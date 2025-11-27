@@ -5,8 +5,8 @@ import { Benefits } from "../sections/Benefits";
 import { About } from "../sections/About";
 import { Credibility } from "../sections/Credibility";
 import { Reviews } from "../sections/Reviews";
-import { LeadMagnet } from "../sections/LeadMagnet";
-import { CTASection } from "../sections/CTASection";
+import { Locations } from "../sections/Locations";
+import { FinalCTA } from "../sections/FinalCTA";
 
 export const Home = () => {
   return (
@@ -18,8 +18,8 @@ export const Home = () => {
         <About />
         <Credibility />
         <Reviews />
-        <LeadMagnet />
-        <CTASection />
+        <Locations />
+        <FinalCTA />
       </main>
       <Footer />
     </div>

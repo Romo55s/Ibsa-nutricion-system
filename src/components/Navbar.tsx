@@ -1,50 +1,143 @@
-import { colors } from "../design-system";
+import { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import Logo from "../assets/Logo-IBSA-White.svg";
+import { Button } from "./Button";
+
+const MagneticNavItem = ({ href, children }: { href: string; children: React.ReactNode }) => {
+  const itemRef = useRef<HTMLAnchorElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const item = itemRef.current;
+    const text = textRef.current;
+    const dot = dotRef.current;
+    
+    if (!item || !text || !dot) return;
+
+    const xTo = gsap.quickTo(text, "x", { duration: 1, ease: "elastic.out(1, 0.3)" });
+    const yTo = gsap.quickTo(text, "y", { duration: 1, ease: "elastic.out(1, 0.3)" });
+    const dotXTo = gsap.quickTo(dot, "x", { duration: 0.6, ease: "power2.out" });
+    const dotYTo = gsap.quickTo(dot, "y", { duration: 0.6, ease: "power2.out" });
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const { left, top, width, height } = item.getBoundingClientRect();
+      
+      const x = clientX - (left + width / 2);
+      const y = clientY - (top + height / 2);
+      
+      // Mover texto magnéticamente
+      xTo(x * 0.3);
+      yTo(y * 0.3);
+
+      // Mover bolita (dot)
+      dotXTo(x * 0.5);
+      dotYTo(y * 0.5);
+    };
+
+    const handleMouseEnter = () => {
+      gsap.to(dot, { scale: 1, duration: 0.3 });
+    };
+
+    const handleMouseLeave = () => {
+      xTo(0);
+      yTo(0);
+      dotXTo(0);
+      dotYTo(0);
+      gsap.to(dot, { scale: 0, duration: 0.3 });
+    };
+
+    item.addEventListener("mousemove", handleMouseMove);
+    item.addEventListener("mouseenter", handleMouseEnter);
+    item.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      item.removeEventListener("mousemove", handleMouseMove);
+      item.removeEventListener("mouseenter", handleMouseEnter);
+      item.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, []);
+
+  return (
+    <a 
+      ref={itemRef}
+      href={href} 
+      className="relative px-4 py-2 group flex flex-col items-center justify-center"
+    >
+      <span ref={textRef} className="relative z-10 block text-slate-300 group-hover:text-white transition-colors">
+        {children}
+      </span>
+      <div 
+        ref={dotRef}
+        className="absolute bottom-0 w-1.5 h-1.5 bg-white rounded-full scale-0 pointer-events-none"
+      ></div>
+    </a>
+  );
+};
 
 export const Navbar = () => {
+  const logoRef = useRef<HTMLImageElement>(null);
+
+  const handleLogoEnter = () => {
+    if (!logoRef.current) return;
+    gsap.to(logoRef.current, { 
+      rotation: 360, 
+      scale: 1.1,
+      duration: 0.8, 
+      ease: "back.out(1.7)" 
+    });
+  };
+
+  const handleLogoLeave = () => {
+    if (!logoRef.current) return;
+    gsap.to(logoRef.current, { 
+      rotation: 0, 
+      scale: 1,
+      duration: 0.6, 
+      ease: "power2.out" 
+    });
+  };
+
   return (
     <header
+      className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 transition-all duration-300"
       style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 20,
-        backdropFilter: "blur(14px)",
-        background: "linear-gradient(180deg, rgba(10,22,38,0.96), rgba(10,22,38,0.9))",
-        borderBottom: "1px solid rgba(206,208,211,0.12)"
+        backdropFilter: "blur(12px)",
+        background: "rgba(10, 22, 38, 0.85)",
       }}
     >
-      <nav
-        className="container"
-        style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 72 }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: 10,
-              background: "linear-gradient(135deg,#0A1626,#222D3B)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#FFFFFF",
-              fontWeight: 700,
-              fontSize: 16
-            }}
-          >
-            I
+      <nav className="container mx-auto px-6 h-20 flex items-center justify-between">
+        <a 
+            href="#" 
+            className="flex items-center gap-3 group cursor-pointer"
+            onMouseEnter={handleLogoEnter}
+            onMouseLeave={handleLogoLeave}
+        >
+          <img 
+            ref={logoRef}
+            src={Logo} 
+            alt="IBSA Logo" 
+            className="h-10 w-auto" 
+          />
+          <div className="hidden sm:block">
+            <div className="text-white font-bold text-lg leading-tight tracking-tight group-hover:text-blue-200 transition-colors">IBSA Nutrición</div>
+            <div className="text-[11px] text-slate-300 uppercase tracking-wider font-medium group-hover:text-white transition-colors">Clínica y Deportiva</div>
           </div>
-          <div>
-            <div style={{ color: "#FFFFFF", fontWeight: 600, fontSize: 18 }}>IBSA Nutrición</div>
-            <div style={{ fontSize: 12, color: colors.light }}>Nutrición clínica y deportiva</div>
+        </a>
+        
+        <div className="hidden md:flex items-center gap-4 text-sm font-medium">
+          <MagneticNavItem href="#beneficios">Beneficios</MagneticNavItem>
+          <MagneticNavItem href="#sobre-mi">Sobre mí</MagneticNavItem>
+          <MagneticNavItem href="#reseñas">Reseñas</MagneticNavItem>
+          
+          <div className="ml-4">
+            <a href="https://cal.com/mariana-ibarra-santos" target="_blank" rel="noopener noreferrer">
+                <Button variant="white" className="h-10 px-6 text-sm">
+                    Agendar cita
+                </Button>
+            </a>
           </div>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 24, fontSize: 14, color: "#CED0D3" }}>
-          <a href="#beneficios">Beneficios</a>
-          <a href="#sobre-mi">Sobre mí</a>
-          <a href="#reseñas">Reseñas</a>
-          <a href="#agenda" style={{ color: "#FFFFFF", fontWeight: 500 }}>
-            Agendar cita
-          </a>
         </div>
       </nav>
     </header>

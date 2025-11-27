@@ -1,94 +1,103 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Button } from "../components/Button";
+import MainMariana from "../assets/main_mariana.jpeg";
 
 export const Hero = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
-    if (!containerRef.current) return;
     const ctx = gsap.context(() => {
-      gsap.from(".hero-heading", { y: 40, opacity: 0, duration: 0.8, ease: "power3.out" });
-      gsap.from(".hero-sub", { y: 20, opacity: 0, duration: 0.8, delay: 0.15, ease: "power3.out" });
-      gsap.from(".hero-ctas", { y: 10, opacity: 0, duration: 0.7, delay: 0.25, ease: "power2.out" });
-      gsap.from(".hero-card", { opacity: 0, y: 30, duration: 0.9, delay: 0.2, ease: "power3.out" });
+      // Asegurar visibilidad inicial antes de animar
+      gsap.set(".hero-content > *", { opacity: 0, y: 50 });
+      gsap.set(".hero-img", { opacity: 0, x: 50, scale: 0.95 });
+
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      tl.to(".hero-content > *", {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        stagger: 0.1
+      })
+      .to(".hero-img", {
+        x: 0,
+        opacity: 1,
+        duration: 1.2,
+        scale: 1
+      }, "-=0.8");
+
     }, containerRef);
+
     return () => ctx.revert();
   }, []);
 
   return (
-    <section className="section" ref={containerRef} style={{ color: "#FFFFFF" }}>
-      <div className="container grid-2">
-        <div>
-          <span
-            style={{
-              display: "inline-block",
-              borderRadius: 9999,
-              padding: "4px 10px",
-              fontSize: 12,
-              background: "#3B4451",
-              color: "#FFFFFF"
-            }}
-          >
-            Nutrición clínica y deportiva
-          </span>
-          <h1
-            className="hero-heading"
-            style={{ fontSize: "48px", lineHeight: "56px", marginTop: 24, marginBottom: 16 }}
-          >
-            Pon tu cuerpo en forma y saca tu mejor versión
+    <section className="relative min-h-screen flex items-center bg-[#0E1217] text-white overflow-hidden pt-20" ref={containerRef}>
+      
+      {/* Background Gradient Mesh */}
+      <div className="absolute top-0 right-0 w-[70%] h-full bg-gradient-to-l from-[#1A2332] to-transparent opacity-50 pointer-events-none"></div>
+
+      <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10">
+        
+        {/* Left Content */}
+        <div className="hero-content max-w-xl pt-10 lg:pt-0">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-[0.2em] text-blue-300 mb-8 uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+            Nutrición Clínica y Deportiva
+          </div>
+          
+          <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold leading-[0.95] tracking-tighter mb-8">
+            Pon tu cuerpo <br/> 
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">en forma.</span>
           </h1>
-          <p className="hero-sub" style={{ fontSize: 18, lineHeight: "28px", color: "var(--color-light)" }}>
-            Planes de nutrición personalizados según tus gustos, entrenamientos y estilo de vida,
-            con un enfoque no peso-centrista para atletas y personas activas.
+
+          <p className="text-lg text-slate-400 leading-relaxed mb-10 font-light max-w-md">
+            Planes de nutrición 100% personalizados. Olvídate de las dietas restrictivas y enfócate en tu rendimiento, hábitos y bienestar real.
           </p>
-          <div className="hero-ctas" style={{ display: "flex", gap: 12, marginTop: 28, flexWrap: "wrap" }}>
-            <a href="#agenda">
-              <Button>Agenda tu consulta</Button>
-            </a>
-            <a href="#recetario">
-              <Button variant="ghost">Quiero mi guía de desayunos</Button>
+          
+              <div className="flex flex-wrap gap-4">
+                <a href="https://cal.com/mariana-ibarra-santos" target="_blank" rel="noopener noreferrer">
+                  <Button variant="white" className="h-14 px-8 border-none font-semibold">
+                    Agendar consulta
+                  </Button>
+                </a>
+                <a href="#recetario">
+              <Button variant="ghost" className="h-14 px-8 border-white/20 hover:bg-white/5 text-white font-medium">
+                Guía de desayunos gratis
+              </Button>
             </a>
           </div>
-          <p style={{ marginTop: 20, fontSize: 14, color: "var(--color-light)" }}>
-            Incluye: guía gratuita de desayunos ricos y saludables para empezar a cambiar tus hábitos hoy.
-          </p>
-        </div>
-        <div
-          className="hero-card"
-          style={{
-            background: "#FFFFFF",
-            borderRadius: 16,
-            padding: 20,
-            boxShadow: "0 18px 40px rgba(10,22,38,0.12)",
-            color: "#222D3B",
-            display: "flex",
-            flexDirection: "column",
-            gap: 16
-          }}
-        >
-          <h2 style={{ fontSize: 20, margin: 0 }}>Nutrición pensada para tu rendimiento y bienestar</h2>
-          <ul style={{ paddingLeft: 18, margin: 0, fontSize: 14, display: "grid", rowGap: 4 }}>
-            <li>Aumento de masa muscular y rendimiento deportivo.</li>
-            <li>Mejora de hábitos alimenticios sin dietas extremas.</li>
-            <li>Mejor relación con la comida y tu cuerpo.</li>
-            <li>Más seguridad y autoestima en tu día a día.</li>
-          </ul>
-          <div
-            style={{
-              marginTop: 8,
-              padding: 12,
-              borderRadius: 12,
-              background: "rgba(10,22,38,0.03)",
-              fontSize: 12
-            }}
-          >
-            Consultas presenciales en Phyn y Rhino Training Complex o en formato online, para adaptarnos a tu rutina.
+
+          <div className="mt-12 pt-8 border-t border-white/5 hidden sm:block">
+             <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-2">Especialista en</p>
+             <div className="flex gap-6 text-slate-300 text-sm">
+                <span>• Recomposición</span>
+                <span>• Atletas</span>
+                <span>• Hábitos</span>
+             </div>
           </div>
         </div>
+
+        {/* Right Image - Full Height / Magazine Style */}
+        <div className="hero-img relative h-[500px] lg:h-[85vh] w-full rounded-2xl overflow-hidden shadow-2xl group mt-10 lg:mt-0">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0E1217] via-transparent to-transparent opacity-60 z-10"></div>
+            <img 
+                src={MainMariana} 
+                alt="Mariana - Nutrióloga" 
+                className="w-full h-full object-cover  transition-transform duration-1000 ease-out group-hover:scale-105"
+            />
+            
+            {/* Floating Quote */}
+            <div className="absolute bottom-8 left-8 z-20 max-w-xs">
+                <p className="text-xl font-medium text-white leading-snug mb-2">
+                  "No es comer menos, es comer mejor."
+                </p>
+                <p className="text-xs text-slate-400 font-bold tracking-widest uppercase">Mariana IBSA</p>
+            </div>
+        </div>
+
       </div>
     </section>
   );
 };
-
-
