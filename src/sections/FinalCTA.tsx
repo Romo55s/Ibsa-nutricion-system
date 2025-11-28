@@ -74,8 +74,8 @@ export const FinalCTA = () => {
                         Agendar ahora
                     </Button>
                 </a>
-                {/* Reemplaza el numero despues de 52 con tu numero de telefono (ej. 524491234567) */}
-                <a href="https://wa.me/52" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                {/* Enlace directo a WhatsApp */}
+                <a href="https://wa.me/524499409918" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
                     <Button variant="whatsapp" className="w-full justify-center h-14 px-8">
                         <div className="flex items-center gap-2">
                             <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
