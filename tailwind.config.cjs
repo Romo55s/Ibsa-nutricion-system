@@ -22,6 +22,18 @@ module.exports = {
         "elev-1": "0 1px 4px rgba(10,22,38,0.06)",
         "elev-2": "0 6px 18px rgba(10,22,38,0.08)",
         "elev-3": "0 18px 40px rgba(10,22,38,0.12)"
+      },
+      translate: {
+        '101': '101%',
+      },
+      keyframes: {
+        marquee: {
+          'from': { transform: 'translateX(0%)' },
+          'to': { transform: 'translateX(-50%)' }
+        }
+      },
+      animation: {
+        marquee: 'marquee 15s linear infinite'
       }
     }
   },

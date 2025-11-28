@@ -1,7 +1,21 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
+import { Link } from "react-router-dom";
 import Logo from "../assets/Logo-IBSA-White.svg";
 import { Button } from "./Button";
+import StaggeredMenu from "./StaggeredMenu";
+
+const menuItems = [
+  { label: 'Beneficios', ariaLabel: 'Beneficios', link: '#beneficios' },
+  { label: 'Sobre mí', ariaLabel: 'Sobre mí', link: '#sobre-mi' },
+  { label: 'Reseñas', ariaLabel: 'Reseñas', link: '#reseñas' },
+  { label: 'Agendar cita', ariaLabel: 'Agendar cita', link: 'https://cal.com/mariana-ibarra-santos' }
+];
+
+const socialItems = [
+  { label: 'Instagram', link: 'https://www.instagram.com/ibsa.nutricion/' },
+  { label: 'LinkedIn', link: 'https://www.linkedin.com/in/mariana-ibarra0407' }
+];
 
 const MagneticNavItem = ({ href, children }: { href: string; children: React.ReactNode }) => {
   const itemRef = useRef<HTMLAnchorElement>(null);
@@ -108,8 +122,8 @@ export const Navbar = () => {
       }}
     >
       <nav className="container mx-auto px-6 h-20 flex items-center justify-between">
-        <a 
-            href="#" 
+        <Link 
+            to="/" 
             className="flex items-center gap-3 group cursor-pointer"
             onMouseEnter={handleLogoEnter}
             onMouseLeave={handleLogoLeave}
@@ -124,7 +138,7 @@ export const Navbar = () => {
             <div className="text-white font-bold text-lg leading-tight tracking-tight group-hover:text-blue-200 transition-colors">IBSA Nutrición</div>
             <div className="text-[11px] text-slate-300 uppercase tracking-wider font-medium group-hover:text-white transition-colors">Clínica y Deportiva</div>
           </div>
-        </a>
+        </Link>
         
         <div className="hidden md:flex items-center gap-4 text-sm font-medium">
           <MagneticNavItem href="#beneficios">Beneficios</MagneticNavItem>
@@ -138,6 +152,19 @@ export const Navbar = () => {
                 </Button>
             </a>
           </div>
+        </div>
+
+        <div className="md:hidden">
+            <StaggeredMenu
+                isFixed={true}
+                items={menuItems}
+                socialItems={socialItems}
+                logoUrl={Logo}
+                colors={['#2E8BFF', '#0A1626']}
+                accentColor="#2E8BFF"
+                menuButtonColor="#fff"
+                openMenuButtonColor="#000"
+            />
         </div>
       </nav>
     </header>

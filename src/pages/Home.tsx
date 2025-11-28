@@ -6,6 +6,7 @@ import { About } from "../sections/About";
 import { Credibility } from "../sections/Credibility";
 import { Reviews } from "../sections/Reviews";
 import { Locations } from "../sections/Locations";
+import { FlowingMenu } from "../sections/FlowingMenu";
 import { FinalCTA } from "../sections/FinalCTA";
 
 export const Home = () => {
@@ -19,6 +20,7 @@ export const Home = () => {
         <Credibility />
         <Reviews />
         <Locations />
+        <FlowingMenu />
         <FinalCTA />
       </main>
       <Footer />
