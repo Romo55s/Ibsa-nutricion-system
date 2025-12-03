@@ -516,36 +516,36 @@ export const EventPage = () => {
         </section>
 
         {/* Featured Event 2 (Wire Masters) - WHITE CONTAINER as per reference layout "Boomtown" section */}
-        <section className="w-full bg-white text-[#0A1626] py-20 md:py-32 mb-0 fade-in-section">
-             <div className="container mx-auto px-6">
-                <div className="grid md:grid-cols-12 gap-12 items-center">
+        <section className="w-full bg-white text-[#0A1626] py-12 md:py-20 lg:py-32 mb-0 fade-in-section">
+             <div className="container mx-auto px-4 md:px-6">
+                <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-center">
                     <div className="md:col-span-7 order-2 md:order-1">
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-3 md:gap-4">
                             <div 
-                                className="aspect-[3/4] overflow-hidden rounded-xl cursor-pointer group"
+                                className="aspect-[3/4] overflow-hidden rounded-lg md:rounded-xl cursor-pointer group"
                                 onClick={() => setSelectedImage({ src: WireMasters4, alt: "Mariana Ibarra presentando sobre carbohidratos simples y complejos en Wire Masters" })}
                             >
                                 <img src={WireMasters4} alt="Mariana Ibarra presentando sobre carbohidratos en Wire Masters" className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105" />
                             </div>
                             <div 
-                                className="aspect-[3/4] overflow-hidden mt-12 rounded-xl cursor-pointer group"
+                                className="aspect-[3/4] overflow-hidden mt-6 md:mt-12 rounded-lg md:rounded-xl cursor-pointer group"
                                 onClick={() => setSelectedImage({ src: WireMasters6, alt: "Mariana Ibarra y co-presentadora frente a la audiencia en Wire Masters" })}
                             >
                                 <img src={WireMasters6} alt="Mariana Ibarra presentando frente a la audiencia en Wire Masters" className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105" />
                             </div>
                         </div>
                     </div>
-                    <div className="md:col-span-5 order-1 md:order-2 text-right md:text-left">
-                        <h3 className="text-5xl md:text-7xl font-bold text-[#0A1626] mb-4">Wire Masters</h3>
-                        <p className="text-[#2E8BFF] font-bold tracking-widest uppercase mb-8">15-16 Mayo</p>
-                        <p className="text-[#535B67] text-lg leading-relaxed mb-10 font-normal">
+                    <div className="md:col-span-5 order-1 md:order-2 text-left mb-8 md:mb-0">
+                        <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-[#0A1626] mb-3 md:mb-4">Wire Masters</h3>
+                        <p className="text-[#2E8BFF] font-bold tracking-widest uppercase text-sm md:text-base mb-4 md:mb-8">15-16 Mayo</p>
+                        <p className="text-[#535B67] text-base md:text-lg leading-relaxed mb-6 md:mb-10 font-normal">
                             Una conferencia vibrante sobre nutrición y rendimiento deportivo. Un espacio donde se reúnen profesionales de la salud, atletas y entusiastas para compartir conocimientos.
                         </p>
-                        <div className="flex flex-wrap gap-4 items-end md:items-start">
+                        <div className="flex flex-wrap gap-4 items-start">
                             <Button 
                                 variant="primary"
                                 onClick={() => setShowMoreWire(!showMoreWire)}
-                                className="bg-[#153255] hover:bg-[#0A1626] text-white border-transparent hover:border-[#153255] px-8"
+                                className="bg-[#153255] hover:bg-[#0A1626] text-white border-transparent hover:border-[#153255] px-6 md:px-8 text-sm md:text-base"
                             >
                                 {showMoreWire ? "Ver Menos" : "Ver Todas las Fotos"}
                             </Button>
