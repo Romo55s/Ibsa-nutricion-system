@@ -1,23 +1,27 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useState } from 'react';
 import { gsap } from 'gsap';
 import EventoCarrera from "../assets/Evento-Carrera-portada.jpg";
 import EventoCarrera1 from "../assets/Evento-Carrera-1.jpg";
 import EventoCarrera3 from "../assets/Evento-Carrera-4.jpg";
 import ConsultorioPhyn from "../assets/Phyn-1.jpg";
 import ConsultorioPhyn2 from "../assets/Phyn-2.jpg";
+import CertificadoMujerAtleta from "../assets/Certificado-Mujer-Atleta.jpg";
+import CertificadoRecomposicionCorporal from "../assets/Certificado-Recomposicion-Corporal.jpg";
 import RhinoGym from "../assets/Rhino-Gym-2.jpg";
+import { CertificationsModal } from "../components/CertificationsModal";
 
 interface MenuItemProps {
   link: string;
   text: string;
   images: string[];
+  onClick?: () => void;
 }
 
 interface FlowingMenuProps {
   items?: MenuItemProps[];
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ link, text, images }) => {
+const MenuItem: React.FC<MenuItemProps> = ({ link, text, images, onClick }) => {
   const itemRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
   const marqueeInnerRef = useRef<HTMLDivElement>(null);
@@ -71,11 +75,19 @@ const MenuItem: React.FC<MenuItemProps> = ({ link, text, images }) => {
     });
   }, [text, images]);
 
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (onClick) {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
   return (
     <div className="flex-1 relative overflow-hidden text-center border-b border-white/10 bg-[#0A1626]" ref={itemRef}>
       <a
         className="flex items-center justify-center h-full relative cursor-pointer uppercase no-underline font-semibold text-white text-[4vh] z-10 hover:text-[#0A1626] transition-colors duration-300"
         href={link}
+        onClick={handleClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
@@ -113,24 +125,64 @@ const MENU_ITEMS = [
     images: ["https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?q=80&w=600&auto=format&fit=crop&fm=webp"]
   },
   { 
-    text: "Comunidad", 
-    link: "#comunidad", 
-    images: ["https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=600&auto=format&fit=crop&fm=webp"] // Imagen de grupo de personas/comunidad
+    text: "Certificados", 
+    link: "#certificados", 
+    images: [CertificadoMujerAtleta, CertificadoRecomposicionCorporal]
   }
 ];
 
 export const FlowingMenu = () => {
+  const [isCertificationsOpen, setIsCertificationsOpen] = useState(false);
+  const [selectedCertification, setSelectedCertification] = useState<{
+    src: string;
+    alt: string;
+    title: string;
+  } | null>(null);
+
+  const certifications = [
+    {
+      src: CertificadoMujerAtleta,
+      alt: "Certificado de Nutrición en la Mujer Atleta",
+      title: "Nutrición en la Mujer Atleta",
+    },
+    {
+      src: CertificadoRecomposicionCorporal,
+      alt: "Certificado de Recomposición Corporal",
+      title: "Recomposición Corporal",
+    },
+  ];
+
+  const menuItemsWithHandlers = MENU_ITEMS.map((item) => {
+    if (item.text === "Certificados") {
+      return {
+        ...item,
+        onClick: () => setIsCertificationsOpen(true),
+      };
+    }
+    return item;
+  });
+
   return (
-    <section className="bg-[#0A1626] py-0"> 
-        <div style={{ height: '600px', position: 'relative' }}>
-            <div className="w-full h-full overflow-hidden">
-                <nav className="flex flex-col h-full m-0 p-0">
-                    {MENU_ITEMS.map((item, idx) => (
-                        <MenuItem key={idx} {...item} />
-                    ))}
-                </nav>
-            </div>
-        </div>
-    </section>
+    <>
+      <section className="bg-[#0A1626] py-0"> 
+          <div style={{ height: '600px', position: 'relative' }}>
+              <div className="w-full h-full overflow-hidden" id='certificados'>
+                  <nav className="flex flex-col h-full m-0 p-0">
+                      {menuItemsWithHandlers.map((item, idx) => (
+                          <MenuItem key={idx} {...item} />
+                      ))}
+                  </nav>
+              </div>
+          </div>
+      </section>
+
+      <CertificationsModal
+        isOpen={isCertificationsOpen}
+        onClose={() => setIsCertificationsOpen(false)}
+        certifications={certifications}
+        selectedCertification={selectedCertification}
+        onSelectCertification={setSelectedCertification}
+      />
+    </>
   );
 };

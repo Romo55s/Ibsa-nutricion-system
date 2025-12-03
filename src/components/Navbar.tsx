@@ -9,6 +9,7 @@ const menuItems = [
   { label: 'Beneficios', ariaLabel: 'Beneficios', link: '#beneficios' },
   { label: 'Sobre mí', ariaLabel: 'Sobre mí', link: '#sobre-mi' },
   { label: 'Reseñas', ariaLabel: 'Reseñas', link: '#reseñas' },
+  { label: 'Certificados', ariaLabel: 'Certificados', link: '#certificados' },
   { label: 'Agendar cita', ariaLabel: 'Agendar cita', link: 'https://cal.com/mariana-ibarra-santos' }
 ];
 
@@ -144,6 +145,7 @@ export const Navbar = () => {
           <MagneticNavItem href="#beneficios">Beneficios</MagneticNavItem>
           <MagneticNavItem href="#sobre-mi">Sobre mí</MagneticNavItem>
           <MagneticNavItem href="#reseñas">Reseñas</MagneticNavItem>
+          <MagneticNavItem href="#certificados">Certificados</MagneticNavItem>
           
           <div className="ml-4">
             <a href="https://cal.com/mariana-ibarra-santos" target="_blank" rel="noopener noreferrer">

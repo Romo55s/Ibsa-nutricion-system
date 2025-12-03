@@ -5,6 +5,7 @@ export interface StaggeredMenuItem {
   label: string;
   ariaLabel: string;
   link: string;
+  onClick?: () => void;
 }
 export interface StaggeredMenuSocialItem {
   label: string;
@@ -433,7 +434,15 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                       href={it.link}
                       aria-label={it.ariaLabel}
                       data-index={idx + 1}
-                      onClick={closeMenu}
+                      onClick={(e) => {
+                        if (it.onClick) {
+                          e.preventDefault();
+                          it.onClick();
+                          closeMenu();
+                        } else {
+                          closeMenu();
+                        }
+                      }}
                     >
                       <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">
                         {it.label}

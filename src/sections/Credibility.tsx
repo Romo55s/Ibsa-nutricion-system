@@ -1,8 +1,32 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
+import { CertificationsModal } from "../components/CertificationsModal";
+
+// Importar certificaciones
+import CertificadoMujerAtleta from "../assets/Certificado-Mujer-Atleta.jpg";
+import CertificadoRecomposicion from "../assets/Certificado-Recomposicion-Corporal.jpg";
 
 export const Credibility = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const [isCertificationsOpen, setIsCertificationsOpen] = useState(false);
+  const [selectedCertification, setSelectedCertification] = useState<{
+    src: string;
+    alt: string;
+    title: string;
+  } | null>(null);
+
+  const certifications = [
+    {
+      src: CertificadoMujerAtleta,
+      alt: "Certificado de Nutrición en la Mujer Atleta",
+      title: "Nutrición en la Mujer Atleta",
+    },
+    {
+      src: CertificadoRecomposicion,
+      alt: "Certificado de Recomposición Corporal",
+      title: "Recomposición Corporal",
+    },
+  ];
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -40,7 +64,7 @@ export const Credibility = () => {
   }, []);
 
   return (
-    <section id="credibilidad" className="py-24 bg-[#0A1626] text-white overflow-hidden relative" ref={sectionRef}>
+    <section  className="py-24 bg-[#0A1626] text-white overflow-hidden relative" ref={sectionRef}>
       {/* Background sutil estilo "noise" o textura si se desea, por ahora limpio */}
       
       <div className="container mx-auto px-6 max-w-6xl relative z-10">
@@ -90,7 +114,10 @@ export const Credibility = () => {
               </p>
             </div>
 
-            <div className="cred-card group bg-white/5 hover:bg-white/10 transition-colors duration-500 p-8 rounded-2xl border border-white/5 backdrop-blur-sm">
+            <button
+              onClick={() => setIsCertificationsOpen(true)}
+              className="cred-card group bg-white/5 hover:bg-white/10 transition-colors duration-500 p-8 rounded-2xl border border-white/5 backdrop-blur-sm text-left cursor-pointer"
+            >
               <div className="mb-6 w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 group-hover:scale-110 transition-transform duration-300">
                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
               </div>
@@ -98,7 +125,10 @@ export const Credibility = () => {
               <p className="text-sm text-slate-400 leading-relaxed">
                 Actualización constante: 3er seminario de recomposición corporal y congreso de nutrición en la mujer atleta.
               </p>
-            </div>
+              <p className="text-xs text-green-400 mt-3 font-medium group-hover:underline">
+                Ver certificaciones →
+              </p>
+            </button>
 
             <div className="cred-card group bg-white/5 hover:bg-white/10 transition-colors duration-500 p-8 rounded-2xl border border-white/5 backdrop-blur-sm sm:translate-y-8">
               <div className="mb-6 w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 group-hover:scale-110 transition-transform duration-300">
@@ -113,6 +143,14 @@ export const Credibility = () => {
           </div>
         </div>
       </div>
+
+      <CertificationsModal
+        isOpen={isCertificationsOpen}
+        onClose={() => setIsCertificationsOpen(false)}
+        certifications={certifications}
+        selectedCertification={selectedCertification}
+        onSelectCertification={setSelectedCertification}
+      />
     </section>
   );
 };
