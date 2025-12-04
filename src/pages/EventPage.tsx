@@ -22,7 +22,7 @@ import WireMasters3 from "../assets/mariana-empresa-3.jpg";
 import WireMasters4 from "../assets/mariana-empresa-4.jpg";
 
 // Importar imagen de comunidad
-import ComunidadMariana from "../assets/comunidad-mariana.jpeg";
+import ComunidadMariana from "../assets/Mariana-Phyn.jpg";
 // @ts-ignore - JPG files
 import WireMasters5 from "../assets/mariana-empresa-5.JPG";
 // @ts-ignore - JPG files
@@ -82,6 +82,7 @@ export const EventPage = () => {
 
   // Refs for scroll
   const eventsSectionRef = useRef<HTMLDivElement>(null);
+  const comunidadSectionRef = useRef<HTMLElement>(null);
 
   const scrollToEvents = () => {
     if (eventsSectionRef.current) {
@@ -126,6 +127,60 @@ export const EventPage = () => {
           }
         });
       });
+
+      // Smooth fade out for comunidad section
+      if (comunidadSectionRef.current) {
+        gsap.fromTo(comunidadSectionRef.current, 
+          {
+            opacity: 0,
+            y: 50
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: comunidadSectionRef.current,
+              start: "top 80%",
+              end: "bottom 20%",
+              scrub: 1,
+              onEnter: () => {
+                gsap.to(comunidadSectionRef.current, {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.8,
+                  ease: "power2.out"
+                });
+              },
+              onLeave: () => {
+                gsap.to(comunidadSectionRef.current, {
+                  opacity: 0.3,
+                  y: -30,
+                  duration: 0.8,
+                  ease: "power2.in"
+                });
+              },
+              onEnterBack: () => {
+                gsap.to(comunidadSectionRef.current, {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.8,
+                  ease: "power2.out"
+                });
+              },
+              onLeaveBack: () => {
+                gsap.to(comunidadSectionRef.current, {
+                  opacity: 0,
+                  y: 50,
+                  duration: 0.8,
+                  ease: "power2.in"
+                });
+              }
+            }
+          }
+        );
+      }
 
     }, containerRef);
 
@@ -437,9 +492,21 @@ export const EventPage = () => {
                             />
                         </div>
                         {/* Small legend overlay that scales with image */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-4 transform group-hover:scale-110 origin-center">
-                            <span className="text-white text-[10px] font-bold uppercase tracking-widest">Ver Foto</span>
-                            <span className="w-8 h-[1px] bg-[#2E8BFF] mt-1"></span>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-4 md:p-6">
+                            <div className="transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 ease-out">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-white text-xs md:text-sm font-bold uppercase tracking-widest">Ver Foto</span>
+                                    <svg 
+                                        className="w-4 h-4 text-[#2E8BFF] transform translate-x-0 group-hover:translate-x-1 transition-transform duration-300" 
+                                        fill="none" 
+                                        viewBox="0 0 24 24" 
+                                        stroke="currentColor"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </div>
+                                <div className="w-12 h-[2px] bg-gradient-to-r from-[#2E8BFF] to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                            </div>
                         </div>
                     </div>
                 ))}
@@ -567,27 +634,40 @@ export const EventPage = () => {
         </section>
 
         {/* Join Us / Contact Section - Dark Bottom */}
-        <section className="bg-[#050a12] py-24 fade-in-section">
-            <div className="container mx-auto px-6">
-                 <div className="grid md:grid-cols-2 gap-16">
-                     <div>
+        <section ref={comunidadSectionRef} className="bg-[#050a12] py-16 md:py-24 lg:py-32 fade-in-section">
+            <div className="container mx-auto px-4 md:px-6">
+                 <div className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
+                     <div className="order-2 md:order-1">
                          <div 
-                             className="aspect-video bg-[#111] overflow-hidden relative group cursor-pointer"
+                             className="aspect-[4/3] md:aspect-video bg-[#111] overflow-hidden relative group cursor-pointer rounded-xl md:rounded-2xl shadow-2xl"
                              onClick={() => setSelectedImage({ src: ComunidadMariana, alt: "Únete a la comunidad" })}
                          >
-                             <img src={ComunidadMariana} alt="Únete a la comunidad" className="w-full h-full object-cover object-[center_17%] opacity-60 group-hover:opacity-80 transition-opacity" />
-                             <div className="absolute inset-0 flex items-center justify-center">
-                                 <span className="text-white text-2xl font-bold">Únete a la comunidad</span>
+                             <img 
+                                 src={ComunidadMariana} 
+                                 alt="Únete a la comunidad" 
+                                 className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700" 
+                             />
+                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-100 group-hover:from-black/70 transition-opacity duration-500" />
+                             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                                 <span className="text-white text-xl md:text-2xl font-bold drop-shadow-lg">Únete a la comunidad</span>
                              </div>
                          </div>
                      </div>
-                     <div className="flex flex-col justify-center">
-                         <h3 className="text-4xl font-bold text-white mb-6">¿Por qué participo?</h3>
-                         <p className="text-[#CED0D3] mb-8 leading-relaxed">
-                             Participar en eventos me conecta con mi ciudad y con personas que comparten la misma visión. No se trata solo de nutrición en el plato, sino de nutrir el espíritu.
-                         </p>
-                         <a href="https://cal.com/mariana-ibarra-santos" target="_blank" rel="noopener noreferrer">
-                             <Button variant="primary" className="bg-[#153255] hover:bg-white hover:text-[#0A1626] text-white border-transparent">
+                     <div className="flex flex-col justify-center order-1 md:order-2">
+                         <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 md:mb-6 leading-tight">¿Por qué participo?</h3>
+                         <div className="space-y-4 md:space-y-6 mb-6 md:mb-8">
+                             <p className="text-[#CED0D3] text-base md:text-lg leading-relaxed">
+                                 Participar en eventos me conecta con mi ciudad y con personas que comparten la misma visión.
+                             </p>
+                             <p className="text-[#CED0D3] text-base md:text-lg leading-relaxed">
+                                 No se trata solo de nutrición en el plato, sino de nutrir el espíritu.
+                             </p>
+                         </div>
+                         <a href="https://cal.com/mariana-ibarra-santos" target="_blank" rel="noopener noreferrer" className="inline-block">
+                             <Button 
+                                 variant="primary" 
+                                 className="bg-[#153255] hover:bg-[#2E8BFF] hover:border-[#2E8BFF] text-white border-transparent px-6 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                             >
                                  Agendar Consulta
                              </Button>
                          </a>
