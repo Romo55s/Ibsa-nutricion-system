@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../assets/Logo-IBSA-White.svg";
 import { Button } from "./Button";
 import StaggeredMenu from "./StaggeredMenu";
@@ -8,7 +8,7 @@ import StaggeredMenu from "./StaggeredMenu";
 const menuItems = [
   { label: 'Beneficios', ariaLabel: 'Beneficios', link: '#beneficios' },
   { label: 'Sobre mí', ariaLabel: 'Sobre mí', link: '#sobre-mi' },
-  { label: 'Reseñas', ariaLabel: 'Reseñas', link: '#reseñas' },
+  { label: 'Reseñas', ariaLabel: 'Reseñas', link: '#review' },
   { label: 'Certificados', ariaLabel: 'Certificados', link: '#certificados' },
   { label: 'Agendar cita', ariaLabel: 'Agendar cita', link: 'https://cal.com/mariana-ibarra-santos' }
 ];
@@ -22,6 +22,8 @@ const MagneticNavItem = ({ href, children }: { href: string; children: React.Rea
   const itemRef = useRef<HTMLAnchorElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const item = itemRef.current;
@@ -74,10 +76,37 @@ const MagneticNavItem = ({ href, children }: { href: string; children: React.Rea
     };
   }, []);
 
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Si estamos en /evento y el link es un anchor, navegar a home con el hash
+    if (location.pathname === '/evento' && href.startsWith('#')) {
+      e.preventDefault();
+      // Marcar como navegación de router para evitar conflicto con el handleClick global
+      e.currentTarget.setAttribute('data-router-link', 'true');
+      // Navegar a home con el hash en la URL
+      navigate(`/${href}`, { replace: false });
+      // El ScrollToTop se encargará del scroll cuando la página cambie
+    } else if (location.pathname === '/' && href.startsWith('#')) {
+      // Si ya estamos en home, prevenir el comportamiento por defecto y usar scroll suave
+      e.preventDefault();
+      // Marcar como navegación de router
+      e.currentTarget.setAttribute('data-router-link', 'true');
+      const element = document.querySelector(href);
+      if (element) {
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - 100;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+  };
+
   return (
     <a 
       ref={itemRef}
       href={href} 
+      onClick={handleClick}
       className="relative px-4 py-2 group flex flex-col items-center justify-center"
     >
       <span ref={textRef} className="relative z-10 block text-slate-300 group-hover:text-white transition-colors">
@@ -144,7 +173,7 @@ export const Navbar = () => {
         <div className="hidden md:flex items-center gap-4 text-sm font-medium">
           <MagneticNavItem href="#beneficios">Beneficios</MagneticNavItem>
           <MagneticNavItem href="#sobre-mi">Sobre mí</MagneticNavItem>
-          <MagneticNavItem href="#reseñas">Reseñas</MagneticNavItem>
+          <MagneticNavItem href="#review">Reseñas</MagneticNavItem>
           <MagneticNavItem href="#certificados">Certificados</MagneticNavItem>
           
           <div className="ml-4">

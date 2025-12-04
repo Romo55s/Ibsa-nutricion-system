@@ -164,7 +164,7 @@ export const FlowingMenu = () => {
 
   return (
     <>
-      <section className="bg-[#0A1626] py-0"> 
+      <section className="bg-[#0A1626] py-0" id='certificados'> 
           <div style={{ height: '600px', position: 'relative' }}>
               <div className="w-full h-full overflow-hidden" id='certificados'>
                   <nav className="flex flex-col h-full m-0 p-0">

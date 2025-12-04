@@ -61,7 +61,7 @@ export const Footer = () => {
               <li><a href="#beneficios" className="hover:text-blue-300 transition-colors">Resultados Reales</a></li>
               <li><a href="#sobre-mi" className="hover:text-blue-300 transition-colors">Sobre Mí</a></li>
               <li><a href="#credibilidad" className="hover:text-blue-300 transition-colors">Experiencia</a></li>
-              <li><a href="#reseñas" className="hover:text-blue-300 transition-colors">Testimonios</a></li>
+              <li><a href="#review" className="hover:text-blue-300 transition-colors">Testimonios</a></li>
             </ul>
           </div>
 

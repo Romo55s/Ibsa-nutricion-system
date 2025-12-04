@@ -51,7 +51,7 @@ export const Reviews = () => {
   }, []);
 
   return (
-    <section id="reseñas" className="py-24 bg-slate-50" ref={sectionRef}>
+    <section id="review" className="py-24 bg-slate-50" ref={sectionRef}>
       <div className="container mx-auto px-6 max-w-6xl">
         
         <div className="text-center mb-16">

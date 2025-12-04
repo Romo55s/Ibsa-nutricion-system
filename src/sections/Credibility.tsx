@@ -64,7 +64,7 @@ export const Credibility = () => {
   }, []);
 
   return (
-    <section  className="py-24 bg-[#0A1626] text-white overflow-hidden relative" ref={sectionRef}>
+    <section className="py-24 bg-[#0A1626] text-white overflow-hidden relative" ref={sectionRef}>
       {/* Background sutil estilo "noise" o textura si se desea, por ahora limpio */}
       
       <div className="container mx-auto px-6 max-w-6xl relative z-10">
