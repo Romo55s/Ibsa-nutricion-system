@@ -13,7 +13,7 @@ import Evento1 from "../assets/Evento-Carrera-1.jpg";
 import Evento2 from "../assets/Eveneto-Carrera-2.jpg";
 import Evento3 from "../assets/Evento Carrera-3.jpg";
 import Evento4 from "../assets/Evento-Carrera-4.jpg";
-import EventoPortada from "../assets/Evento-Carrera-portada-2.jpg";
+import EventoPortada from "../assets/Evento-Carrera-Portada-2.jpg";
 
 // Importar imágenes de Wire Masters
 import WireMasters1 from "../assets/mariana-empresa-1.jpg";
