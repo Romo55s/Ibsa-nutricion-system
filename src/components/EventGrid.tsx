@@ -21,10 +21,10 @@ export const EventGrid = ({ images }: EventGridProps) => {
 
   useLayoutEffect(() => {
     const cleanupFunctions: (() => void)[] = [];
-    
+
     const ctx = gsap.context(() => {
       const items = containerRef.current?.querySelectorAll(".event-grid-item");
-      
+
       if (!items || items.length === 0) return;
 
       // Animación inicial de entrada
@@ -34,8 +34,8 @@ export const EventGrid = ({ images }: EventGridProps) => {
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top 80%",
-          toggleActions: "play none none none"
-        }
+          toggleActions: "play none none none",
+        },
       });
 
       tl.to(items, {
@@ -46,8 +46,8 @@ export const EventGrid = ({ images }: EventGridProps) => {
         ease: "power3.out",
         stagger: {
           amount: 0.6,
-          from: "random"
-        }
+          from: "random",
+        },
       });
 
       // Hover animations
@@ -60,12 +60,12 @@ export const EventGrid = ({ images }: EventGridProps) => {
             scale: 1.05,
             duration: 0.4,
             ease: "power2.out",
-            zIndex: 10
+            zIndex: 10,
           });
           gsap.to(img, {
             scale: 1.1,
             duration: 0.4,
-            ease: "power2.out"
+            ease: "power2.out",
           });
         };
 
@@ -74,12 +74,12 @@ export const EventGrid = ({ images }: EventGridProps) => {
             scale: 1,
             duration: 0.4,
             ease: "power2.out",
-            zIndex: 1
+            zIndex: 1,
           });
           gsap.to(img, {
             scale: 1,
             duration: 0.4,
-            ease: "power2.out"
+            ease: "power2.out",
           });
         };
 
@@ -95,7 +95,7 @@ export const EventGrid = ({ images }: EventGridProps) => {
 
     return () => {
       ctx.revert();
-      cleanupFunctions.forEach(cleanup => cleanup());
+      cleanupFunctions.forEach((cleanup) => cleanup());
     };
   }, [images]);
 
@@ -104,7 +104,7 @@ export const EventGrid = ({ images }: EventGridProps) => {
     if (selectedImage && modalRef.current) {
       const modal = modalRef.current;
       const img = modal.querySelector("img");
-      
+
       gsap.set(modal, { opacity: 0 });
       gsap.set(img, { scale: 0.8, opacity: 0 });
 
@@ -112,14 +112,17 @@ export const EventGrid = ({ images }: EventGridProps) => {
       tl.to(modal, {
         opacity: 1,
         duration: 0.3,
-        ease: "power2.out"
-      })
-      .to(img, {
-        scale: 1,
-        opacity: 1,
-        duration: 0.4,
-        ease: "back.out(1.2)"
-      }, "-=0.2");
+        ease: "power2.out",
+      }).to(
+        img,
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.4,
+          ease: "back.out(1.2)",
+        },
+        "-=0.2"
+      );
     }
   }, [selectedImage]);
 
@@ -127,29 +130,34 @@ export const EventGrid = ({ images }: EventGridProps) => {
     if (modalRef.current && selectedImage) {
       const modal = modalRef.current;
       const img = modal.querySelector("img");
-      
+
       const tl = gsap.timeline({
-        onComplete: () => setSelectedImage(null)
+        onComplete: () => setSelectedImage(null),
       });
-      
+
       tl.to(img, {
         scale: 0.8,
         opacity: 0,
         duration: 0.2,
-        ease: "power2.in"
-      })
-      .to(modal, {
-        opacity: 0,
-        duration: 0.2,
-        ease: "power2.in"
-      }, "-=0.1");
+        ease: "power2.in",
+      }).to(
+        modal,
+        {
+          opacity: 0,
+          duration: 0.2,
+          ease: "power2.in",
+        },
+        "-=0.1"
+      );
     } else {
       setSelectedImage(null);
     }
   };
 
-  const carreraImages = images.filter(img => img.category === "carrera");
-  const wireMastersImages = images.filter(img => img.category === "wire-masters");
+  const carreraImages = images.filter((img) => img.category === "carrera");
+  const wireMastersImages = images.filter(
+    (img) => img.category === "wire-masters"
+  );
 
   return (
     <>
@@ -157,31 +165,33 @@ export const EventGrid = ({ images }: EventGridProps) => {
         {/* Carrera Section */}
         {carreraImages.length > 0 && (
           <div className="mb-24">
-            <h3 className="text-[36px] md:text-[48px] font-bold text-white mb-10">
+            <h3 className="mb-10 text-[36px] font-bold text-white md:text-[48px]">
               Corriendo con <span className="text-[#2E8BFF]">Causa</span>
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {carreraImages.map((image, idx) => (
                 <div
                   key={`carrera-${idx}`}
-                  className="event-grid-item relative overflow-hidden rounded-xl cursor-pointer group"
+                  className="event-grid-item group relative cursor-pointer overflow-hidden rounded-xl"
                   onClick={() => setSelectedImage(image)}
                   style={{
-                    boxShadow: '0 6px 18px rgba(10,22,38,0.08)',
+                    boxShadow: "0 6px 18px rgba(10,22,38,0.08)",
                   }}
                 >
-                  <div className="aspect-[4/3] relative overflow-hidden bg-[#222D3B] border border-[#3B4451] group-hover:border-[#2E8BFF] transition-all duration-300">
+                  <div className="relative aspect-[4/3] overflow-hidden border border-[#3B4451] bg-[#222D3B] transition-all duration-300 group-hover:border-[#2E8BFF]">
                     <img
                       src={image.src}
                       alt={image.alt}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                       loading="lazy"
                     />
                     {/* Overlay on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A1626]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A1626]/90 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
                     {/* Label */}
-                    <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                      <p className="text-white text-sm font-semibold uppercase tracking-wider">{image.alt}</p>
+                    <div className="absolute bottom-0 left-0 right-0 translate-y-full transform p-5 transition-transform duration-300 group-hover:translate-y-0">
+                      <p className="text-sm font-semibold uppercase tracking-wider text-white">
+                        {image.alt}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -193,31 +203,33 @@ export const EventGrid = ({ images }: EventGridProps) => {
         {/* Wire Masters Section */}
         {wireMastersImages.length > 0 && (
           <div>
-            <h3 className="text-[36px] md:text-[48px] font-bold text-white mb-10">
+            <h3 className="mb-10 text-[36px] font-bold text-white md:text-[48px]">
               Wire Masters - <span className="text-[#2E8BFF]">Conferencia</span>
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {wireMastersImages.map((image, idx) => (
                 <div
                   key={`wire-${idx}`}
-                  className="event-grid-item relative overflow-hidden rounded-xl cursor-pointer group"
+                  className="event-grid-item group relative cursor-pointer overflow-hidden rounded-xl"
                   onClick={() => setSelectedImage(image)}
                   style={{
-                    boxShadow: '0 6px 18px rgba(10,22,38,0.08)',
+                    boxShadow: "0 6px 18px rgba(10,22,38,0.08)",
                   }}
                 >
-                  <div className="aspect-[4/3] relative overflow-hidden bg-[#222D3B] border border-[#3B4451] group-hover:border-[#2E8BFF] transition-all duration-300">
+                  <div className="relative aspect-[4/3] overflow-hidden border border-[#3B4451] bg-[#222D3B] transition-all duration-300 group-hover:border-[#2E8BFF]">
                     <img
                       src={image.src}
                       alt={image.alt}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                       loading="lazy"
                     />
                     {/* Overlay on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A1626]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A1626]/90 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
                     {/* Label */}
-                    <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                      <p className="text-white text-sm font-semibold uppercase tracking-wider">{image.alt}</p>
+                    <div className="absolute bottom-0 left-0 right-0 translate-y-full transform p-5 transition-transform duration-300 group-hover:translate-y-0">
+                      <p className="text-sm font-semibold uppercase tracking-wider text-white">
+                        {image.alt}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -231,29 +243,40 @@ export const EventGrid = ({ images }: EventGridProps) => {
       {selectedImage && (
         <div
           ref={modalRef}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 cursor-pointer"
+          className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
           onClick={closeModal}
         >
-          <div className="relative max-w-6xl max-h-[90vh] w-full" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="relative max-h-[90vh] w-full max-w-6xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               onClick={closeModal}
-              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors z-10"
+              className="absolute -top-12 right-0 z-10 text-white transition-colors hover:text-gray-300"
               aria-label="Cerrar"
             >
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <path d="M18 6L6 18M6 6l12 12" />
               </svg>
             </button>
             <img
               src={selectedImage.src}
               alt={selectedImage.alt}
-              className="w-full h-full object-contain rounded-xl"
+              className="h-full w-full rounded-xl object-contain"
             />
-            <p className="text-white text-center mt-4 text-lg">{selectedImage.alt}</p>
+            <p className="mt-4 text-center text-lg text-white">
+              {selectedImage.alt}
+            </p>
           </div>
         </div>
       )}
     </>
   );
 };
-

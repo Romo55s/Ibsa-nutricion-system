@@ -45,17 +45,16 @@ export const CertificationsModal = ({
       opacity: 1,
       duration: 0.3,
       ease: "power2.out",
-    })
-      .to(
-        content,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.4,
-          ease: "power3.out",
-        },
-        "-=0.2"
-      );
+    }).to(
+      content,
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        ease: "power3.out",
+      },
+      "-=0.2"
+    );
 
     return () => {
       tl.kill();
@@ -175,13 +174,13 @@ export const CertificationsModal = ({
         />
         <div
           ref={contentRef}
-          className="relative z-10 bg-[#0A1626] rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-white/10"
+          className="relative z-10 max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-white/10 bg-[#0A1626]"
         >
-          <div className="sticky top-0 bg-[#0A1626] border-b border-white/10 p-6 flex items-center justify-between z-20">
+          <div className="sticky top-0 z-20 flex items-center justify-between border-b border-white/10 bg-[#0A1626] p-6">
             <h2 className="text-2xl font-bold text-white">Certificaciones</h2>
             <button
               onClick={handleClose}
-              className="text-white/60 hover:text-white transition-colors"
+              className="text-white/60 transition-colors hover:text-white"
               aria-label="Cerrar"
             >
               <svg
@@ -198,24 +197,24 @@ export const CertificationsModal = ({
           </div>
 
           <div className="p-6">
-            <p className="text-slate-400 mb-6 text-sm">
+            <p className="mb-6 text-sm text-slate-400">
               Haz clic en cualquier certificación para verla en tamaño completo.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {certifications.map((cert, idx) => (
                 <div
                   key={idx}
-                  className="group relative aspect-[4/3] bg-white/5 rounded-xl overflow-hidden cursor-pointer border border-white/5 hover:border-white/20 transition-all duration-300"
+                  className="group relative aspect-[4/3] cursor-pointer overflow-hidden rounded-xl border border-white/5 bg-white/5 transition-all duration-300 hover:border-white/20"
                   onClick={() => onSelectCertification(cert)}
                 >
                   <img
                     src={cert.src}
                     alt={cert.alt}
-                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                    className="h-full w-full object-cover opacity-80 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     <div className="absolute bottom-0 left-0 right-0 p-4">
-                      <p className="text-white font-semibold text-sm">
+                      <p className="text-sm font-semibold text-white">
                         {cert.title}
                       </p>
                     </div>
@@ -231,16 +230,16 @@ export const CertificationsModal = ({
       {selectedCertification && (
         <div
           ref={imageModalRef}
-          className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm cursor-pointer"
+          className="fixed inset-0 z-[60] flex cursor-pointer items-center justify-center bg-black/95 p-4 backdrop-blur-sm"
           onClick={closeImageModal}
         >
           <div
-            className="relative max-w-6xl max-h-[90vh] w-full"
+            className="relative max-h-[90vh] w-full max-w-6xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={closeImageModal}
-              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors z-10"
+              className="absolute -top-12 right-0 z-10 text-white transition-colors hover:text-gray-300"
               aria-label="Cerrar"
             >
               <svg
@@ -257,10 +256,10 @@ export const CertificationsModal = ({
             <img
               src={selectedCertification.src}
               alt={selectedCertification.alt}
-              className="w-full h-full object-contain rounded-xl"
+              className="h-full w-full rounded-xl object-contain"
             />
-            <div className="text-white text-center mt-4">
-              <p className="text-lg font-semibold mb-1">
+            <div className="mt-4 text-center text-white">
+              <p className="mb-1 text-lg font-semibold">
                 {selectedCertification.title}
               </p>
             </div>
@@ -270,4 +269,3 @@ export const CertificationsModal = ({
     </>
   );
 };
-

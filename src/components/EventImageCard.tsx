@@ -13,7 +13,12 @@ interface EventImageCardProps {
   aspectRatio?: string;
 }
 
-export const EventImageCard = ({ image, onImageClick, className = "", aspectRatio = "aspect-square" }: EventImageCardProps) => {
+export const EventImageCard = ({
+  image,
+  onImageClick,
+  className = "",
+  aspectRatio = "aspect-square",
+}: EventImageCardProps) => {
   const handleClick = () => {
     if (onImageClick) {
       onImageClick(image);
@@ -22,27 +27,27 @@ export const EventImageCard = ({ image, onImageClick, className = "", aspectRati
 
   return (
     <div
-      className={`relative ${aspectRatio || ''} overflow-hidden rounded-xl cursor-pointer group ${className}`}
+      className={`relative ${aspectRatio || ""} group cursor-pointer overflow-hidden rounded-xl ${className}`}
       onClick={handleClick}
-      style={{ boxShadow: '0 6px 18px rgba(10,22,38,0.08)' }}
+      style={{ boxShadow: "0 6px 18px rgba(10,22,38,0.08)" }}
     >
-      <div className="absolute inset-0 bg-[#222D3B] border border-[#3B4451] group-hover:border-[#2E8BFF] transition-all duration-300 overflow-hidden">
-        <div className="absolute inset-0 group-hover:scale-110 transition-transform duration-500">
+      <div className="absolute inset-0 overflow-hidden border border-[#3B4451] bg-[#222D3B] transition-all duration-300 group-hover:border-[#2E8BFF]">
+        <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-110">
           <img
             src={image.src}
             alt={image.alt}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
             loading="lazy"
           />
-          
+
           {/* Text overlay always visible - bottom left */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0A1626]/90 via-transparent to-transparent flex items-end">
-            <div className="p-4 md:p-6 text-left">
-              <p className="text-white text-base md:text-lg font-bold uppercase tracking-wider mb-1">
+          <div className="absolute inset-0 flex items-end bg-gradient-to-t from-[#0A1626]/90 via-transparent to-transparent">
+            <div className="p-4 text-left md:p-6">
+              <p className="mb-1 text-base font-bold uppercase tracking-wider text-white md:text-lg">
                 {image.alt}
               </p>
               {image.description && (
-                <p className="text-white/90 text-xs md:text-sm leading-relaxed font-normal">
+                <p className="text-xs font-normal leading-relaxed text-white/90 md:text-sm">
                   {image.description}
                 </p>
               )}
@@ -53,4 +58,3 @@ export const EventImageCard = ({ image, onImageClick, className = "", aspectRati
     </div>
   );
 };
-

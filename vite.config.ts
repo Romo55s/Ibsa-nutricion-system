@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
-import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 export default defineConfig({
   plugins: [
@@ -13,8 +13,6 @@ export default defineConfig({
     }),
   ],
   server: {
-    port: 5173
-  }
+    port: 5173,
+  },
 });
-
-

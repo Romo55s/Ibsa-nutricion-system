@@ -12,8 +12,11 @@ import { FinalCTA } from "../sections/FinalCTA";
 export const Home = () => {
   return (
     <div className="page">
+      <a href="#main-content" className="skip-to-content">
+        Saltar al contenido
+      </a>
       <Navbar />
-      <main>
+      <main id="main-content">
         <Hero />
         <Benefits />
         <About />
@@ -27,4 +30,3 @@ export const Home = () => {
     </div>
   );
 };
-
