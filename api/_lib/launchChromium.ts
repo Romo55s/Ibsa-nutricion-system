@@ -1,5 +1,6 @@
-import puppeteer from "puppeteer-core";
-import type { Browser } from "puppeteer-core";
+export {};
+
+const puppeteer = require("puppeteer-core");
 
 /**
  * Vercel / Lambda: @sparticuz/chromium + puppeteer-core.
@@ -12,7 +13,7 @@ function useServerlessChromium(): boolean {
   return env === "production" || env === "preview";
 }
 
-export async function launchChromiumForPdf(): Promise<Browser> {
+async function launchChromiumForPdf() {
   if (useServerlessChromium()) {
     const chromium = (await import("@sparticuz/chromium")).default;
     const withGraphics = chromium as typeof chromium & {
@@ -32,3 +33,5 @@ export async function launchChromiumForPdf(): Promise<Browser> {
     headless: true,
   });
 }
+
+module.exports = { launchChromiumForPdf };

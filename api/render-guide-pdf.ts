@@ -1,9 +1,10 @@
-import type { IncomingMessage, ServerResponse } from "http";
-import { buildBreakfastGuideHtml } from "./_lib/buildBreakfastGuideHtml";
-import { launchChromiumForPdf } from "./_lib/launchChromium";
-import { guideMeta } from "../src/data/breakfastGuideContent";
+export {};
 
-function getBaseUrl(req: IncomingMessage): string {
+const { buildBreakfastGuideHtml } = require("./_lib/buildBreakfastGuideHtml");
+const { launchChromiumForPdf } = require("./_lib/launchChromium");
+const { guideMeta } = require("../src/data/breakfastGuideContent");
+
+function getBaseUrl(req: any): string {
   const h = req.headers;
   const host = (h["x-forwarded-host"] || h.host) as string | undefined;
   if (!host) {
@@ -17,10 +18,7 @@ function getBaseUrl(req: IncomingMessage): string {
   return `${proto}://${host}`;
 }
 
-export default async function handler(
-  req: IncomingMessage,
-  res: ServerResponse,
-): Promise<void> {
+module.exports = async function handler(req: any, res: any): Promise<void> {
   if (req.method === "OPTIONS") {
     res.statusCode = 204;
     res.end();
@@ -83,4 +81,4 @@ export default async function handler(
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
     res.end("No se pudo generar el PDF. Revisa que Chromium/Chrome esté disponible.");
   }
-}
+};

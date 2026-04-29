@@ -1,4 +1,6 @@
-import {
+export {};
+
+const {
   closing,
   disclaimer,
   guideHero,
@@ -7,7 +9,7 @@ import {
   principles,
   recipes,
   timingGuide,
-} from "../../src/data/breakfastGuideContent";
+} = require("../../src/data/breakfastGuideContent");
 
 function esc(s: string): string {
   return s
@@ -27,16 +29,16 @@ function absUrl(base: string, path: string): string {
  * HTML completo para page.setContent + page.pdf (Chromium).
  * Imágenes y logo deben resolverse con baseUrl absoluto (misma app en Vercel).
  */
-export function buildBreakfastGuideHtml(baseUrl: string): string {
+function buildBreakfastGuideHtml(baseUrl: string): string {
   const logoSrc = absUrl(baseUrl, "/ibsa-logo-white.svg");
 
   const introHtml = guideIntro.paragraphs
-    .map((p) => `<p class="intro-p">${esc(p)}</p>`)
+    .map((p: any) => `<p class="intro-p">${esc(p)}</p>`)
     .join("");
 
   const timingRows = timingGuide.rows
     .map(
-      (row) => `
+      (row: any) => `
       <tr>
         <td class="timing-window">${esc(row.window)}</td>
         <td class="timing-focus">${esc(row.focus)}</td>
@@ -46,7 +48,7 @@ export function buildBreakfastGuideHtml(baseUrl: string): string {
 
   const principlesHtml = principles.items
     .map(
-      (item) => `
+      (item: any) => `
       <div class="principle">
         <h4>${esc(item.title)}</h4>
         <p>${esc(item.body)}</p>
@@ -55,13 +57,13 @@ export function buildBreakfastGuideHtml(baseUrl: string): string {
     .join("");
 
   const recipesHtml = recipes
-    .map((recipe) => {
+    .map((recipe: any) => {
       const imgSrc = absUrl(baseUrl, recipe.imageUrl);
       const timingChip = esc(recipe.timingLabel.replace(/^Ideal\s*/, ""));
       const safeAlt = esc(recipe.imageAlt);
       const ingredientsHtml = recipe.ingredients
         .map(
-          (ing) => `
+          (ing: any) => `
         <li class="ing-row">
           <span class="ing-dash" aria-hidden="true"></span>
           <span>${esc(ing)}</span>
@@ -376,3 +378,5 @@ export function buildBreakfastGuideHtml(baseUrl: string): string {
 </body>
 </html>`;
 }
+
+module.exports = { buildBreakfastGuideHtml };
