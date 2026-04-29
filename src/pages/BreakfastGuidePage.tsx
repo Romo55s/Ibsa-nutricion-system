@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -25,33 +19,11 @@ import Logo from "../assets/Logo-IBSA-White.svg";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function pdfDownloadErrorMessage(error: unknown): string {
-  const msg = error instanceof Error ? error.message : "";
-  const name = error instanceof Error ? error.name : "";
-  const looksLikeNetwork =
-    name === "TypeError" &&
-    (msg === "Failed to fetch" ||
-      msg.includes("Failed to fetch") ||
-      msg.includes("NetworkError") ||
-      msg.includes("Load failed"));
-
-  if (looksLikeNetwork) {
-    return (
-      "El navegador no pudo conectar con el servidor que genera el PDF. " +
-      "En local: ejecuta `npm run dev:vercel`, abre la URL que indique la terminal (p. ej. http://127.0.0.1:3000) y no uses solo el puerto 5173. " +
-      "Prueba `127.0.0.1` en lugar de `localhost`. Revisa VPN, firewall o extensiones que bloqueen peticiones. " +
-      "Abajo tienes un enlace de descarga directa por si el bloqueo afecta solo a fetch."
-    );
-  }
-
-  if (msg) return msg;
-  return "No se pudo generar el PDF.";
-}
+/** PDF estático en `public/` (generar con `npm run generate:pdf`). */
+const pdfPublicPath = `/${guideMeta.pdfFileName}`;
 
 export const BreakfastGuidePage = () => {
   const pageRootRef = useRef<HTMLDivElement>(null);
-  const [pdfLoading, setPdfLoading] = useState(false);
-  const [pdfError, setPdfError] = useState<string | null>(null);
 
   useEffect(() => {
     const prev = document.title;
@@ -194,50 +166,6 @@ export const BreakfastGuidePage = () => {
     };
   }, []);
 
-  const handleDownloadPdf = useCallback(async () => {
-    setPdfError(null);
-    setPdfLoading(true);
-    try {
-      const pdfEndpoint = new URL(
-        "/api/render-guide-pdf",
-        window.location.origin,
-      ).toString();
-      const res = await fetch(pdfEndpoint, {
-        method: "GET",
-        cache: "no-store",
-      });
-      const buf = await res.arrayBuffer();
-      if (!res.ok) {
-        const detail = new TextDecoder().decode(buf).trim().slice(0, 420);
-        throw new Error(
-          detail ||
-            `El servidor respondió ${res.status}. Prueba \`npm run dev:vercel\` y abre la URL que indique (no :5173).`,
-        );
-      }
-      const bytes = new Uint8Array(buf);
-      const sig = String.fromCharCode(...bytes.subarray(0, Math.min(5, bytes.length)));
-      if (!sig.startsWith("%PDF")) {
-        throw new Error(
-          "La respuesta no es un PDF válido. Con solo `npm run dev` no existe la API; usa `npm run dev:vercel`.",
-        );
-      }
-      const blob = new Blob([bytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = guideMeta.pdfFileName;
-      a.rel = "noopener";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    } catch (e) {
-      setPdfError(pdfDownloadErrorMessage(e));
-    } finally {
-      setPdfLoading(false);
-    }
-  }, []);
-
   return (
     <div className="min-h-screen bg-[#f4f5f7]">
       <a href="#main-content" className="skip-to-content">
@@ -316,11 +244,10 @@ export const BreakfastGuidePage = () => {
                 </span>
                 .
               </p>
-              <button
-                type="button"
-                disabled={pdfLoading}
-                onClick={handleDownloadPdf}
-                className="guide-download-btn group relative inline-flex min-h-[52px] shrink-0 items-center justify-center gap-3 overflow-hidden rounded-full border border-[#0A1626] bg-[#0A1626] px-6 py-3.5 pl-5 text-left shadow-[0_10px_40px_-10px_rgba(10,22,38,0.55),0_0_0_1px_rgba(255,255,255,0.06)_inset] transition-[transform,box-shadow,border-color] duration-300 enabled:hover:-translate-y-0.5 enabled:hover:border-[#2E8BFF]/55 enabled:hover:shadow-[0_16px_48px_-12px_rgba(46,139,255,0.35),0_0_0_1px_rgba(126,184,255,0.2)_inset] disabled:cursor-not-allowed disabled:opacity-55"
+              <a
+                href={pdfPublicPath}
+                download={guideMeta.pdfFileName}
+                className="guide-download-btn group relative inline-flex min-h-[52px] shrink-0 items-center justify-center gap-3 overflow-hidden rounded-full border border-[#0A1626] bg-[#0A1626] px-6 py-3.5 pl-5 text-left shadow-[0_10px_40px_-10px_rgba(10,22,38,0.55),0_0_0_1px_rgba(255,255,255,0.06)_inset] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-[#2E8BFF]/55 hover:shadow-[0_16px_48px_-12px_rgba(46,139,255,0.35),0_0_0_1px_rgba(126,184,255,0.2)_inset]"
               >
                 <span
                   className="pointer-events-none absolute -left-1/3 top-0 h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent opacity-0 transition-[opacity,transform] duration-500 disabled:opacity-0 group-hover:translate-x-[220%] group-hover:opacity-100"
@@ -330,78 +257,33 @@ export const BreakfastGuidePage = () => {
                   className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-br from-[#2E8BFF]/15 via-transparent to-transparent opacity-0 transition-opacity duration-300 disabled:opacity-0 group-hover:opacity-100"
                   aria-hidden
                 />
-                {pdfLoading ? (
+                <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/15 transition-[background-color,box-shadow] duration-300 group-hover:bg-[#2E8BFF]/25 group-hover:ring-[#7EB8FF]/40">
                   <svg
-                    className="relative h-5 w-5 shrink-0 animate-spin text-[#7EB8FF]"
+                    width="22"
+                    height="22"
                     viewBox="0 0 24 24"
                     fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-[#E8F1FF]"
                     aria-hidden
                   >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-90"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                    <path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3" />
                   </svg>
-                ) : (
-                  <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/15 transition-[background-color,box-shadow] duration-300 group-hover:bg-[#2E8BFF]/25 group-hover:ring-[#7EB8FF]/40">
-                    <svg
-                      width="22"
-                      height="22"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.75"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-[#E8F1FF]"
-                      aria-hidden
-                    >
-                      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-                      <path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3" />
-                    </svg>
-                  </span>
-                )}
+                </span>
                 <span className="relative flex min-w-0 flex-col items-start gap-0.5">
                   <span className="text-[15px] font-semibold tracking-tight text-white">
-                    {pdfLoading ? "Generando tu PDF…" : "Descargar guía en PDF"}
+                    Descargar guía en PDF
                   </span>
                   <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-[#7EB8FF]/90">
                     Gratis · listo para imprimir
                   </span>
                 </span>
-              </button>
+              </a>
             </div>
-            {pdfError ? (
-              <div
-                className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
-                role="alert"
-              >
-                <p className="leading-relaxed">{pdfError}</p>
-                <p className="mt-3 text-xs font-medium text-red-900/90">
-                  <a
-                    href="/api/render-guide-pdf"
-                    download={guideMeta.pdfFileName}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline decoration-red-800/40 underline-offset-2 hover:decoration-red-900"
-                  >
-                    Descarga directa (misma URL, sin usar fetch)
-                  </a>
-                </p>
-                <p className="mt-2 text-xs text-red-800/85">
-                  Otra opción: menú del navegador → Imprimir → Guardar como PDF.
-                </p>
-              </div>
-            ) : null}
 
             <article
               data-guide-pdf-root

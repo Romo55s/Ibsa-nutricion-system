@@ -7,11 +7,11 @@
     "dev:vercel": "vercel dev",
     "build": "vite build",
     "preview": "vite preview",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"vite.config.ts\" \"*.mjs\" \"*.cjs\""
+    "generate:pdf": "tsx scripts/generate-breakfast-guide-pdf.ts",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"scripts/**/*.ts\" \"vite.config.ts\" \"*.mjs\" \"*.cjs\""
   },
   "dependencies": {
     "@gsap/react": "^2.1.1",
-    "@sparticuz/chromium": "^131.0.1",
     "@use-gesture/react": "^10.3.1",
     "gsap": "^3.12.5",
     "lenis": "^1.3.15",
@@ -32,6 +32,7 @@
     "prettier-plugin-tailwindcss": "^0.8.0",
     "sharp": "^0.34.0",
     "tailwindcss": "^3.4.15",
+    "tsx": "^4.19.4",
     "typescript": "^5.6.3",
     "vercel": "^52.0.0",
     "vite": "^6.0.0"

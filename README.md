@@ -33,6 +33,21 @@ The app runs locally on `http://localhost:5173`.
 - `npm run build` - Build production bundle into `dist/`
 - `npm run preview` - Preview the production build locally
 - `npm run format` - Format source/config files with Prettier
+- `npm run generate:pdf` - Regenerate the breakfast guide PDF into `public/` (requires Chrome; see below)
+
+## Breakfast guide PDF (static)
+
+The guide download is a **static file** served from `public/` (same filename as `guideMeta.pdfFileName` in `src/data/breakfastGuideContent.ts`), not a serverless renderer. That avoids runtime Chromium on Vercel.
+
+From the project root, regenerate the PDF after content or image changes:
+
+```bash
+npm run generate:pdf
+```
+
+Images and the logo are read from `public/` and embedded in the HTML (no dev server needed). Commit the updated PDF under `public/` before deploying.
+
+Requires **Google Chrome** installed (`puppeteer-core` uses the `chrome` channel).
 
 ## Project Structure
 

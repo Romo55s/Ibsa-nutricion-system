@@ -1,7 +1,7 @@
 /**
  * Contenido de la guía de desayunos pre-entreno.
- * Edita aquí para actualizar la página y el PDF exportado (misma fuente).
- * Imágenes en `public/guide/` para URLs estables en web y en el HTML del PDF (Puppeteer).
+ * Edita aquí para actualizar la página y el PDF estático (misma fuente; regenerar con `npm run generate:pdf`).
+ * Imágenes en `public/guide/` para URLs estables en web y en el HTML del PDF.
  */
 
 export const guideMeta = {
