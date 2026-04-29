@@ -1,8 +1,6 @@
-export {};
-
-const { buildBreakfastGuideHtml } = require("./_lib/buildBreakfastGuideHtml");
-const { launchChromiumForPdf } = require("./_lib/launchChromium");
-const { guideMeta } = require("../src/data/breakfastGuideContent");
+const htmlLib = require("./_lib/buildBreakfastGuideHtml");
+const chromeLib = require("./_lib/launchChromium");
+const guideContent = require("../src/data/breakfastGuideContent");
 
 function getBaseUrl(req: any): string {
   const h = req.headers;
@@ -35,9 +33,9 @@ module.exports = async function handler(req: any, res: any): Promise<void> {
   let browser;
   try {
     const baseUrl = getBaseUrl(req);
-    const html = buildBreakfastGuideHtml(baseUrl);
+    const html = htmlLib.buildBreakfastGuideHtml(baseUrl);
 
-    browser = await launchChromiumForPdf();
+    browser = await chromeLib.launchChromiumForPdf();
     const page = await browser.newPage();
     // Hobby: límite ~10s de CPU; `networkidle0` + Google Fonts suele colgar y mata la función.
     await page.setContent(html, { waitUntil: "load", timeout: 9000 });
@@ -64,7 +62,7 @@ module.exports = async function handler(req: any, res: any): Promise<void> {
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename="${guideMeta.pdfFileName}"`,
+      `attachment; filename="${guideContent.guideMeta.pdfFileName}"`,
     );
     res.setHeader("Cache-Control", "no-store");
     res.end(pdfBuffer);

@@ -1,15 +1,12 @@
-export {};
-
-const {
-  closing,
-  disclaimer,
-  guideHero,
-  guideIntro,
-  guideMeta,
-  principles,
-  recipes,
-  timingGuide,
-} = require("../../src/data/breakfastGuideContent");
+const breakfastContent = require("../../src/data/breakfastGuideContent");
+const closing = breakfastContent.closing;
+const disclaimer = breakfastContent.disclaimer;
+const guideHero = breakfastContent.guideHero;
+const guideIntro = breakfastContent.guideIntro;
+const guideMeta = breakfastContent.guideMeta;
+const principles = breakfastContent.principles;
+const recipes = breakfastContent.recipes;
+const timingGuide = breakfastContent.timingGuide;
 
 function esc(s: string): string {
   return s
@@ -29,7 +26,7 @@ function absUrl(base: string, path: string): string {
  * HTML completo para page.setContent + page.pdf (Chromium).
  * Imágenes y logo deben resolverse con baseUrl absoluto (misma app en Vercel).
  */
-function buildBreakfastGuideHtml(baseUrl: string): string {
+function buildBreakfastGuideHtmlImpl(baseUrl: string): string {
   const logoSrc = absUrl(baseUrl, "/ibsa-logo-white.svg");
 
   const introHtml = guideIntro.paragraphs
@@ -379,4 +376,4 @@ function buildBreakfastGuideHtml(baseUrl: string): string {
 </html>`;
 }
 
-module.exports = { buildBreakfastGuideHtml };
+module.exports = { buildBreakfastGuideHtml: buildBreakfastGuideHtmlImpl };

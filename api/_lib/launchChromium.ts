@@ -1,5 +1,3 @@
-export {};
-
 const puppeteer = require("puppeteer-core");
 
 /**
@@ -13,7 +11,7 @@ function useServerlessChromium(): boolean {
   return env === "production" || env === "preview";
 }
 
-async function launchChromiumForPdf() {
+async function launchChromiumForPdfImpl() {
   if (useServerlessChromium()) {
     const chromium = (await import("@sparticuz/chromium")).default;
     const withGraphics = chromium as typeof chromium & {
@@ -34,4 +32,4 @@ async function launchChromiumForPdf() {
   });
 }
 
-module.exports = { launchChromiumForPdf };
+module.exports = { launchChromiumForPdf: launchChromiumForPdfImpl };
