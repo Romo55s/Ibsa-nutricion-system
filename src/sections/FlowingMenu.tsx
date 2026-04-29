@@ -146,10 +146,12 @@ const MENU_ITEMS = [
     images: [ConsultorioPhyn, ConsultorioPhyn2, RhinoGym],
   },
   {
-    text: "Recetario",
+    text: "Guía pre-entreno",
     link: "/guia-desayunos-pre-entreno",
     images: [
-      "https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?q=80&w=600&auto=format&fit=crop&fm=webp",
+      "/guide/overnight-oats.png",
+      "/guide/toastadas-fruta.png",
+      "/guide/batido-pre-entreno.png",
     ],
   },
   {

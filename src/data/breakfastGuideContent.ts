@@ -59,7 +59,7 @@ export const principles = {
     },
     {
       title: "Proteína en dosis razonable",
-      body: "Ayuda al saciety y al mantenimiento muscular; no hace falta un plato enorme justo antes de salir al gym.",
+      body: "Ayuda a la saciedad y al mantenimiento muscular; no hace falta un plato enorme justo antes de salir al gym.",
     },
     {
       title: "Grasa y fibra: a tu tolerancia",
@@ -95,7 +95,7 @@ export const recipes: GuideRecipe[] = [
       "½ plátano en rodajas o frutos rojos",
       "Canela o vainilla al gusto",
     ],
-    tip: "Pruébalo un día de entreno ligero; si lo digestiona bien, queda perfecto para días de mayor volumen.",
+    tip: "Pruébalo un día de entreno ligero; si lo digieres bien, queda perfecto para días de mayor volumen.",
   },
   {
     name: "Tostadas integrales + fruta",
