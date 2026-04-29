@@ -41,10 +41,16 @@ export default async function handler(
 
     browser = await launchChromiumForPdf();
     const page = await browser.newPage();
-    await page.setContent(html, {
-      waitUntil: "networkidle0",
-      timeout: 45_000,
-    });
+    // Hobby: límite ~10s de CPU; `networkidle0` + Google Fonts suele colgar y mata la función.
+    await page.setContent(html, { waitUntil: "load", timeout: 9000 });
+    await page
+      .waitForFunction(
+        () => [...document.images].every((img) => img.complete),
+        { timeout: 8000 },
+      )
+      .catch(() => {
+        /* imágenes lentas: seguimos con lo que haya cargado */
+      });
 
     const pdfBuffer = await page.pdf({
       format: "A4",

@@ -95,14 +95,11 @@ export function buildBreakfastGuideHtml(baseUrl: string): string {
 <head>
   <meta charset="UTF-8" />
   <title>${esc(guideMeta.documentTitle)}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: "Albert Sans", system-ui, -apple-system, sans-serif;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
       color: #222d3b;
       background: #fff;
       font-size: 11pt;

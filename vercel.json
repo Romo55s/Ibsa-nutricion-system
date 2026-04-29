@@ -1,8 +1,14 @@
 {
+  "rewrites": [
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ],
   "functions": {
     "api/render-guide-pdf.ts": {
-      "maxDuration": 60,
-      "memory": 3008
+      "maxDuration": 10,
+      "memory": 2048
     }
   }
 }

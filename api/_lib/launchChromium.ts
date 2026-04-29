@@ -5,8 +5,15 @@ import type { Browser } from "puppeteer-core";
  * Vercel / Lambda: @sparticuz/chromium + puppeteer-core.
  * Local (Windows/Mac): Chrome instalado (channel "chrome").
  */
+function useServerlessChromium(): boolean {
+  // `VERCEL=1` no siempre está presente; en deploys reales viene `VERCEL_ENV`.
+  // `development` = `vercel dev` local → usar Chrome del sistema (p. ej. Windows).
+  const env = process.env.VERCEL_ENV;
+  return env === "production" || env === "preview";
+}
+
 export async function launchChromiumForPdf(): Promise<Browser> {
-  if (process.env.VERCEL === "1") {
+  if (useServerlessChromium()) {
     const chromium = (await import("@sparticuz/chromium")).default;
     const withGraphics = chromium as typeof chromium & {
       setGraphicsMode?: (enabled: boolean) => void;
