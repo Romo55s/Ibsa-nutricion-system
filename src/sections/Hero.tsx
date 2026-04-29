@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { Link } from "react-router-dom";
 import { Button } from "../components/Button";
 import MainMariana from "../assets/main_mariana.jpeg";
 
@@ -94,14 +95,12 @@ export const Hero = () => {
                 Agendar consulta
               </Button>
             </a>
-            <a href="#recetario" className="w-full sm:w-auto">
-              <Button
-                variant="ghost"
-                className="h-14 w-full border-white/20 px-8 font-medium text-white hover:bg-white/5 sm:w-auto lg:h-[3.75rem] lg:px-10 lg:text-[15px]"
-              >
-                Guía de desayunos gratis
-              </Button>
-            </a>
+            <Link
+              to="/guia-desayunos-pre-entreno"
+              className="relative inline-flex h-14 w-full items-center justify-center overflow-hidden rounded-full border border-white/20 bg-transparent px-8 font-medium text-white transition-colors duration-300 hover:bg-white/5 sm:w-auto lg:h-[3.75rem] lg:px-10 lg:text-[15px]"
+            >
+              Guía de desayunos pre-entreno
+            </Link>
           </div>
 
           {/* Specialties */}

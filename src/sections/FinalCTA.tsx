@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { Link } from "react-router-dom";
 import { Button } from "../components/Button";
 
 export const FinalCTA = () => {
@@ -43,19 +44,20 @@ export const FinalCTA = () => {
                 Recurso Gratuito
               </div>
               <h3 className="mb-4 text-3xl font-bold md:text-4xl">
-                Guía de Desayunos <br />{" "}
-                <span className="text-blue-400">Energéticos</span>
+                Guía de desayunos <br />{" "}
+                <span className="text-blue-400">pre-entreno</span>
               </h3>
               <p className="mb-8 text-lg leading-relaxed text-slate-400">
-                Olvídate de empezar el día sin energía. Descarga mi guía con 5
-                recetas rápidas, deliciosas y perfectas para tu rendimiento.
+                Ideas prácticas para desayunar antes de entrenar: energía
+                digestible y enfoque fitness, en PDF con la marca IBSA para que
+                lo uses o lo compartas.
               </p>
-              <Button
-                variant="ghost"
-                className="border border-white/20 transition-all duration-300 hover:bg-white hover:text-[#0A1626]"
+              <Link
+                to="/guia-desayunos-pre-entreno"
+                className="relative inline-flex min-h-[44px] cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/20 bg-transparent px-8 py-4 font-medium text-white transition-all duration-300 hover:bg-white hover:text-[#0A1626]"
               >
-                Descargar guía gratis
-              </Button>
+                Ver guía y descargar PDF
+              </Link>
             </div>
 
             {/* Right: Main CTA */}

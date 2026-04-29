@@ -132,10 +132,10 @@ export const Footer = () => {
             <ul className="space-y-3 text-sm">
               <li>
                 <a
-                  href="#recetario"
+                  href="/guia-desayunos-pre-entreno"
                   className="transition-colors hover:text-blue-300"
                 >
-                  Guía de Desayunos
+                  Guía de desayunos pre-entreno
                 </a>
               </li>
               <li>

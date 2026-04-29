@@ -15,6 +15,11 @@ const Home = lazy(() =>
 const EventPage = lazy(() =>
   import("./pages/EventPage").then((m) => ({ default: m.EventPage }))
 );
+const BreakfastGuidePage = lazy(() =>
+  import("./pages/BreakfastGuidePage").then((m) => ({
+    default: m.BreakfastGuidePage,
+  }))
+);
 
 // Registrar ScrollTrigger una sola vez
 gsap.registerPlugin(ScrollTrigger);
@@ -116,6 +121,10 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/evento" element={<EventPage />} />
+          <Route
+            path="/guia-desayunos-pre-entreno"
+            element={<BreakfastGuidePage />}
+          />
         </Routes>
       </Suspense>
     </>

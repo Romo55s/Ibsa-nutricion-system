@@ -147,7 +147,7 @@ const MENU_ITEMS = [
   },
   {
     text: "Recetario",
-    link: "#recetario",
+    link: "/guia-desayunos-pre-entreno",
     images: [
       "https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?q=80&w=600&auto=format&fit=crop&fm=webp",
     ],
