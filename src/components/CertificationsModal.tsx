@@ -56,8 +56,14 @@ export const CertificationsModal = ({
       "-=0.2"
     );
 
+    window.dispatchEvent(new Event("ibsa:modal-lock"));
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     return () => {
       tl.kill();
+      document.body.style.overflow = prevOverflow;
+      window.dispatchEvent(new Event("ibsa:modal-unlock"));
     };
   }, [isOpen]);
 
@@ -174,7 +180,8 @@ export const CertificationsModal = ({
         />
         <div
           ref={contentRef}
-          className="relative z-10 max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-white/10 bg-[#0A1626]"
+          className="relative z-10 max-h-[90vh] w-full max-w-4xl overflow-y-auto overscroll-contain rounded-2xl border border-white/10 bg-[#0A1626]"
+          data-lenis-prevent
         >
           <div className="sticky top-0 z-20 flex items-center justify-between border-b border-white/10 bg-[#0A1626] p-6">
             <h2 className="text-2xl font-bold text-white">Certificaciones</h2>
