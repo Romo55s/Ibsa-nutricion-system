@@ -20,6 +20,24 @@ const BreakfastGuidePage = lazy(() =>
     default: m.BreakfastGuidePage,
   }))
 );
+const RoutinesPage = lazy(() =>
+  import("./pages/RoutinesPage").then((m) => ({ default: m.RoutinesPage }))
+);
+const RoutineDetailPage = lazy(() =>
+  import("./pages/RoutineDetailPage").then((m) => ({
+    default: m.RoutineDetailPage,
+  }))
+);
+const RoutineCreatePage = lazy(() =>
+  import("./pages/RoutineEditorPage").then((m) => ({
+    default: m.RoutineCreatePage,
+  }))
+);
+const RoutineEditPage = lazy(() =>
+  import("./pages/RoutineEditorPage").then((m) => ({
+    default: m.RoutineEditPage,
+  }))
+);
 
 // Registrar ScrollTrigger una sola vez
 gsap.registerPlugin(ScrollTrigger);
@@ -70,6 +88,7 @@ const AppContent = () => {
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
+      allowNestedScroll: true,
     });
 
     lenis.on("scroll", ScrollTrigger.update);
@@ -79,6 +98,18 @@ const AppContent = () => {
     };
     gsap.ticker.add(onGsapTicker);
     gsap.ticker.lagSmoothing(0);
+
+    let modalLockCount = 0;
+    const onModalLock = () => {
+      modalLockCount += 1;
+      if (modalLockCount === 1) lenis.stop();
+    };
+    const onModalUnlock = () => {
+      modalLockCount = Math.max(0, modalLockCount - 1);
+      if (modalLockCount === 0) lenis.start();
+    };
+    window.addEventListener("ibsa:modal-lock", onModalLock);
+    window.addEventListener("ibsa:modal-unlock", onModalUnlock);
 
     // Manejo de anclas modificado para funcionar con React Router
     // Solo interceptar si estamos en la misma página (no cuando navegamos desde otra página)
@@ -111,6 +142,8 @@ const AppContent = () => {
       lenis.destroy();
       gsap.ticker.remove(onGsapTicker);
       document.removeEventListener("click", handleClick);
+      window.removeEventListener("ibsa:modal-lock", onModalLock);
+      window.removeEventListener("ibsa:modal-unlock", onModalUnlock);
     };
   }, []);
 
@@ -125,6 +158,10 @@ const AppContent = () => {
             path="/guia-desayunos-pre-entreno"
             element={<BreakfastGuidePage />}
           />
+          <Route path="/rutinas" element={<RoutinesPage />} />
+          <Route path="/rutinas/nueva" element={<RoutineCreatePage />} />
+          <Route path="/rutinas/:id" element={<RoutineDetailPage />} />
+          <Route path="/rutinas/:id/editar" element={<RoutineEditPage />} />
         </Routes>
       </Suspense>
     </>
