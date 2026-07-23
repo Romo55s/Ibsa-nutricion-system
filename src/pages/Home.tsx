@@ -4,6 +4,7 @@ import { Hero } from "../sections/Hero";
 import { Benefits } from "../sections/Benefits";
 import { About } from "../sections/About";
 import { Credibility } from "../sections/Credibility";
+import { RoutineTool } from "../sections/RoutineTool";
 import { Reviews } from "../sections/Reviews";
 import { Locations } from "../sections/Locations";
 import { FlowingMenu } from "../sections/FlowingMenu";
@@ -21,6 +22,7 @@ export const Home = () => {
         <Benefits />
         <About />
         <Credibility />
+        <RoutineTool />
         <Reviews />
         <Locations />
         <FlowingMenu />
