@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../assets/Logo-IBSA-White.svg";
@@ -8,8 +8,14 @@ import StaggeredMenu from "./StaggeredMenu";
 const menuItems = [
   { label: "Beneficios", ariaLabel: "Beneficios", link: "#beneficios" },
   { label: "Sobre mí", ariaLabel: "Sobre mí", link: "#sobre-mi" },
+  {
+    label: "Crea tu rutina",
+    ariaLabel: "Crea tu rutina",
+    link: "#crea-tu-rutina",
+  },
   { label: "Reseñas", ariaLabel: "Reseñas", link: "#review" },
   { label: "Certificados", ariaLabel: "Certificados", link: "#certificados" },
+  { label: "Rutinas", ariaLabel: "Rutinas", link: "/rutinas" },
   {
     label: "Agendar cita",
     ariaLabel: "Agendar cita",
@@ -99,8 +105,8 @@ const MagneticNavItem = ({
   }, []);
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // Si estamos en /evento y el link es un anchor, navegar a home con el hash
-    if (location.pathname === "/evento" && href.startsWith("#")) {
+    // Si estamos fuera de home y el link es un anchor, navegar a home con el hash
+    if (location.pathname !== "/" && href.startsWith("#")) {
       e.preventDefault();
       // Marcar como navegación de router para evitar conflicto con el handleClick global
       e.currentTarget.setAttribute("data-router-link", "true");
@@ -122,6 +128,10 @@ const MagneticNavItem = ({
           behavior: "smooth",
         });
       }
+    } else if (href.startsWith("/") && !href.startsWith("//")) {
+      e.preventDefault();
+      e.currentTarget.setAttribute("data-router-link", "true");
+      navigate(href);
     }
   };
 
@@ -148,6 +158,18 @@ const MagneticNavItem = ({
 
 export const Navbar = () => {
   const logoRef = useRef<HTMLImageElement>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    const onLock = () => setModalOpen(true);
+    const onUnlock = () => setModalOpen(false);
+    window.addEventListener("ibsa:modal-lock", onLock);
+    window.addEventListener("ibsa:modal-unlock", onUnlock);
+    return () => {
+      window.removeEventListener("ibsa:modal-lock", onLock);
+      window.removeEventListener("ibsa:modal-unlock", onUnlock);
+    };
+  }, []);
 
   const handleLogoEnter = () => {
     if (!logoRef.current) return;
@@ -171,7 +193,12 @@ export const Navbar = () => {
 
   return (
     <header
-      className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 transition-all duration-300"
+      className={`fixed left-0 right-0 top-0 z-50 border-b border-white/10 transition-all duration-300 ${
+        modalOpen
+          ? "pointer-events-none -translate-y-full opacity-0"
+          : "translate-y-0 opacity-100"
+      }`}
+      aria-hidden={modalOpen}
       style={{
         backdropFilter: "blur(12px)",
         background: "rgba(10, 22, 38, 0.85)",
@@ -200,13 +227,17 @@ export const Navbar = () => {
           </div>
         </Link>
 
-        <div className="hidden items-center gap-4 text-sm font-medium md:flex">
+        <div className="hidden items-center gap-3 text-sm font-medium lg:flex xl:gap-4">
           <MagneticNavItem href="#beneficios">Beneficios</MagneticNavItem>
           <MagneticNavItem href="#sobre-mi">Sobre mí</MagneticNavItem>
+          <MagneticNavItem href="#crea-tu-rutina">
+            Crea tu rutina
+          </MagneticNavItem>
           <MagneticNavItem href="#review">Reseñas</MagneticNavItem>
           <MagneticNavItem href="#certificados">Certificados</MagneticNavItem>
+          <MagneticNavItem href="/rutinas">Rutinas</MagneticNavItem>
 
-          <div className="ml-4">
+          <div className="ml-2 xl:ml-4">
             <a
               href="https://cal.com/mariana-ibarra-santos"
               target="_blank"
@@ -219,7 +250,7 @@ export const Navbar = () => {
           </div>
         </div>
 
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <StaggeredMenu
             isFixed={true}
             items={menuItems}
