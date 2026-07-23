@@ -1,6 +1,6 @@
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { gsap } from "gsap";
-import { colors } from "../design-system";
 import Logo from "../assets/Logo-IBSA-White.svg";
 
 export const Footer = () => {
@@ -117,6 +117,14 @@ export const Footer = () => {
               </li>
               <li>
                 <a
+                  href="#crea-tu-rutina"
+                  className="transition-colors hover:text-blue-300"
+                >
+                  Crea tu rutina
+                </a>
+              </li>
+              <li>
+                <a
                   href="#review"
                   className="transition-colors hover:text-blue-300"
                 >
@@ -131,12 +139,20 @@ export const Footer = () => {
             <h4 className="mb-6 font-semibold text-white">Recursos</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <a
-                  href="/guia-desayunos-pre-entreno"
+                <Link
+                  to="/guia-desayunos-pre-entreno"
                   className="transition-colors hover:text-blue-300"
                 >
                   Guía de desayunos pre-entreno
-                </a>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/rutinas"
+                  className="transition-colors hover:text-blue-300"
+                >
+                  Crear mis rutinas
+                </Link>
               </li>
               <li>
                 <a href="#" className="transition-colors hover:text-blue-300">
