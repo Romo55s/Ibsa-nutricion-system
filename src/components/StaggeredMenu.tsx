@@ -518,13 +518,31 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                       aria-label={it.ariaLabel}
                       data-index={idx + 1}
                       onClick={(e) => {
-                        // Si estamos en /evento y el link es un anchor, navegar a home con el hash
+                        // Si estamos fuera de home y el link es un anchor, navegar a home con el hash
                         if (
-                          location.pathname === "/evento" &&
+                          location.pathname !== "/" &&
                           it.link.startsWith("#")
                         ) {
                           e.preventDefault();
                           navigate(`/${it.link}`);
+                          closeMenu();
+                        } else if (
+                          location.pathname === "/" &&
+                          it.link.startsWith("#")
+                        ) {
+                          e.preventDefault();
+                          closeMenu();
+                          const element = document.querySelector(it.link);
+                          if (element) {
+                            const top =
+                              element.getBoundingClientRect().top +
+                              window.pageYOffset -
+                              100;
+                            window.scrollTo({ top, behavior: "smooth" });
+                          }
+                        } else if (it.link.startsWith("/") && !it.link.startsWith("//")) {
+                          e.preventDefault();
+                          navigate(it.link);
                           closeMenu();
                         } else if (it.onClick) {
                           e.preventDefault();
