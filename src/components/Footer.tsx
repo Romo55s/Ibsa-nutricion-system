@@ -27,9 +27,9 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="border-t border-white/5 bg-[#050B14] pb-10 pt-20 text-slate-400">
-      <div className="container mx-auto px-6">
-        <div className="mb-16 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
+    <footer className="bg-primary pb-8 pt-[var(--section-space)] text-light">
+      <div className="editorial-container">
+        <div className="mb-12 grid gap-x-[var(--grid-gap)] gap-y-8 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.25fr]">
           {/* Brand Column */}
           <div>
             <div
@@ -43,11 +43,11 @@ export const Footer = () => {
                 alt="IBSA Logo"
                 className="h-8 w-auto opacity-90 transition-opacity group-hover:opacity-100"
               />
-              <span className="text-lg font-bold tracking-tight text-white transition-colors group-hover:text-blue-300">
+              <span className="font-display text-3xl leading-tight text-white">
                 IBSA Nutrición
               </span>
             </div>
-            <p className="mb-6 max-w-xs text-sm leading-relaxed">
+            <p className="mb-5 max-w-sm text-base leading-relaxed">
               Nutrición clínica y deportiva con enfoque no peso-centrista.
               Transformando hábitos y rendimiento desde la empatía y la ciencia.
             </p>
@@ -57,7 +57,7 @@ export const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Síguenos en Instagram"
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10 hover:text-white"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 transition-colors hover:bg-white/10 hover:text-white"
               >
                 <svg
                   width="16"
@@ -73,7 +73,7 @@ export const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Síguenos en LinkedIn"
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10 hover:text-white"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 transition-colors hover:bg-white/10 hover:text-white"
               >
                 <svg
                   width="16"
@@ -89,12 +89,12 @@ export const Footer = () => {
 
           {/* Navigation */}
           <div>
-            <h4 className="mb-6 font-semibold text-white">Navegación</h4>
-            <ul className="space-y-3 text-sm">
+            <h2 className="mb-3 border-t border-white/30 pt-4 font-semibold text-white">Navegación</h2>
+            <ul className="text-sm">
               <li>
                 <a
                   href="#beneficios"
-                  className="transition-colors hover:text-blue-300"
+                  className="editorial-link min-h-11 transition-colors hover:text-white"
                 >
                   Resultados Reales
                 </a>
@@ -102,7 +102,7 @@ export const Footer = () => {
               <li>
                 <a
                   href="#sobre-mi"
-                  className="transition-colors hover:text-blue-300"
+                  className="editorial-link min-h-11 transition-colors hover:text-white"
                 >
                   Sobre Mí
                 </a>
@@ -110,7 +110,7 @@ export const Footer = () => {
               <li>
                 <a
                   href="#credibilidad"
-                  className="transition-colors hover:text-blue-300"
+                  className="editorial-link min-h-11 transition-colors hover:text-white"
                 >
                   Experiencia
                 </a>
@@ -118,7 +118,7 @@ export const Footer = () => {
               <li>
                 <a
                   href="#crea-tu-rutina"
-                  className="transition-colors hover:text-blue-300"
+                  className="editorial-link min-h-11 transition-colors hover:text-white"
                 >
                   Crea tu rutina
                 </a>
@@ -126,7 +126,7 @@ export const Footer = () => {
               <li>
                 <a
                   href="#review"
-                  className="transition-colors hover:text-blue-300"
+                  className="editorial-link min-h-11 transition-colors hover:text-white"
                 >
                   Testimonios
                 </a>
@@ -136,12 +136,12 @@ export const Footer = () => {
 
           {/* Legal / Info */}
           <div>
-            <h4 className="mb-6 font-semibold text-white">Recursos</h4>
-            <ul className="space-y-3 text-sm">
+            <h2 className="mb-3 border-t border-white/30 pt-4 font-semibold text-white">Recursos</h2>
+            <ul className="text-sm">
               <li>
                 <Link
                   to="/guia-desayunos-pre-entreno"
-                  className="transition-colors hover:text-blue-300"
+                  className="editorial-link min-h-11 transition-colors hover:text-white"
                 >
                   Guía de desayunos pre-entreno
                 </Link>
@@ -149,18 +149,18 @@ export const Footer = () => {
               <li>
                 <Link
                   to="/rutinas"
-                  className="transition-colors hover:text-blue-300"
+                  className="editorial-link min-h-11 transition-colors hover:text-white"
                 >
                   Crear mis rutinas
                 </Link>
               </li>
               <li>
-                <a href="#" className="transition-colors hover:text-blue-300">
+                <a href="#" className="editorial-link min-h-11 transition-colors hover:text-white">
                   Aviso de Privacidad
                 </a>
               </li>
               <li>
-                <a href="#" className="transition-colors hover:text-blue-300">
+                <a href="#" className="editorial-link min-h-11 transition-colors hover:text-white">
                   Términos y Condiciones
                 </a>
               </li>
@@ -169,21 +169,27 @@ export const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h4 className="mb-6 font-semibold text-white">Contacto</h4>
-            <ul className="space-y-3 text-sm">
+            <h2 className="mb-3 border-t border-white/30 pt-4 font-semibold text-white">Contacto</h2>
+            <a
+              href="https://cal.com/mariana-ibarra-santos"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="editorial-link mb-3 min-h-11 font-semibold text-white"
+            >
+              Agendar cita
+            </a>
+            <ul className="text-sm">
               <li className="flex items-start gap-3">
-                <span className="text-blue-400">📍</span>
                 <span>
                   Aguascalientes, México
                   <br />
-                  Phyn & Rhino Training Complex
+                  PHYN Clinic
                 </span>
               </li>
               <li className="flex items-center gap-3">
-                <span className="text-blue-400">📧</span>
                 <a
                   href="mailto:marianale0407@gmail.com"
-                  className="hover:text-white"
+                  className="editorial-link min-h-11"
                 >
                   marianale0407@gmail.com
                 </a>
@@ -192,7 +198,7 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 text-xs opacity-60 md:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/30 pt-6 text-xs md:flex-row">
           <p>
             © {new Date().getFullYear()} IBSA Nutrición. Todos los derechos
             reservados.

@@ -48,6 +48,8 @@ export interface Exercise {
   cues?: string[];
   /** Suggested for warmup / activation blocks */
   isWarmup?: boolean;
+  /** User-defined exercise stored in localStorage */
+  isCustom?: boolean;
 }
 
 export interface RoutineExercise {

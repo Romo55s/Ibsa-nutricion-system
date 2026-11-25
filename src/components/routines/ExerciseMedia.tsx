@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import {
   getExerciseImageUrl,
   getYoutubeEmbedUrl,
@@ -6,6 +6,7 @@ import {
   muscleGroupLabels,
   equipmentLabels,
 } from "../../data/exercises";
+import { isCustomExercise } from "../../lib/customExercisesStorage";
 import type { Exercise } from "../../types/routines";
 import { IconImage, IconPlay } from "./RoutineIcons";
 
@@ -27,11 +28,42 @@ function VideoToggleButton({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center justify-center gap-1.5 rounded-full border border-blue-400/40 px-3 py-1 text-xs text-blue-300 transition-colors hover:border-blue-300 hover:text-white"
+      className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border border-light bg-white px-3 py-2 text-sm font-medium text-accent hover:border-accent"
     >
       {showVideo ? <IconImage size={13} /> : <IconPlay size={13} />}
       {label ?? (showVideo ? "Ver imagen" : "Ver video")}
     </button>
+  );
+}
+
+function ExerciseImage({
+  exercise,
+  className = "",
+}: {
+  exercise: Exercise;
+  className?: string;
+}) {
+  const imageUrl = getExerciseImageUrl(exercise.imagePath);
+  if (!imageUrl || isCustomExercise(exercise)) {
+    return (
+      <div
+        className={`flex h-full w-full items-center justify-center bg-mist ${className}`}
+        aria-hidden
+      >
+        <span className="font-display text-4xl text-muted">
+          {exercise.name.trim().charAt(0).toUpperCase() || "?"}
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={imageUrl}
+      alt={exercise.name}
+      className={`h-full w-full object-cover ${className}`}
+      loading="lazy"
+    />
   );
 }
 
@@ -40,7 +72,6 @@ export function ExerciseMedia({
   compact = false,
 }: ExerciseMediaProps) {
   const [showVideo, setShowVideo] = useState(false);
-  const imageUrl = getExerciseImageUrl(exercise.imagePath);
   const videoId = exercise.youtubeVideoId?.trim() || null;
   const canEmbed = Boolean(videoId);
 
@@ -56,7 +87,7 @@ export function ExerciseMedia({
         }`}
       >
         <div
-          className={`overflow-hidden rounded-lg bg-primary-2/40 ${
+          className={`overflow-hidden rounded-sm bg-mist ${
             showVideo && canEmbed ? "aspect-video" : "aspect-square"
           }`}
         >
@@ -69,12 +100,7 @@ export function ExerciseMedia({
               allowFullScreen
             />
           ) : (
-            <img
-              src={imageUrl}
-              alt={exercise.name}
-              className="h-full w-full object-cover"
-              loading="lazy"
-            />
+            <ExerciseImage exercise={exercise} />
           )}
         </div>
         {canEmbed ? (
@@ -95,7 +121,7 @@ export function ExerciseMedia({
 
   return (
     <div className="space-y-4">
-      <div className="aspect-video overflow-hidden rounded-lg bg-primary-2/40">
+      <div className="aspect-video overflow-hidden rounded-sm bg-mist">
         {showVideo && canEmbed && videoId ? (
           <iframe
             title={`Demo: ${exercise.name}`}
@@ -105,22 +131,22 @@ export function ExerciseMedia({
             allowFullScreen
           />
         ) : (
-          <img
-            src={imageUrl}
-            alt={exercise.name}
-            className="h-full w-full object-cover"
-            loading="lazy"
-          />
+          <ExerciseImage exercise={exercise} />
         )}
       </div>
 
       <div className="flex flex-wrap items-center gap-2 text-xs">
-        <span className="rounded-full bg-white/10 px-3 py-1 text-slate-200">
+        <span className="rounded-sm bg-mist px-3 py-1 text-primary-2">
           {muscleGroupLabels[exercise.muscleGroup]}
         </span>
-        <span className="rounded-full bg-white/10 px-3 py-1 text-slate-200">
+        <span className="rounded-sm bg-mist px-3 py-1 text-primary-2">
           {equipmentLabels[exercise.equipment]}
         </span>
+        {isCustomExercise(exercise) && (
+          <span className="rounded-sm bg-primary-2 px-3 py-1 text-white">
+            Personalizado
+          </span>
+        )}
         {canEmbed ? (
           <VideoToggleButton
             showVideo={showVideo}

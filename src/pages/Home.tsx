@@ -7,28 +7,24 @@ import { Credibility } from "../sections/Credibility";
 import { RoutineTool } from "../sections/RoutineTool";
 import { Reviews } from "../sections/Reviews";
 import { Locations } from "../sections/Locations";
-import { FlowingMenu } from "../sections/FlowingMenu";
 import { FinalCTA } from "../sections/FinalCTA";
 
-export const Home = () => {
-  return (
-    <div className="page">
-      <a href="#main-content" className="skip-to-content">
-        Saltar al contenido
-      </a>
-      <Navbar />
-      <main id="main-content">
-        <Hero />
-        <Benefits />
-        <About />
-        <Credibility />
-        <RoutineTool />
-        <Reviews />
-        <Locations />
-        <FlowingMenu />
-        <FinalCTA />
-      </main>
-      <Footer />
-    </div>
-  );
-};
+export const Home = () => (
+  <div className="page">
+    <a href="#main-content" className="skip-to-content">
+      Saltar al contenido
+    </a>
+    <Navbar />
+    <main id="main-content">
+      <Hero />
+      <Benefits />
+      <About />
+      <Credibility />
+      <RoutineTool />
+      <Reviews />
+      <Locations />
+      <FinalCTA />
+    </main>
+    <Footer />
+  </div>
+);

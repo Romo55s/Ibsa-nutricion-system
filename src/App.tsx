@@ -2,12 +2,14 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Outlet,
   useLocation,
 } from "react-router-dom";
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useLayoutEffect } from "react";
 import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { EditorialLinkMotion } from "./components/EditorialLinkMotion";
 
 const Home = lazy(() =>
   import("./pages/Home").then((m) => ({ default: m.Home }))
@@ -80,6 +82,35 @@ const ScrollToTop = () => {
   return null;
 };
 
+const PageTransition = () => {
+  const { pathname } = useLocation();
+
+  useLayoutEffect(() => {
+    const main = document.getElementById("main-content");
+    if (!main || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const context = gsap.context(() => {
+      gsap.fromTo(
+        main,
+        { autoAlpha: 0, y: 10 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.38,
+          ease: "power2.out",
+          clearProps: "opacity,visibility,transform",
+        }
+      );
+    });
+
+    return () => context.revert();
+  }, [pathname]);
+
+  return <Outlet />;
+};
+
 const AppContent = () => {
   useEffect(() => {
     const lenis = new Lenis({
@@ -150,18 +181,21 @@ const AppContent = () => {
   return (
     <>
       <ScrollToTop />
+      <EditorialLinkMotion />
       <Suspense fallback={null}>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/evento" element={<EventPage />} />
-          <Route
-            path="/guia-desayunos-pre-entreno"
-            element={<BreakfastGuidePage />}
-          />
-          <Route path="/rutinas" element={<RoutinesPage />} />
-          <Route path="/rutinas/nueva" element={<RoutineCreatePage />} />
-          <Route path="/rutinas/:id" element={<RoutineDetailPage />} />
-          <Route path="/rutinas/:id/editar" element={<RoutineEditPage />} />
+          <Route element={<PageTransition />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/evento" element={<EventPage />} />
+            <Route
+              path="/guia-desayunos-pre-entreno"
+              element={<BreakfastGuidePage />}
+            />
+            <Route path="/rutinas" element={<RoutinesPage />} />
+            <Route path="/rutinas/nueva" element={<RoutineCreatePage />} />
+            <Route path="/rutinas/:id" element={<RoutineDetailPage />} />
+            <Route path="/rutinas/:id/editar" element={<RoutineEditPage />} />
+          </Route>
         </Routes>
       </Suspense>
     </>

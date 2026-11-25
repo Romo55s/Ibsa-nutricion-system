@@ -140,17 +140,17 @@ const MagneticNavItem = ({
       ref={itemRef}
       href={href}
       onClick={handleClick}
-      className="group relative flex flex-col items-center justify-center px-4 py-2"
+      className="group relative flex flex-col items-center min-h-11 justify-center whitespace-nowrap px-2 py-2 xl:px-3"
     >
       <span
         ref={textRef}
-        className="relative z-10 block text-slate-300 transition-colors group-hover:text-white"
+        className="relative z-10 block text-accent transition-colors group-hover:text-primary"
       >
         {children}
       </span>
       <div
         ref={dotRef}
-        className="pointer-events-none absolute bottom-0 h-1.5 w-1.5 scale-0 rounded-full bg-white"
+        className="pointer-events-none absolute bottom-0 h-1.5 w-1.5 scale-0 rounded-full bg-primary"
       ></div>
     </a>
   );
@@ -193,21 +193,17 @@ export const Navbar = () => {
 
   return (
     <header
-      className={`fixed left-0 right-0 top-0 z-50 border-b border-white/10 transition-all duration-300 ${
+      className={`fixed left-0 right-0 top-0 z-50 border-b border-light bg-white transition-all duration-300 ${
         modalOpen
           ? "pointer-events-none -translate-y-full opacity-0"
           : "translate-y-0 opacity-100"
       }`}
       aria-hidden={modalOpen}
-      style={{
-        backdropFilter: "blur(12px)",
-        background: "rgba(10, 22, 38, 0.85)",
-      }}
     >
-      <nav className="container mx-auto flex h-20 items-center justify-between px-6">
+      <nav className="editorial-container flex h-20 items-center justify-between">
         <Link
           to="/"
-          className="group flex cursor-pointer items-center gap-3"
+          className="group flex min-h-11 cursor-pointer items-center gap-3"
           onMouseEnter={handleLogoEnter}
           onMouseLeave={handleLogoLeave}
         >
@@ -215,19 +211,19 @@ export const Navbar = () => {
             ref={logoRef}
             src={Logo}
             alt="IBSA Logo"
-            className="h-10 w-auto"
+            className="h-10 w-auto invert"
           />
           <div className="hidden sm:block">
-            <div className="text-lg font-bold leading-tight tracking-tight text-white transition-colors group-hover:text-blue-200">
+            <div className="text-lg font-bold leading-tight tracking-tight text-primary transition-colors group-hover:text-accent">
               IBSA Nutrición
             </div>
-            <div className="text-[11px] font-medium uppercase tracking-wider text-slate-300 transition-colors group-hover:text-white">
+            <div className="text-[11px] font-medium uppercase tracking-wider text-accent transition-colors group-hover:text-primary">
               Clínica y Deportiva
             </div>
           </div>
         </Link>
 
-        <div className="hidden items-center gap-3 text-sm font-medium lg:flex xl:gap-4">
+        <div className="hidden items-center gap-1 text-sm font-medium lg:flex xl:gap-3">
           <MagneticNavItem href="#beneficios">Beneficios</MagneticNavItem>
           <MagneticNavItem href="#sobre-mi">Sobre mí</MagneticNavItem>
           <MagneticNavItem href="#crea-tu-rutina">
@@ -243,7 +239,7 @@ export const Navbar = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button variant="white" className="h-10 px-6 text-sm">
+              <Button variant="primary" className="px-5 py-2 text-sm">
                 Agendar cita
               </Button>
             </a>
@@ -256,10 +252,6 @@ export const Navbar = () => {
             items={menuItems}
             socialItems={socialItems}
             logoUrl={Logo}
-            colors={["#2E8BFF", "#0A1626"]}
-            accentColor="#2E8BFF"
-            menuButtonColor="#fff"
-            openMenuButtonColor="#000"
           />
         </div>
       </nav>

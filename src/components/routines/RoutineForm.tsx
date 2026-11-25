@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../Button";
 import { ExercisePickerModal } from "./ExercisePickerModal";
 import { RoutineExerciseCard } from "./RoutineExerciseCard";
-import { FancyToggle } from "./FormControls";
+import { FancyToggle, routineFieldClass } from "./FormControls";
 import {
   IconCheck,
   IconClose,
@@ -284,13 +284,13 @@ export function RoutineForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       {(draftNotice || draftSavedAt) && (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#2E8BFF]/25 bg-[#2E8BFF]/10 px-4 py-3 text-sm text-slate-200">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-l-2 border-accent bg-mist px-5 py-4 text-base text-primary">
           <p>
             {draftNotice
               ? "Se recuperó un borrador guardado en este navegador."
               : "Borrador guardado automáticamente."}
             {draftSavedAt && (
-              <span className="ml-1 text-slate-400">
+              <span className="ml-1 text-muted">
                 ({new Date(draftSavedAt).toLocaleString()})
               </span>
             )}
@@ -299,7 +299,7 @@ export function RoutineForm({
             <button
               type="button"
               onClick={discardDraft}
-              className="text-xs font-medium text-blue-200 underline-offset-2 hover:underline"
+              className="min-h-11 px-2 text-sm font-semibold text-red-800 underline underline-offset-4"
             >
               Descartar borrador
             </button>
@@ -307,20 +307,20 @@ export function RoutineForm({
         </div>
       )}
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <label className="block space-y-2 md:col-span-2">
-          <span className="text-sm font-medium text-slate-300">
+      <div className="grid max-w-3xl gap-5">
+        <label className="block space-y-2">
+          <span className="text-sm font-medium text-accent">
             Nombre de la rutina
           </span>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Ej. Hipertrofia 5 días"
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 outline-none transition-colors focus:border-[#2E8BFF]/50"
+            className={routineFieldClass}
           />
         </label>
-        <label className="block space-y-2 md:col-span-2">
-          <span className="text-sm font-medium text-slate-300">
+        <label className="block space-y-2">
+          <span className="text-sm font-medium text-accent">
             Descripción (opcional)
           </span>
           <textarea
@@ -328,23 +328,23 @@ export function RoutineForm({
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
             placeholder="Notas sobre el objetivo de la semana"
-            className="w-full resize-y rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 outline-none transition-colors focus:border-[#2E8BFF]/50"
+            className={`${routineFieldClass} resize-y`}
           />
         </label>
       </div>
 
       <section className="space-y-4">
         <div>
-          <h2 className="text-xl font-semibold text-white">
+          <h2 className="font-display text-3xl text-primary">
             Semana (lunes a domingo)
           </h2>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-base text-muted">
             Activa o desactiva cada día. Puedes añadir un bloque opcional de
             calentamiento.
           </p>
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-1">
+        <div className="grid grid-cols-4 gap-2 sm:grid-cols-7">
           {WEEKDAYS.map((day) => {
             const plan = days[day];
             const selected = activeDay === day;
@@ -355,19 +355,20 @@ export function RoutineForm({
               <button
                 key={day}
                 type="button"
+                aria-pressed={selected}
                 onClick={() => setActiveDay(day)}
-                className={`min-w-[4.5rem] rounded-lg border px-3 py-2 text-center transition-colors ${
+                className={`min-h-14 min-w-0 rounded-sm border px-1.5 py-2 text-center transition-colors ${
                   selected
-                    ? "border-blue-400 bg-blue-500/15 text-white"
+                    ? "border-primary bg-primary text-white"
                     : plan.enabled
-                      ? "border-white/15 bg-white/5 text-slate-200 hover:border-white/30"
-                      : "border-white/10 bg-transparent text-slate-500 hover:border-white/20"
+                      ? "border-accent bg-mist text-primary hover:border-primary"
+                      : "border-light bg-white text-muted hover:border-accent"
                 }`}
               >
                 <div className="text-xs font-semibold">
                   {weekdayShortLabels[day]}
                 </div>
-                <div className="mt-1 truncate text-[10px] tracking-wide">
+                <div className="mt-1 truncate text-xs">
                   {plan.focus.trim()
                     ? plan.focus.trim()
                     : plan.enabled
@@ -379,29 +380,27 @@ export function RoutineForm({
           })}
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-[#0A1626] p-4 shadow-[0_18px_50px_rgba(0,0,0,0.35)] sm:p-5">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#2E8BFF]">
-                Día seleccionado
-              </p>
-              <h3 className="text-lg font-semibold text-white">
-                {weekdayLabels[activeDay]}
-              </h3>
-              <div className="mt-3">
-                <FancyToggle
-                  checked={dayPlan.enabled}
-                  label="Día activo (entrenar)"
-                  onChange={(checked) =>
-                    patchDay(activeDay, { enabled: checked })
-                  }
-                />
-              </div>
+        <div className="border-t border-primary pt-6">
+          <div>
+            <p className="editorial-label mb-1 text-muted">
+              Día seleccionado
+            </p>
+            <h3 className="font-display text-3xl text-primary">
+              {weekdayLabels[activeDay]}
+            </h3>
+            <div className="mt-3">
+              <FancyToggle
+                checked={dayPlan.enabled}
+                label="Día activo (entrenar)"
+                onChange={(checked) =>
+                  patchDay(activeDay, { enabled: checked })
+                }
+              />
             </div>
           </div>
 
-          <label className="mt-4 block space-y-2">
-            <span className="text-xs font-medium text-slate-400">
+          <label className="mt-4 block max-w-3xl space-y-2">
+            <span className="text-sm font-medium text-accent">
               Enfoque del día (opcional)
             </span>
             <input
@@ -410,15 +409,15 @@ export function RoutineForm({
                 patchDay(activeDay, { focus: e.target.value })
               }
               placeholder="Ej. Pecho / Empuje / Full body"
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none transition-colors focus:border-[#2E8BFF]/50"
+              className={routineFieldClass}
             />
-            <p className="text-[11px] text-slate-500">
+            <p className="text-xs text-muted">
               Si lo llenas, se guarda con la rutina en este navegador.
             </p>
           </label>
 
           {!dayPlan.enabled ? (
-            <p className="mt-6 rounded-xl border border-dashed border-white/15 px-4 py-8 text-center text-sm text-slate-400">
+            <p className="mt-6 border-l-2 border-light bg-mist px-4 py-8 text-center text-sm text-muted">
               Este día está desactivado. Actívalo para agregar ejercicios, o
               déjalo así para descanso.
             </p>
@@ -428,13 +427,13 @@ export function RoutineForm({
               <section className="space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <h4 className="text-base font-semibold text-white">
+                    <h4 className="text-xl font-semibold text-primary">
                       Calentamiento
-                      <span className="ml-2 text-xs font-normal text-slate-500">
+                      <span className="ml-2 text-xs font-normal text-muted">
                         (opcional)
                       </span>
                     </h4>
-                    <p className="mt-1 text-xs text-slate-400">
+                    <p className="mt-1 text-xs text-muted">
                       Activación: abdomen, cuerda, trote, movilidad…
                     </p>
                   </div>
@@ -452,8 +451,8 @@ export function RoutineForm({
                     <div className="flex justify-end">
                       <Button
                         type="button"
-                        variant="white"
-                        className="h-10 px-5 text-sm"
+                        variant="primary"
+                        className="min-h-11 px-5 text-sm"
                         onClick={() => setPickerTarget("warmup")}
                       >
                         {withIcon(<IconPlus />, "Agregar a calentamiento")}
@@ -461,7 +460,7 @@ export function RoutineForm({
                     </div>
 
                     {dayPlan.warmupExercises.length === 0 ? (
-                      <p className="rounded-xl border border-dashed border-white/15 px-4 py-8 text-center text-sm text-slate-400">
+                      <p className="border-l-2 border-light bg-mist px-4 py-8 text-center text-sm text-muted">
                         Sin ejercicios de calentamiento todavía.
                       </p>
                     ) : (
@@ -493,15 +492,15 @@ export function RoutineForm({
               </section>
 
               {/* Main work */}
-              <section className="space-y-4 border-t border-white/10 pt-6">
+              <section className="space-y-4 border-t border-light pt-6">
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                  <h4 className="text-base font-semibold text-white">
+                  <h4 className="text-xl font-semibold text-primary">
                     Trabajo principal
                   </h4>
                   <Button
                     type="button"
-                    variant="white"
-                    className="h-10 px-5 text-sm"
+                    variant="primary"
+                    className="min-h-11 px-5 text-sm"
                     onClick={() => setPickerTarget("main")}
                   >
                     {withIcon(<IconPlus />, "Agregar ejercicio")}
@@ -509,7 +508,7 @@ export function RoutineForm({
                 </div>
 
                 {dayPlan.exercises.length === 0 ? (
-                  <p className="rounded-xl border border-dashed border-white/15 px-4 py-10 text-center text-sm text-slate-400">
+                  <p className="border-l-2 border-light bg-mist px-4 py-10 text-center text-sm text-muted">
                     Sin ejercicios este día. Abre el catálogo para armar la
                     sesión.
                   </p>
@@ -547,18 +546,22 @@ export function RoutineForm({
       />
 
       {error && (
-        <p className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+        <p role="alert" className="rounded-sm border-l-2 border-red-700 bg-red-50 px-4 py-3 text-sm text-red-800">
           {error}
         </p>
       )}
 
-      <div className="flex flex-wrap gap-3">
-        <Button type="submit" variant="white" className="h-11 px-6 text-sm">
+      <div className="flex flex-col items-stretch gap-3 border-t border-light pt-6 sm:flex-row sm:items-center">
+        <Button
+          type="submit"
+          variant="primary"
+          className="w-full sm:w-auto"
+        >
           {withIcon(<IconCheck />, submitLabel)}
         </Button>
         <Link
           to={onCancelHref}
-          className="inline-flex h-11 items-center gap-2 rounded-full border border-white/20 px-6 text-sm text-slate-300 transition-colors hover:border-white hover:text-white"
+          className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-light px-5 py-3 text-sm font-semibold text-accent transition-colors hover:border-accent hover:bg-mist sm:w-auto"
         >
           <IconClose />
           Cancelar

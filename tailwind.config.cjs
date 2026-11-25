@@ -9,8 +9,10 @@ module.exports = {
         accent: "#3B4451",
         muted: "#535B67",
         light: "#CED0D3",
+        mist: "#F5F6F7",
       },
       fontFamily: {
+        display: ['"DM Serif Display"', "Georgia", "serif"],
         sans: [
           '"Albert Sans"',
           "system-ui",

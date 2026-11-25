@@ -1,13 +1,25 @@
 import { useRef, useEffect } from "react";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type {
+  AnchorHTMLAttributes,
+  ButtonHTMLAttributes,
+  ReactNode,
+} from "react";
+import { Link, type LinkProps } from "react-router-dom";
 import { gsap } from "gsap";
 
 type Variant = "primary" | "ghost" | "outline" | "white" | "whatsapp";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface SharedButtonProps {
   variant?: Variant;
   children: ReactNode;
 }
+
+type ButtonProps = SharedButtonProps &
+  (
+    | (ButtonHTMLAttributes<HTMLButtonElement> & { href?: never; to?: never })
+    | (AnchorHTMLAttributes<HTMLAnchorElement> & { href: string; to?: never })
+    | (Omit<LinkProps, "children"> & { to: string; href?: never })
+  );
 
 export const Button = ({
   variant = "primary",
@@ -15,109 +27,122 @@ export const Button = ({
   className = "",
   ...rest
 }: ButtonProps) => {
-  // ... (refs and useEffect logic remains same) ...
+  const isLink = rest.href !== undefined || rest.to !== undefined;
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const linkRef = useRef<HTMLAnchorElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
   const fillRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const button = buttonRef.current;
+    const control: HTMLElement | null = isLink ? linkRef.current : buttonRef.current;
     const text = textRef.current;
     const fill = fillRef.current;
 
-    if (!button || !text || !fill) return;
+    if (!control || !text || !fill) return;
 
-    const xTo = gsap.quickTo(button, "x", {
-      duration: 1,
-      ease: "elastic.out(1, 0.3)",
-    });
-    const yTo = gsap.quickTo(button, "y", {
-      duration: 1,
-      ease: "elastic.out(1, 0.3)",
-    });
+    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let removePointerEffects = () => {};
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      const { left, top, width, height } = button.getBoundingClientRect();
+    const clearPointerEffects = () => {
+      removePointerEffects();
+      removePointerEffects = () => {};
+      gsap.killTweensOf([control, text, fill]);
+      gsap.set(control, { x: 0, y: 0 });
+      gsap.set(text, { x: 0, y: 0 });
+      gsap.set(fill, { x: 0, y: 0, scale: 0 });
+    };
 
-      const x = clientX - (left + width / 2);
-      const y = clientY - (top + height / 2);
-
-      xTo(x * 0.3);
-      yTo(y * 0.3);
-      gsap.to(text, {
-        x: x * 0.1,
-        y: y * 0.1,
+    const enablePointerEffects = () => {
+      const xTo = gsap.quickTo(control, "x", {
         duration: 1,
-        ease: "power2.out",
+        ease: "elastic.out(1, 0.3)",
       });
-      gsap.to(fill, {
-        x: x * 0.5,
-        y: y * 0.5,
-        duration: 0.6,
-        ease: "power2.out",
+      const yTo = gsap.quickTo(control, "y", {
+        duration: 1,
+        ease: "elastic.out(1, 0.3)",
       });
+
+      const handleMouseMove = (e: MouseEvent) => {
+        const { clientX, clientY } = e;
+        const { left, top, width, height } = control.getBoundingClientRect();
+        const x = clientX - (left + width / 2);
+        const y = clientY - (top + height / 2);
+
+        xTo(x * 0.3);
+        yTo(y * 0.3);
+        gsap.to(text, { x: x * 0.1, y: y * 0.1, duration: 1, ease: "power2.out" });
+        gsap.to(fill, { x: x * 0.5, y: y * 0.5, duration: 0.6, ease: "power2.out" });
+      };
+
+      const handleMouseEnter = () => {
+        gsap.to(fill, { scale: 2.5, duration: 0.5, ease: "power2.out" });
+      };
+
+      const handleMouseLeave = () => {
+        xTo(0);
+        yTo(0);
+        gsap.to(text, { x: 0, y: 0, duration: 1, ease: "elastic.out(1, 0.3)" });
+        gsap.to(fill, { scale: 0, duration: 0.5, ease: "power2.in" });
+      };
+
+      control.addEventListener("mousemove", handleMouseMove);
+      control.addEventListener("mouseenter", handleMouseEnter);
+      control.addEventListener("mouseleave", handleMouseLeave);
+      removePointerEffects = () => {
+        control.removeEventListener("mousemove", handleMouseMove);
+        control.removeEventListener("mouseenter", handleMouseEnter);
+        control.removeEventListener("mouseleave", handleMouseLeave);
+      };
     };
 
-    const handleMouseEnter = () => {
-      gsap.to(fill, { scale: 2.5, duration: 0.5, ease: "power2.out" });
+    const syncMotionPreference = () => {
+      clearPointerEffects();
+      if (!motionPreference.matches) enablePointerEffects();
     };
 
-    const handleMouseLeave = () => {
-      xTo(0);
-      yTo(0);
-      gsap.to(text, { x: 0, y: 0, duration: 1, ease: "elastic.out(1, 0.3)" });
-      gsap.to(fill, { scale: 0, duration: 0.5, ease: "power2.in" });
-    };
-
-    button.addEventListener("mousemove", handleMouseMove);
-    button.addEventListener("mouseenter", handleMouseEnter);
-    button.addEventListener("mouseleave", handleMouseLeave);
+    syncMotionPreference();
+    motionPreference.addEventListener("change", syncMotionPreference);
 
     return () => {
-      button.removeEventListener("mousemove", handleMouseMove);
-      button.removeEventListener("mouseenter", handleMouseEnter);
-      button.removeEventListener("mouseleave", handleMouseLeave);
+      motionPreference.removeEventListener("change", syncMotionPreference);
+      clearPointerEffects();
     };
-  }, []);
+  }, [isLink]);
 
   // Estilos base minimalistas
   const baseStyles =
-    "relative overflow-hidden rounded-full px-8 py-4 font-medium transition-colors duration-300 z-10 inline-flex items-center justify-center group/btn";
+    "relative min-h-11 overflow-hidden rounded-full px-8 py-4 font-medium transition-colors duration-300 motion-reduce:transition-none z-10 inline-flex items-center justify-center group/btn";
 
   const variantStyles = {
-    primary: "bg-[#0A1626] text-white border border-[#0A1626]",
+    primary: "bg-primary text-white border border-primary",
     ghost:
       "bg-transparent text-white border border-white/30 hover:border-white",
-    outline: "bg-transparent text-[#0A1626] border border-[#0A1626]/30",
-    white: "bg-white text-[#0A1626] border border-white hover:border-slate-200",
+    outline: "bg-transparent text-primary border border-primary/30",
+    white: "bg-white text-primary border border-white hover:border-light",
     whatsapp:
       "bg-transparent text-[#4ade80] border border-[#4ade80]/40 hover:border-[#4ade80]",
   };
 
   // Color del círculo de relleno (inverso al fondo)
   const fillColors = {
-    primary: "bg-[#1e293b]", // Slate-800, elegante y oscuro
+    primary: "bg-primary-2",
     ghost: "bg-white",
-    outline: "bg-[#0A1626]",
-    white: "bg-[#0A1626]",
+    outline: "bg-primary",
+    white: "bg-primary",
     whatsapp: "bg-[#25D366]",
   };
 
   const textColors = {
-    primary: "text-white group-hover/btn:text-white",
-    ghost: "text-white group-hover/btn:text-[#0A1626]",
-    outline: "text-[#0A1626] group-hover/btn:text-white",
-    white: "text-[#0A1626] group-hover/btn:text-white",
-    whatsapp: "text-[#4ade80] group-hover/btn:text-white",
+    primary: "text-white motion-safe:group-hover/btn:text-white",
+    ghost: "text-white motion-safe:group-hover/btn:text-primary",
+    outline: "text-primary motion-safe:group-hover/btn:text-white",
+    white: "text-primary motion-safe:group-hover/btn:text-white",
+    whatsapp: "text-[#4ade80] motion-safe:group-hover/btn:text-white",
   };
 
-  return (
-    <button
-      ref={buttonRef}
-      className={`${baseStyles} ${variantStyles[variant]} ${className}`}
-      {...rest}
-    >
+  const controlClassName = `${baseStyles} ${variantStyles[variant]} ${className}`;
+  const content = (
+    <>
       <div
         ref={fillRef}
         className={`pointer-events-none absolute left-[-25%] top-[-25%] -z-10 h-[150%] w-[150%] scale-0 rounded-full ${fillColors[variant]}`}
@@ -125,10 +150,32 @@ export const Button = ({
 
       <span
         ref={textRef}
-        className={`relative z-10 block ${textColors[variant]} transition-colors duration-300`}
+        className={`relative z-10 block ${textColors[variant]} transition-colors duration-300 motion-reduce:transition-none`}
       >
         {children}
       </span>
+    </>
+  );
+
+  if (rest.href !== undefined) {
+    return (
+      <a ref={linkRef} className={controlClassName} {...rest}>
+        {content}
+      </a>
+    );
+  }
+
+  if (rest.to !== undefined) {
+    return (
+      <Link ref={linkRef} className={controlClassName} {...rest}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <button ref={buttonRef} className={controlClassName} {...rest}>
+      {content}
     </button>
   );
 };

@@ -1,4 +1,9 @@
 import type { Exercise, MuscleGroup } from "../types/routines";
+import {
+  CUSTOM_EXERCISE_IMAGE,
+  getCustomExerciseById,
+  listCustomExercises,
+} from "../lib/customExercisesStorage";
 
 /** Images from https://github.com/yuhonas/free-exercise-db (open exercise media). */
 export const EXERCISE_IMAGE_BASE =
@@ -28,6 +33,9 @@ export const equipmentLabels = {
 } as const;
 
 export function getExerciseImageUrl(imagePath: string): string {
+  if (!imagePath || imagePath === CUSTOM_EXERCISE_IMAGE) {
+    return "";
+  }
   if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
     return imagePath;
   }
@@ -38,6 +46,13 @@ export function getExerciseImageUrl(imagePath: string): string {
     return imagePath;
   }
   return `${EXERCISE_IMAGE_BASE}/${imagePath}`;
+}
+
+/** Catalog exercises plus any user-created custom exercises. */
+export function getAllExercises(): Exercise[] {
+  const custom = listCustomExercises();
+  if (custom.length === 0) return exercises;
+  return [...custom, ...exercises];
 }
 
 export function getYoutubeSearchUrl(query: string): string {
@@ -1025,5 +1040,5 @@ export const exerciseById = Object.fromEntries(
 ) as Record<string, Exercise>;
 
 export function getExerciseById(id: string): Exercise | undefined {
-  return exerciseById[id];
+  return exerciseById[id] ?? getCustomExerciseById(id);
 }

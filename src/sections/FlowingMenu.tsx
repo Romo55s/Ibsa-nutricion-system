@@ -1,221 +1,62 @@
-import React, { useRef, useMemo, useState } from "react";
-import { gsap } from "gsap";
-import EventoCarrera from "../assets/Evento-Carrera-portada.jpg";
-import EventoCarrera1 from "../assets/Evento-Carrera-1.jpg";
-import EventoCarrera3 from "../assets/Evento-Carrera-4.jpg";
-import ConsultorioPhyn from "../assets/Phyn-1.jpg";
-import ConsultorioPhyn2 from "../assets/Phyn-2.jpg";
-import CertificadoMujerAtleta from "../assets/Certificado-Mujer-Atleta.jpg";
-import CertificadoRecomposicionCorporal from "../assets/Certificado-Recomposicion-Corporal.jpg";
-import RhinoGym from "../assets/Rhino-Gym-2.jpg";
-import { CertificationsModal } from "../components/CertificationsModal";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import raceCover from "../assets/Evento-Carrera-portada.jpg";
+import raceStart from "../assets/Evento-Carrera-1.jpg";
+import raceFinish from "../assets/Evento-Carrera-4.jpg";
+import clinic from "../assets/Phyn-1.jpg";
+import clinicInterior from "../assets/Phyn-2.jpg";
+import athleteCertificate from "../assets/Certificado-Mujer-Atleta.jpg";
+import recompositionCertificate from "../assets/Certificado-Recomposicion-Corporal.jpg";
 
-interface MenuItemProps {
-  link: string;
-  text: string;
-  images: string[];
-  onClick?: () => void;
-}
-
-interface FlowingMenuProps {
-  items?: MenuItemProps[];
-}
-
-const MenuItem: React.FC<MenuItemProps> = ({ link, text, images, onClick }) => {
-  const itemRef = useRef<HTMLDivElement>(null);
-  const marqueeRef = useRef<HTMLDivElement>(null);
-  const marqueeInnerRef = useRef<HTMLDivElement>(null);
-
-  const animationDefaults = { duration: 0.6, ease: "expo" };
-
-  const findClosestEdge = (
-    mouseX: number,
-    mouseY: number,
-    width: number,
-    height: number
-  ): "top" | "bottom" => {
-    const topEdgeDist = Math.pow(mouseX - width / 2, 2) + Math.pow(mouseY, 2);
-    const bottomEdgeDist =
-      Math.pow(mouseX - width / 2, 2) + Math.pow(mouseY - height, 2);
-    return topEdgeDist < bottomEdgeDist ? "top" : "bottom";
-  };
-
-  const handleMouseEnter = (ev: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current)
-      return;
-
-    const rect = itemRef.current.getBoundingClientRect();
-    const edge = findClosestEdge(
-      ev.clientX - rect.left,
-      ev.clientY - rect.top,
-      rect.width,
-      rect.height
-    );
-
-    const tl = gsap.timeline({ defaults: animationDefaults });
-
-    tl.set(marqueeRef.current, { y: edge === "top" ? "-101%" : "101%" })
-      .set(marqueeInnerRef.current, { y: edge === "top" ? "101%" : "-101%" })
-      .to([marqueeRef.current, marqueeInnerRef.current], { y: "0%" });
-  };
-
-  const handleMouseLeave = (ev: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current)
-      return;
-
-    const rect = itemRef.current.getBoundingClientRect();
-    const edge = findClosestEdge(
-      ev.clientX - rect.left,
-      ev.clientY - rect.top,
-      rect.width,
-      rect.height
-    );
-
-    const tl = gsap.timeline({ defaults: animationDefaults });
-
-    tl.to(marqueeRef.current, { y: edge === "top" ? "-101%" : "101%" }).to(
-      marqueeInnerRef.current,
-      { y: edge === "top" ? "101%" : "-101%" },
-      "<"
-    ); // Run concurrently
-  };
-
-  const repeatedMarqueeContent = useMemo(() => {
-    return Array.from({ length: 10 }).map((_, idx) => {
-      // Ciclar a través de las imágenes disponibles
-      const currentImage = images[idx % images.length];
-      return (
-        <React.Fragment key={idx}>
-          <span className="whitespace-nowrap p-[1vh_1vw_0] text-[3vh] font-normal uppercase leading-[1.2] text-[#0A1626] sm:text-[4vh]">
-            {text}
-          </span>
-          <div
-            className="mx-[2vw] my-[2em] h-[7vh] w-[200px] shrink-0 rounded-[50px] bg-cover bg-center p-[1em_0]"
-            style={{ backgroundImage: `url(${currentImage})` }}
-          />
-        </React.Fragment>
-      );
-    });
-  }, [text, images]);
-
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (onClick) {
-      e.preventDefault();
-      onClick();
-    }
-  };
-
-  return (
-    <div
-      className="relative flex-1 overflow-hidden border-b border-white/10 bg-[#0A1626] text-center"
-      ref={itemRef}
-    >
-      <a
-        className="relative z-10 flex h-full cursor-pointer items-center justify-center text-[3vh] font-semibold uppercase text-white no-underline transition-colors duration-300 hover:text-[#0A1626] sm:text-[4vh]"
-        href={link}
-        onClick={handleClick}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        {text}
-      </a>
-      <div
-        className="pointer-events-none absolute left-0 top-0 z-20 h-full w-full translate-y-[101%] overflow-hidden bg-white"
-        ref={marqueeRef}
-      >
-        <div className="flex h-full w-[200%]" ref={marqueeInnerRef}>
-          <div className="relative flex h-full w-[200%] animate-marquee items-center will-change-transform">
-            {repeatedMarqueeContent}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Datos del Menú
-const MENU_ITEMS = [
-  {
-    text: "Eventos",
-    link: "/evento",
-    images: [EventoCarrera, EventoCarrera1, EventoCarrera3],
-  },
-  {
-    text: "Consultorios",
-    link: "#ubicaciones",
-    images: [ConsultorioPhyn, ConsultorioPhyn2, RhinoGym],
-  },
-  {
-    text: "Guía pre-entreno",
-    link: "/guia-desayunos-pre-entreno",
-    images: [
-      "/guide/overnight-oats.png",
-      "/guide/toastadas-fruta.png",
-      "/guide/batido-pre-entreno.png",
-    ],
-  },
-  {
-    text: "Certificados",
-    link: "#certificados",
-    images: [CertificadoMujerAtleta, CertificadoRecomposicionCorporal],
-  },
+const items = [
+  { title: "Eventos", href: "/evento", images: [raceCover, raceStart, raceFinish] },
+  { title: "Consultorios", href: "#ubicaciones", images: [clinic, clinicInterior] },
+  { title: "Guía pre-entreno", href: "/guia-desayunos-pre-entreno", images: [
+    "/guide/overnight-oats.png", "/guide/toastadas-fruta.png", "/guide/batido-pre-entreno.png",
+  ] },
+  { title: "Certificados", images: [athleteCertificate, recompositionCertificate] },
 ];
 
-export const FlowingMenu = () => {
-  const [isCertificationsOpen, setIsCertificationsOpen] = useState(false);
-  const [selectedCertification, setSelectedCertification] = useState<{
-    src: string;
-    alt: string;
-    title: string;
-  } | null>(null);
-
-  const certifications = [
-    {
-      src: CertificadoMujerAtleta,
-      alt: "Certificado de Nutrición en la Mujer Atleta",
-      title: "Nutrición en la Mujer Atleta",
-    },
-    {
-      src: CertificadoRecomposicionCorporal,
-      alt: "Certificado de Recomposición Corporal",
-      title: "Recomposición Corporal",
-    },
-  ];
-
-  const menuItemsWithHandlers = MENU_ITEMS.map((item) => {
-    if (item.text === "Certificados") {
-      return {
-        ...item,
-        onClick: () => setIsCertificationsOpen(true),
-      };
-    }
-    return item;
-  });
+export const FlowingMenu = ({ onOpenCertifications }: { onOpenCertifications: () => void }) => {
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const controlStyle = "relative z-10 flex min-h-14 w-full items-center justify-between gap-4 px-3 text-left font-semibold";
 
   return (
-    <>
-      <section className="bg-[#0A1626] py-0" id="certificados">
-        <div className="relative h-[400px] sm:h-[500px] lg:h-[600px]">
-          <div className="h-full w-full overflow-hidden">
-            <nav
-              className="m-0 flex h-full flex-col p-0"
-              aria-label="Secciones destacadas"
-            >
-              {menuItemsWithHandlers.map((item, idx) => (
-                <MenuItem key={idx} {...item} />
-              ))}
-            </nav>
+    <nav id="certificados" aria-label="Secciones destacadas" className="mt-10 grid scroll-mt-24 gap-x-5 sm:grid-cols-2 lg:grid-cols-4">
+      {items.map(({ title, href, images }) => {
+        const label = <>{title}<span aria-hidden="true">↗</span></>;
+        return (
+          <div
+            key={title}
+            className="relative border-y border-light"
+            onMouseEnter={() => {
+              if (window.matchMedia("(hover: hover) and (prefers-reduced-motion: no-preference)").matches) {
+                setHoveredItem(title);
+              }
+            }}
+            onMouseLeave={() => setHoveredItem(null)}
+          >
+            {href?.startsWith("/") ? (
+              <Link to={href} className={controlStyle}>{label}</Link>
+            ) : href ? (
+              <a href={href} className={controlStyle}>{label}</a>
+            ) : (
+              <button type="button" className={controlStyle} onClick={onOpenCertifications}>{label}</button>
+            )}
+            {hoveredItem === title && (
+              <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 overflow-hidden bg-mist motion-reduce:hidden">
+                <div className="flex h-full w-max animate-marquee items-center">
+                  {[...images, ...images].map((src, i) => (
+                    <span className="flex items-center gap-3 px-2 font-display text-2xl" key={i}>
+                      {title}<img src={src} alt="" width={72} height={40} className="h-10 w-[72px] object-cover" />
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-      </section>
-
-      <CertificationsModal
-        isOpen={isCertificationsOpen}
-        onClose={() => setIsCertificationsOpen(false)}
-        certifications={certifications}
-        selectedCertification={selectedCertification}
-        onSelectCertification={setSelectedCertification}
-      />
-    </>
+        );
+      })}
+    </nav>
   );
 };

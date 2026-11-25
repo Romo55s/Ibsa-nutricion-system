@@ -1,5 +1,5 @@
-import { ExerciseMedia } from "./ExerciseMedia";
-import { FancyToggle, NumberField } from "./FormControls";
+﻿import { ExerciseMedia } from "./ExerciseMedia";
+import { FancyToggle, NumberField, routineFieldClass } from "./FormControls";
 import { IconTrash } from "./RoutineIcons";
 import { getExerciseById } from "../../data/exercises";
 import { syncSetWeights } from "../../lib/weekPlan";
@@ -39,22 +39,27 @@ export function RoutineExerciseCard({
   if (!exercise) return null;
 
   return (
-    <li className="rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-4">
-      <div className="flex flex-row flex-wrap items-start gap-3 sm:gap-4">
+    <li className="min-w-0 border-t border-light bg-white py-5">
+      <div className="grid items-start gap-4 lg:grid-cols-[auto_minmax(0,1fr)]">
         <ExerciseMedia exercise={exercise} compact />
-        <div className="min-w-0 flex-1 space-y-3">
+        <div className="min-w-0 space-y-4">
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div className="min-w-0">
-              <h4 className="font-semibold text-white">
+              <h4 className="break-words text-lg font-semibold text-primary">
                 {index + 1}. {exercise.name}
               </h4>
-              <p className="text-xs text-slate-400">{exercise.nameEn}</p>
+              <p className="text-xs text-muted">{exercise.nameEn}</p>
+              {exercise.isCustom || exercise.id.startsWith("custom-") ? (
+                <span className="mt-1 inline-flex rounded-full bg-primary-2 px-2 py-0.5 text-xs font-medium uppercase tracking-wide text-white">
+                  Personalizado
+                </span>
+              ) : null}
             </div>
             <div className="flex shrink-0 gap-2">
               <button
                 type="button"
                 onClick={() => onMove(-1)}
-                className="rounded-full border border-white/15 px-3 py-1 text-xs text-slate-300 transition-colors hover:bg-white/10"
+                className="h-11 w-11 rounded-full border border-light text-lg text-accent hover:border-accent"
                 aria-label="Subir"
               >
                 ↑
@@ -62,7 +67,7 @@ export function RoutineExerciseCard({
               <button
                 type="button"
                 onClick={() => onMove(1)}
-                className="rounded-full border border-white/15 px-3 py-1 text-xs text-slate-300 transition-colors hover:bg-white/10"
+                className="h-11 w-11 rounded-full border border-light text-lg text-accent hover:border-accent"
                 aria-label="Bajar"
               >
                 ↓
@@ -70,7 +75,7 @@ export function RoutineExerciseCard({
               <button
                 type="button"
                 onClick={onRemove}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-red-400/30 text-red-300 transition-colors hover:bg-red-500/10"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-red-200 text-red-800 transition-colors hover:bg-red-100"
                 aria-label="Quitar ejercicio"
                 title="Quitar"
               >
@@ -79,53 +84,56 @@ export function RoutineExerciseCard({
             </div>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-black/20 p-3">
-            <p className="mb-2 text-xs font-medium text-slate-400">
+          <div className="border-l-2 border-light bg-mist p-4">
+            <p className="mb-2 text-xs font-medium text-muted">
               Medición
             </p>
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
+                aria-pressed={item.loadType === "reps" || !item.loadType}
                 onClick={() => onChange({ loadType: "reps" })}
-                className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                className={`min-h-11 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
                   item.loadType === "reps" || !item.loadType
-                    ? "bg-white text-[#0A1626]"
-                    : "border border-white/15 text-slate-300 hover:bg-white/10"
+                    ? "bg-primary text-white"
+                    : "border border-light bg-white text-accent hover:bg-mist"
                 }`}
               >
                 Por repeticiones
               </button>
               <button
                 type="button"
+                aria-pressed={item.loadType === "time"}
                 onClick={() => onChange({ loadType: "time" })}
-                className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                className={`min-h-11 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
                   item.loadType === "time"
-                    ? "bg-white text-[#0A1626]"
-                    : "border border-white/15 text-slate-300 hover:bg-white/10"
+                    ? "bg-primary text-white"
+                    : "border border-light bg-white text-accent hover:bg-mist"
                 }`}
               >
                 Por tiempo (seg)
               </button>
               <button
                 type="button"
+                aria-pressed={item.loadType === "laps"}
                 onClick={() => onChange({ loadType: "laps" })}
-                className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                className={`min-h-11 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
                   item.loadType === "laps"
-                    ? "bg-white text-[#0A1626]"
-                    : "border border-white/15 text-slate-300 hover:bg-white/10"
+                    ? "bg-primary text-white"
+                    : "border border-light bg-white text-accent hover:bg-mist"
                 }`}
               >
                 Por vueltas
               </button>
             </div>
             {item.loadType === "laps" && (
-              <p className="mt-2 text-[11px] text-slate-500">
+              <p className="mt-2 text-xs text-muted">
                 Ida y vuelta / de un lado a otro (ej. shuttle, cancha, conos).
               </p>
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <NumberField
               label="Series"
               value={item.sets}
@@ -153,25 +161,25 @@ export function RoutineExerciseCard({
                 }
               />
             ) : item.loadType === "laps" ? (
-              <label className="space-y-1 text-xs text-slate-400">
+              <label className="min-w-0 space-y-1 text-sm font-medium text-accent">
                 Vueltas
                 <input
                   type="text"
                   value={item.laps ?? ""}
                   onChange={(e) => onChange({ laps: e.target.value })}
                   placeholder="4"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-slate-600 focus:border-[#2E8BFF]/50"
+                  className={routineFieldClass}
                 />
               </label>
             ) : (
-              <label className="space-y-1 text-xs text-slate-400">
+              <label className="min-w-0 space-y-1 text-sm font-medium text-accent">
                 Reps
                 <input
                   type="text"
                   value={item.reps}
                   onChange={(e) => onChange({ reps: e.target.value })}
                   placeholder="8-12"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-slate-600 focus:border-[#2E8BFF]/50"
+                  className={routineFieldClass}
                 />
               </label>
             )}
@@ -183,19 +191,19 @@ export function RoutineExerciseCard({
               emptyFallback={0}
               onCommit={(value) => onChange({ restSeconds: value ?? 0 })}
             />
-            <label className="col-span-2 space-y-1 text-xs text-slate-400 sm:col-span-1">
+            <label className="min-w-0 space-y-1 text-sm font-medium text-accent">
               Notas
               <input
                 type="text"
                 value={item.notes ?? ""}
                 onChange={(e) => onChange({ notes: e.target.value })}
                 placeholder="Tempo, RPE..."
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-slate-600 focus:border-[#2E8BFF]/50"
+                className={routineFieldClass}
               />
             </label>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-black/20 p-3">
+          <div className="border-l-2 border-light bg-mist p-4">
             <FancyToggle
               checked={item.useWeight}
               label="Agregar peso"
@@ -217,7 +225,7 @@ export function RoutineExerciseCard({
             {item.useWeight && (
               <div className="mt-3 space-y-3">
                 <div>
-                  <p className="mb-2 text-xs font-medium text-slate-400">
+                  <p className="mb-2 text-xs font-medium text-muted">
                     Tipo de peso
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -228,6 +236,7 @@ export function RoutineExerciseCard({
                           key={opt.value}
                           type="button"
                           title={opt.hint}
+                          aria-pressed={active}
                           onClick={() =>
                             onChange({
                               weightMode: opt.value,
@@ -240,10 +249,10 @@ export function RoutineExerciseCard({
                                   : item.setWeights,
                             })
                           }
-                          className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                          className={`min-h-11 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
                             active
-                              ? "bg-white text-[#0A1626]"
-                              : "border border-white/15 text-slate-300 hover:bg-white/10"
+                              ? "bg-primary text-white"
+                              : "border border-light bg-white text-accent hover:bg-mist"
                           }`}
                         >
                           {opt.label}
@@ -251,7 +260,7 @@ export function RoutineExerciseCard({
                       );
                     })}
                   </div>
-                  <p className="mt-1.5 text-[11px] text-slate-500">
+                  <p className="mt-1.5 text-xs text-muted">
                     {
                       WEIGHT_MODE_OPTIONS.find(
                         (o) => o.value === (item.weightMode ?? "fixed")
@@ -260,7 +269,7 @@ export function RoutineExerciseCard({
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 sm:max-w-md">
+                <div className="grid gap-3 sm:max-w-lg sm:grid-cols-2">
                   {(item.weightMode ?? "fixed") === "fixed" && (
                     <NumberField
                       label="Peso"
@@ -296,7 +305,7 @@ export function RoutineExerciseCard({
                     </>
                   )}
 
-                  <label className="space-y-1 text-xs text-slate-400">
+                  <label className="min-w-0 space-y-1 text-sm font-medium text-accent">
                     Unidad
                     <select
                       value={item.weightUnit}
@@ -305,7 +314,7 @@ export function RoutineExerciseCard({
                           weightUnit: e.target.value as WeightUnit,
                         })
                       }
-                      className="w-full rounded-xl border border-white/10 bg-[#0d1726] px-3 py-2 text-sm text-white outline-none focus:border-[#2E8BFF]/50"
+                      className={routineFieldClass}
                     >
                       <option value="kg">kg</option>
                       <option value="lb">lb</option>
@@ -315,10 +324,10 @@ export function RoutineExerciseCard({
 
                 {(item.weightMode ?? "fixed") === "perSet" && (
                   <div>
-                    <p className="mb-2 text-xs font-medium text-slate-400">
+                    <p className="mb-2 text-xs font-medium text-muted">
                       Peso por serie
                     </p>
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+                    <div className="grid gap-2 sm:grid-cols-3 md:grid-cols-4">
                       {Array.from({ length: item.sets }, (_, i) => (
                         <NumberField
                           key={i}

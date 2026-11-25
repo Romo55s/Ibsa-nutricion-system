@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
+
+export const routineFieldClass =
+  "block min-h-11 w-full min-w-0 rounded-sm border border-muted bg-white px-3 py-2 text-base text-primary placeholder:text-muted focus:border-primary";
 
 interface NumberFieldProps {
   label: string;
@@ -68,7 +71,7 @@ export function NumberField({
   };
 
   return (
-    <label className={`space-y-1 text-xs text-slate-400 ${className}`}>
+    <label className={`block min-w-0 space-y-1 text-sm font-medium text-accent ${className}`}>
       {label}
       <input
         type="text"
@@ -91,7 +94,7 @@ export function NumberField({
             e.currentTarget.blur();
           }
         }}
-        className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-slate-600 focus:border-[#2E8BFF]/50"
+        className={routineFieldClass}
       />
     </label>
   );
@@ -110,20 +113,20 @@ export function FancyToggle({ checked, onChange, label }: FancyToggleProps) {
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className="group inline-flex items-center gap-3 text-left text-sm text-slate-200"
+      className="group inline-flex min-h-11 items-center gap-3 text-left font-medium text-primary"
     >
       <span
         className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
-          checked ? "bg-[#2E8BFF]" : "bg-white/15"
+          checked ? "bg-primary" : "bg-muted"
         }`}
       >
         <span
-          className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+          className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white transition-transform ${
             checked ? "translate-x-5" : "translate-x-0"
           }`}
         />
       </span>
-      <span className="transition-colors group-hover:text-white">{label}</span>
+      <span className="transition-colors group-hover:underline">{label}</span>
     </button>
   );
 }

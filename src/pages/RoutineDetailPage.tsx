@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
+import { ConfirmDeleteDialog } from "../components/ConfirmDeleteDialog";
 import { ExerciseMedia } from "../components/routines/ExerciseMedia";
 import {
   IconPencil,
@@ -38,35 +39,35 @@ function ExerciseDetailCard({
   const loadTitle = formatExerciseLoadLabel(item.loadType);
 
   return (
-    <li className="rounded-lg border border-white/10 bg-white/[0.03] p-5">
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+    <li className="border-t border-light py-6">
+      <div className="grid gap-5 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-8">
         <ExerciseMedia exercise={exercise} />
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-blue-300">
+          <p className="editorial-label text-muted">
             {label} {index + 1}
           </p>
-          <h3 className="mt-1 text-2xl font-semibold">{exercise.name}</h3>
-          <p className="text-sm text-slate-400">{exercise.nameEn}</p>
+          <h3 className="mt-2 break-words font-display text-3xl">{exercise.name}</h3>
+          <p className="text-sm text-muted">{exercise.nameEn}</p>
 
           <dl
-            className={`mt-5 grid gap-3 text-center ${
+            className={`mt-5 grid gap-2 text-center ${
               weightLabel ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-3"
             }`}
           >
-            <div className="rounded-md bg-white/5 px-3 py-3">
-              <dt className="text-[11px] uppercase tracking-wide text-slate-500">
+            <div className="min-w-0 break-words border-t border-light bg-mist px-1 py-3">
+              <dt className="text-xs uppercase tracking-wide text-muted">
                 Series
               </dt>
               <dd className="mt-1 text-lg font-semibold">{item.sets}</dd>
             </div>
-            <div className="rounded-md bg-white/5 px-3 py-3">
-              <dt className="text-[11px] uppercase tracking-wide text-slate-500">
+            <div className="min-w-0 break-words border-t border-light bg-mist px-1 py-3">
+              <dt className="text-xs uppercase tracking-wide text-muted">
                 {loadTitle}
               </dt>
               <dd className="mt-1 text-lg font-semibold">{loadLabel}</dd>
             </div>
-            <div className="rounded-md bg-white/5 px-3 py-3">
-              <dt className="text-[11px] uppercase tracking-wide text-slate-500">
+            <div className="min-w-0 break-words border-t border-light bg-mist px-1 py-3">
+              <dt className="text-xs uppercase tracking-wide text-muted">
                 Descanso
               </dt>
               <dd className="mt-1 text-lg font-semibold">
@@ -75,13 +76,13 @@ function ExerciseDetailCard({
             </div>
             {weightLabel && (
               <div
-                className={`rounded-md bg-white/5 px-3 py-3 ${
+                className={`min-w-0 break-words border-t border-light bg-mist px-1 py-3 ${
                   (item.weightMode ?? "fixed") === "perSet"
                     ? "col-span-2 sm:col-span-4"
                     : ""
                 }`}
               >
-                <dt className="text-[11px] uppercase tracking-wide text-slate-500">
+                <dt className="text-xs uppercase tracking-wide text-muted">
                   {(item.weightMode ?? "fixed") === "range"
                     ? "Rango"
                     : (item.weightMode ?? "fixed") === "perSet"
@@ -102,14 +103,14 @@ function ExerciseDetailCard({
           </dl>
 
           {item.notes && (
-            <p className="mt-4 text-sm text-slate-300">
-              <span className="font-medium text-white">Notas: </span>
+            <p className="mt-4 break-words text-base text-accent">
+              <span className="font-medium text-primary">Notas: </span>
               {item.notes}
             </p>
           )}
 
           {exercise.cues && exercise.cues.length > 0 && (
-            <ul className="mt-4 list-disc space-y-1 pl-5 text-sm text-slate-400">
+            <ul className="mt-4 list-disc space-y-1 pl-5 text-sm text-muted">
               {exercise.cues.map((cue) => (
                 <li key={cue}>{cue}</li>
               ))}
@@ -129,6 +130,7 @@ export const RoutineDetailPage = () => {
   const [activeDay, setActiveDay] = useState<Weekday>("monday");
   const [pdfBusy, setPdfBusy] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!ready) return;
@@ -152,10 +154,13 @@ export const RoutineDetailPage = () => {
 
   if (!ready || routine === undefined) {
     return (
-      <div className="min-h-screen bg-[#050B14] text-white">
+      <div className="min-h-screen bg-white text-primary">
+        <a href="#main-content" className="skip-to-content" data-router-link>
+          Saltar al contenido
+        </a>
         <Navbar />
-        <main className="container mx-auto px-6 pt-28">
-          <p className="text-slate-400">Cargando…</p>
+        <main id="main-content" tabIndex={-1} className="editorial-container pt-28">
+          <p className="text-muted">Cargando…</p>
         </main>
       </div>
     );
@@ -163,14 +168,17 @@ export const RoutineDetailPage = () => {
 
   if (routine === null) {
     return (
-      <div className="min-h-screen bg-[#050B14] text-white">
+      <div className="min-h-screen bg-white text-primary">
+        <a href="#main-content" className="skip-to-content" data-router-link>
+          Saltar al contenido
+        </a>
         <Navbar />
-        <main className="container mx-auto px-6 pb-20 pt-28">
-          <h1 className="text-2xl font-bold">Rutina no encontrada</h1>
-          <p className="mt-2 text-slate-400">
+        <main id="main-content" tabIndex={-1} className="editorial-container pb-20 pt-28 lg:pt-36">
+          <h1 className="editorial-heading">Rutina no encontrada</h1>
+          <p className="mt-2 text-muted">
             Puede que la hayas eliminado o que estés en otro dispositivo.
           </p>
-          <Link to="/rutinas" className="mt-6 inline-block text-blue-300">
+          <Link to="/rutinas" className="editorial-link mt-6 min-h-11 font-medium text-accent">
             Volver a mis rutinas
           </Link>
         </main>
@@ -199,34 +207,37 @@ export const RoutineDetailPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#050B14] text-white">
+    <div className="min-h-screen bg-white text-primary">
+      <a href="#main-content" className="skip-to-content" data-router-link>
+        Saltar al contenido
+      </a>
       <Navbar />
-      <main className="container mx-auto px-6 pb-20 pt-28">
+      <main id="main-content" tabIndex={-1} className="editorial-container pb-20 pt-28 lg:pt-36">
         <Link
           to="/rutinas"
-          className="text-sm text-slate-400 transition-colors hover:text-white"
+          className="editorial-link min-h-11 font-medium text-accent"
         >
           ← Mis rutinas
         </Link>
 
-        <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+        <div className="mt-4 flex flex-col gap-5 border-b border-primary pb-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="min-w-0">
+            <h1 className="editorial-heading break-words">
               {routine.name}
             </h1>
             {routine.description && (
-              <p className="mt-3 max-w-2xl text-slate-400">
+              <p className="mt-3 max-w-2xl break-words text-muted">
                 {routine.description}
               </p>
             )}
-            <p className="mt-3 text-xs uppercase tracking-wider text-slate-500">
+            <p className="mt-3 text-sm font-medium text-accent">
               {summarizeEnabledDays(routine.days)}
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex shrink-0 flex-wrap gap-2">
             <Link
               to={`/rutinas/${routine.id}/editar`}
-              className="inline-flex h-10 items-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-[#0A1626] transition-opacity hover:opacity-90"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-2"
             >
               <IconPencil />
               Editar
@@ -235,22 +246,15 @@ export const RoutineDetailPage = () => {
               type="button"
               disabled={pdfBusy}
               onClick={handleExportPdf}
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-white/20 px-5 text-sm text-slate-200 transition-colors hover:border-white hover:text-white disabled:opacity-50"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-light px-5 py-3 text-sm font-semibold text-primary-2 transition-colors hover:border-accent hover:bg-mist disabled:cursor-not-allowed disabled:opacity-50"
             >
               <IconPdf />
               {pdfBusy ? "Preparando PDF…" : "Exportar PDF"}
             </button>
             <button
               type="button"
-              onClick={() => {
-                if (
-                  window.confirm(`¿Eliminar la rutina "${routine.name}"?`)
-                ) {
-                  remove(routine.id);
-                  navigate("/rutinas");
-                }
-              }}
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-red-400/30 px-5 text-sm text-red-300 hover:bg-red-500/10"
+              onClick={() => setDeleteDialogOpen(true)}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-red-200 px-5 py-3 text-sm font-semibold text-red-800 transition-colors hover:bg-red-100"
             >
               <IconTrash />
               Eliminar
@@ -259,17 +263,17 @@ export const RoutineDetailPage = () => {
         </div>
 
         {pdfError && (
-          <p className="mt-4 rounded-md border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          <p role="alert" className="mt-4 rounded-sm border-l-2 border-red-700 bg-red-50 px-4 py-3 text-sm text-red-800">
             {pdfError}
           </p>
         )}
 
-        <p className="mt-3 text-xs text-slate-500">
+        <p className="mt-3 text-xs text-muted">
           Se abre el diálogo de impresión: elige{" "}
-          <span className="text-slate-300">Guardar como PDF</span>.
+          <span className="text-accent">Guardar como PDF</span>.
         </p>
 
-        <div className="mt-8 flex gap-2 overflow-x-auto pb-1">
+        <div className="mt-8 grid grid-cols-4 gap-2 sm:grid-cols-7">
           {WEEKDAYS.map((day) => {
             const plan = routine.days[day];
             const selected = activeDay === day;
@@ -280,19 +284,20 @@ export const RoutineDetailPage = () => {
               <button
                 key={day}
                 type="button"
+                aria-pressed={selected}
                 onClick={() => setActiveDay(day)}
-                className={`min-w-[4.5rem] rounded-lg border px-3 py-2 text-center transition-colors ${
+                className={`min-h-14 min-w-0 rounded-sm border px-1.5 py-2 text-center transition-colors ${
                   selected
-                    ? "border-blue-400 bg-blue-500/15 text-white"
+                    ? "border-primary bg-primary text-white"
                     : plan.enabled
-                      ? "border-white/15 bg-white/5 text-slate-200 hover:border-white/30"
-                      : "border-white/10 text-slate-500 hover:border-white/20"
+                      ? "border-accent bg-mist text-primary hover:border-primary"
+                      : "border-light bg-white text-muted hover:border-accent"
                 }`}
               >
                 <div className="text-xs font-semibold">
                   {weekdayShortLabels[day]}
                 </div>
-                <div className="mt-1 text-[10px] uppercase tracking-wide">
+                <div className="mt-1 break-words text-xs">
                   {plan.enabled ? `${count} ej.` : "Descanso"}
                 </div>
               </button>
@@ -302,23 +307,23 @@ export const RoutineDetailPage = () => {
 
         <section className="mt-6">
           <div className="mb-6">
-            <h2 className="text-2xl font-semibold">
+            <h2 className="break-words font-display text-3xl">
               {weekdayLabels[activeDay]}
               {dayPlan.focus.trim() ? ` — ${dayPlan.focus}` : ""}
             </h2>
           </div>
 
           {!dayPlan.enabled ? (
-            <div className="rounded-lg border border-dashed border-white/15 px-6 py-14 text-center">
-              <p className="text-lg font-medium">Día de descanso</p>
-              <p className="mt-2 text-sm text-slate-400">
+            <div className="border-y border-light bg-mist px-6 py-14 text-center">
+              <p className="font-display text-2xl">Día de descanso</p>
+              <p className="mt-2 text-sm text-muted">
                 Este día está desactivado en tu plan semanal.
               </p>
             </div>
           ) : dayExerciseCount === 0 ? (
-            <div className="rounded-lg border border-dashed border-white/15 px-6 py-14 text-center">
-              <p className="text-lg font-medium">Sin ejercicios</p>
-              <p className="mt-2 text-sm text-slate-400">
+            <div className="border-y border-light bg-mist px-6 py-14 text-center">
+              <p className="font-display text-2xl">Sin ejercicios</p>
+              <p className="mt-2 text-sm text-muted">
                 Edita la rutina para agregar ejercicios a este día.
               </p>
             </div>
@@ -327,10 +332,10 @@ export const RoutineDetailPage = () => {
               {dayPlan.warmupEnabled &&
                 dayPlan.warmupExercises.length > 0 && (
                   <div>
-                    <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-[#7eb8ff]">
+                    <h3 className="editorial-label mb-3 text-accent">
                       Calentamiento
                     </h3>
-                    <ol className="space-y-6">
+                    <ol className="space-y-0">
                       {dayPlan.warmupExercises.map((item, index) => (
                         <ExerciseDetailCard
                           key={`warmup-${item.exerciseId}-${index}`}
@@ -347,11 +352,11 @@ export const RoutineDetailPage = () => {
                 <div>
                   {dayPlan.warmupEnabled &&
                     dayPlan.warmupExercises.length > 0 && (
-                      <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-[#7eb8ff]">
+                      <h3 className="editorial-label mb-3 text-accent">
                         Trabajo principal
                       </h3>
                     )}
-                  <ol className="space-y-6">
+                  <ol className="space-y-0">
                     {dayPlan.exercises.map((item, index) => (
                       <ExerciseDetailCard
                         key={`main-${item.exerciseId}-${index}`}
@@ -368,6 +373,17 @@ export const RoutineDetailPage = () => {
         </section>
       </main>
       <Footer />
+      {deleteDialogOpen && (
+        <ConfirmDeleteDialog
+          itemName={routine.name}
+          onCancel={() => setDeleteDialogOpen(false)}
+          onConfirm={() => {
+            remove(routine.id);
+            setDeleteDialogOpen(false);
+            navigate("/rutinas", { state: { focusRoutineHeading: true } });
+          }}
+        />
+      )}
     </div>
   );
 };

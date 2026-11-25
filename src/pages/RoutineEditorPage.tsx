@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
@@ -24,24 +24,27 @@ export const RoutineCreatePage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#050B14] text-white">
+    <div className="min-h-screen bg-white text-primary">
+      <a href="#main-content" className="skip-to-content" data-router-link>
+        Saltar al contenido
+      </a>
       <Navbar />
-      <main className="container mx-auto max-w-4xl px-6 pb-20 pt-28">
+      <main id="main-content" tabIndex={-1} className="editorial-container max-w-5xl pb-20 pt-28 lg:pt-36">
         <Link
           to="/rutinas"
-          className="text-sm text-slate-400 transition-colors hover:text-white"
+          className="editorial-link min-h-11 font-medium text-accent"
         >
           ← Mis rutinas
         </Link>
-        <h1 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">
+        <h1 className="mt-6 editorial-heading break-words">
           Nueva rutina
         </h1>
-        <p className="mt-3 text-sm text-slate-400">
+        <p className="mt-4 max-w-2xl leading-relaxed text-muted">
           Plan de lunes a domingo. Se guarda un borrador automático en este
           navegador si cierras o recargas la página; al terminar, usa
           &quot;Guardar rutina&quot; para dejarla fija en Mis rutinas.
         </p>
-        <div className="mt-8">
+        <div className="mt-8 border-t border-primary pt-8">
           <RoutineForm
             submitLabel="Guardar rutina"
             onCancelHref="/rutinas"
@@ -87,10 +90,13 @@ export const RoutineEditPage = () => {
 
   if (!ready || routine === undefined) {
     return (
-      <div className="min-h-screen bg-[#050B14] text-white">
+      <div className="min-h-screen bg-white text-primary">
+        <a href="#main-content" className="skip-to-content" data-router-link>
+          Saltar al contenido
+        </a>
         <Navbar />
-        <main className="container mx-auto px-6 pt-28">
-          <p className="text-slate-400">Cargando…</p>
+        <main id="main-content" tabIndex={-1} className="editorial-container pt-28">
+          <p className="text-muted">Cargando…</p>
         </main>
       </div>
     );
@@ -98,14 +104,17 @@ export const RoutineEditPage = () => {
 
   if (routine === null) {
     return (
-      <div className="min-h-screen bg-[#050B14] text-white">
+      <div className="min-h-screen bg-white text-primary">
+        <a href="#main-content" className="skip-to-content" data-router-link>
+          Saltar al contenido
+        </a>
         <Navbar />
-        <main className="container mx-auto px-6 pb-20 pt-28">
-          <h1 className="text-2xl font-bold">Rutina no encontrada</h1>
-          <p className="mt-2 text-sm text-slate-400">
+        <main id="main-content" tabIndex={-1} className="editorial-container pb-20 pt-28 lg:pt-36">
+          <h1 className="editorial-heading">Rutina no encontrada</h1>
+          <p className="mt-2 text-sm text-muted">
             Puede que se haya eliminado o que estés en otro navegador.
           </p>
-          <Link to="/rutinas" className="mt-6 inline-block text-blue-300">
+          <Link to="/rutinas" className="editorial-link mt-6 min-h-11 font-medium text-accent">
             Volver a mis rutinas
           </Link>
         </main>
@@ -115,24 +124,27 @@ export const RoutineEditPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#050B14] text-white">
+    <div className="min-h-screen bg-white text-primary">
+      <a href="#main-content" className="skip-to-content" data-router-link>
+        Saltar al contenido
+      </a>
       <Navbar />
-      <main className="container mx-auto max-w-4xl px-6 pb-20 pt-28">
+      <main id="main-content" tabIndex={-1} className="editorial-container max-w-5xl pb-20 pt-28 lg:pt-36">
         <Link
           to={`/rutinas/${routine.id}`}
-          className="text-sm text-slate-400 transition-colors hover:text-white"
+          className="editorial-link min-h-11 font-medium text-accent"
         >
           ← Volver a la rutina
         </Link>
-        <h1 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">
+        <h1 className="mt-6 editorial-heading break-words">
           Editar rutina
         </h1>
-        <p className="mt-3 text-sm text-slate-400">
+        <p className="mt-4 max-w-2xl leading-relaxed text-muted">
           Los cambios se guardan en este navegador al pulsar &quot;Guardar
           cambios&quot;. Mientras editas, también se guarda un borrador
           automático.
         </p>
-        <div className="mt-8">
+        <div className="mt-8 border-t border-primary pt-8">
           <RoutineForm
             draftId={routine.id}
             savedUpdatedAt={routine.updatedAt}

@@ -1,9 +1,11 @@
+import { colors, typography } from "../design-system";
 import {
   getExerciseById,
   getExerciseImageUrl,
   getExerciseVideoUrl,
   muscleGroupLabels,
 } from "../data/exercises";
+import { isCustomExercise } from "./customExercisesStorage";
 import type { Routine, RoutineExercise } from "../types/routines";
 import { WEEKDAYS } from "../types/routines";
 import {
@@ -22,6 +24,20 @@ function esc(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
+function renderExercisePhoto(exercise: {
+  name: string;
+  imagePath: string;
+  id: string;
+  isCustom?: boolean;
+}): string {
+  const img = getExerciseImageUrl(exercise.imagePath);
+  if (!img || isCustomExercise(exercise)) {
+    const initial = esc(exercise.name.trim().charAt(0).toUpperCase() || "?");
+    return `<div class="ex-photo-placeholder" aria-hidden="true"><span>${initial}</span></div>`;
+  }
+  return `<img src="${esc(img)}" alt="${esc(exercise.name)}" />`;
+}
+
 function renderExerciseCards(
   items: RoutineExercise[],
   sectionLabel: string
@@ -30,7 +46,6 @@ function renderExerciseCards(
     .map((item, index) => {
       const exercise = getExerciseById(item.exerciseId);
       if (!exercise) return "";
-      const img = getExerciseImageUrl(exercise.imagePath);
       const video = getExerciseVideoUrl(exercise);
       const notes = item.notes?.trim()
         ? `<p class="ex-notes"><strong>Notas:</strong> ${esc(item.notes)}</p>`
@@ -46,7 +61,7 @@ function renderExerciseCards(
         <article class="ex-card">
           <div class="ex-grid">
             <div class="ex-photo">
-              <img src="${esc(img)}" alt="${esc(exercise.name)}" />
+              ${renderExercisePhoto(exercise)}
             </div>
             <div class="ex-body">
               <p class="ex-index">${esc(sectionLabel)} ${index + 1}</p>
@@ -148,234 +163,131 @@ export function buildRoutinePdfHtml(routine: Routine, logoSrc: string): string {
   <meta charset="UTF-8" />
   <title>${esc(routine.name)} | IBSA Nutrición</title>
   <style>
-    @page {
-      size: A4;
-      margin: 12mm 12mm 14mm;
+    @page { size: A4; margin: 13mm 13mm 15mm; }
+
+    :root {
+      --ink: ${colors.primary};
+      --slate: ${colors.accent};
+      --muted: ${colors.muted};
+      --rule: ${colors.light};
+      --mist: #f5f6f7;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-      color: #222d3b;
-      background: #fff;
-      font-size: 10pt;
-      line-height: 1.4;
+      font: 10pt/1.4 ${typography.fontFamily};
+      color: var(--ink);
+      background: white;
+      overflow-wrap: anywhere;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
+    h1, h2 {
+      font-family: "DM Serif Display", Georgia, serif;
+      font-weight: 400;
+      line-height: 1.12;
+    }
     .header {
-      background: linear-gradient(145deg, #0a1626 0%, #0a1626 40%, #222d3b 100%);
-      color: #fff;
-      padding: 18px 20px 16px;
-      border-radius: 10px;
+      padding-bottom: 12pt;
+      border-bottom: 1.5pt solid var(--ink);
+    }
+    .header, .week-overview, .day-head, .block-title {
       page-break-after: avoid;
       break-after: avoid;
     }
     .header-top {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
+      gap: 10pt;
+      margin-bottom: 13pt;
     }
-    .header-top img { height: 32px; width: auto; }
-    .kicker {
-      font-size: 8px;
+    .header-top img {
+      width: auto;
+      height: 26pt;
+      filter: brightness(0);
+    }
+    .kicker, .ex-index, .block-title, .stats span {
+      font-size: 8pt;
       font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #7eb8ff;
-      margin: 0 0 2px;
-    }
-    .brand { font-size: 10px; color: #cbd5e1; margin: 0; }
-    h1 {
-      font-size: 18pt;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin: 0 0 6px;
-      line-height: 1.15;
-    }
-    .subtitle {
-      font-size: 10pt;
-      color: #cbd5e1;
-      max-width: 40em;
-      margin: 0;
-      line-height: 1.4;
-    }
-    .week-overview {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      margin: 14px 0 18px;
-      page-break-after: avoid;
-      break-after: avoid;
-    }
-    .week-day {
-      border: 1px solid rgba(10,22,38,0.1);
-      border-radius: 8px;
-      padding: 8px 6px;
-      text-align: center;
-      background: #f8fafc;
-    }
-    .week-day strong {
-      display: block;
-      font-size: 9px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #0a1626;
-      margin-bottom: 3px;
-    }
-    .week-day span {
-      display: block;
-      font-size: 8.5px;
-      color: #535b67;
-      line-height: 1.25;
-      word-break: break-word;
-    }
-    .week-day--rest {
-      background: #fff;
-      border-style: dashed;
-    }
-    .week-day--rest span { color: #94a3b8; }
-    .wrap { padding: 0; }
-    .day {
-      margin: 0 0 16px;
-      padding-bottom: 4px;
-    }
-    .day-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin: 0 0 8px;
-      padding-bottom: 6px;
-      border-bottom: 2px solid rgba(10,22,38,0.08);
-      page-break-after: avoid;
-      break-after: avoid;
-    }
-    .day-head h2 {
-      margin: 0;
-      font-size: 12.5pt;
-      color: #0a1626;
-    }
-    .day--rest {
-      margin-bottom: 10px;
-      padding: 8px 10px;
-      background: #f8fafc;
-      border-radius: 8px;
-      border: 1px dashed rgba(10,22,38,0.12);
-    }
-    .day--rest .day-head {
-      margin: 0;
-      padding: 0;
-      border: 0;
-    }
-    .day--rest .day-head h2 { font-size: 11pt; color: #64748b; }
-    .block-title {
-      margin: 10px 0 6px;
-      font-size: 9pt;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #2e8bff;
-      page-break-after: avoid;
-      break-after: avoid;
-    }
-    .train-chip, .rest-chip {
-      font-size: 7.5px;
-      font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      padding: 5px 9px;
-      border-radius: 999px;
-      white-space: nowrap;
+      color: var(--slate);
     }
-    .train-chip { background: #e8f2ff; color: #1d6fd8; }
-    .rest-chip { background: #e2e8f0; color: #64748b; }
-    .empty-day { color: #535b67; font-size: 9.5pt; margin: 0; }
+    .kicker, .brand, .subtitle, .empty-day, .ex-index { margin: 0; }
+    .brand, .subtitle, .empty-day, .ex-meta, .video-link, .footer { color: var(--muted); }
+    .brand { font-size: 9pt; }
+    h1 { margin: 0; font-size: 26pt; }
+    .subtitle { max-width: 64ch; margin-top: 5pt; }
+
+    .week-overview {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      margin: 10pt 0 16pt;
+      border-block: 0.65pt solid var(--rule);
+    }
+    .week-day { padding: 6pt 3pt; text-align: center; background: var(--mist); }
+    .week-day + .week-day { border-left: 0.65pt solid var(--rule); }
+    .week-day strong { display: block; font-size: 9pt; }
+    .week-day span { display: block; margin-top: 2pt; font-size: 8pt; color: var(--slate); }
+    .week-day--rest { background: white; }
+
+    .day { margin: 0 0 14pt; }
+    .day-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10pt;
+      padding-bottom: 4pt;
+      border-bottom: 0.85pt solid var(--ink);
+    }
+    .day-head h2 { margin: 0; font-size: 17pt; }
+    .day--rest { margin-bottom: 8pt; break-inside: avoid; }
+    .day--rest .day-head { border-color: var(--rule); }
+    .day--rest h2 { font-size: 13pt; }
+    .train-chip, .rest-chip { flex: none; font-size: 8.5pt; color: var(--slate); }
+    .block-title { margin: 10pt 0 3pt; }
+    .empty-day { padding-top: 6pt; }
+
     .ex-card {
-      border: 1px solid rgba(10,22,38,0.1);
-      border-radius: 10px;
-      overflow: hidden;
-      margin: 0 0 8px;
+      padding: 8pt 0;
+      border-bottom: 0.65pt solid var(--rule);
       page-break-inside: avoid;
       break-inside: avoid;
     }
     .ex-grid {
       display: grid;
-      grid-template-columns: 108px 1fr;
-      align-items: stretch;
-      min-height: 96px;
+      grid-template-columns: 82pt minmax(0, 1fr);
+      align-items: start;
+      gap: 10pt;
     }
     .ex-photo {
-      position: relative;
-      background: #0a1626;
-      min-height: 96px;
+      height: 70pt;
+      overflow: hidden;
+      background: var(--mist);
     }
-    .ex-photo img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
+    .ex-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .ex-photo-placeholder {
+      display: grid;
       height: 100%;
-      object-fit: cover;
+      place-items: center;
+      font: 24pt Georgia, serif;
+      color: var(--muted);
     }
-    .ex-body { padding: 10px 12px; }
-    .ex-index {
-      margin: 0 0 2px;
-      font-size: 7.5px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #2e8bff;
-    }
-    .ex-body h3 {
-      margin: 0 0 2px;
-      font-size: 11pt;
-      color: #0a1626;
-      line-height: 1.2;
-    }
-    .ex-meta { margin: 0 0 6px; font-size: 8.5pt; color: #535b67; }
+    .ex-body h3 { margin: 2pt 0; font-size: 13pt; line-height: 1.2; }
+    .ex-meta { margin: 0 0 5pt; font-size: 9pt; }
     .stats {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 5px;
-      margin-bottom: 4px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 3pt;
     }
-    .stats--4 { grid-template-columns: repeat(4, 1fr); }
-    .stats div {
-      background: #f8fafc;
-      border-radius: 6px;
-      padding: 5px 4px;
-      text-align: center;
-    }
-    .stats span {
-      display: block;
-      font-size: 7px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #64748b;
-      margin-bottom: 1px;
-    }
-    .stats strong { font-size: 10.5pt; color: #0a1626; }
-    .ex-notes { margin: 4px 0 0; font-size: 8.5pt; color: #334155; }
-    .video-link {
-      margin: 4px 0 0;
-      font-size: 7.5pt;
-      color: #64748b;
-      word-break: break-all;
-    }
-    .video-link a { color: #2e8bff; text-decoration: none; }
-    .footer {
-      margin-top: 16px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(10,22,38,0.08);
-      font-size: 8pt;
-      color: #64748b;
-    }
-    @media print {
-      .header, .train-chip, .week-day {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-    }
+    .stats--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .stats div { padding: 3pt; border-top: 0.65pt solid var(--rule); background: var(--mist); }
+    .stats span, .stats strong { display: block; }
+    .stats span { font-size: 7.5pt; }
+    .stats strong { font-size: 10pt; }
+    .ex-notes, .video-link { margin: 4pt 0 0; font-size: 9pt; }
+    .video-link a { color: var(--slate); text-decoration: underline; }
+    .footer { margin-top: 12pt; padding-top: 7pt; border-top: 0.65pt solid var(--rule); font-size: 8.5pt; }
   </style>
 </head>
 <body>
