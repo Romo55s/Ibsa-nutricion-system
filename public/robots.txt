@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /src/
 
-Sitemap: https://ibsanutricion.com/sitemap.xml
+Sitemap: https://www.ibsa-nutricion.com/sitemap.xml
