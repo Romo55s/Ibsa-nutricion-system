@@ -1,0 +1,33 @@
+{
+  "entries": [
+    {
+      "@context": "https://agenticresourcediscovery.org/context/v1",
+      "@id": "urn:air:ibsa-nutricion.com:website",
+      "identifier": "urn:air:ibsa-nutricion.com:website",
+      "displayName": "IBSA Nutrición — sitio oficial",
+      "type": "text/html",
+      "url": "https://www.ibsa-nutricion.com/",
+      "description": "Sitio oficial de IBSA Nutrición con información sobre consultas de nutrición clínica y deportiva en Aguascalientes y en línea.",
+      "representativeQueries": [
+        "¿Dónde consultar con una nutrióloga deportiva en Aguascalientes?",
+        "¿Qué servicios de nutrición clínica y deportiva ofrece IBSA Nutrición?",
+        "¿Cómo agendar una consulta presencial o en línea con IBSA Nutrición?"
+      ],
+      "tags": ["nutrición clínica", "nutrición deportiva", "Aguascalientes", "México"]
+    },
+    {
+      "@context": "https://agenticresourcediscovery.org/context/v1",
+      "@id": "urn:air:ibsa-nutricion.com:site-guide",
+      "identifier": "urn:air:ibsa-nutricion.com:site-guide",
+      "displayName": "IBSA Nutrición — guía del sitio",
+      "type": "text/markdown",
+      "url": "https://www.ibsa-nutricion.com/llms.txt",
+      "description": "Resumen en Markdown del sitio, sus páginas principales, opciones de cita y ubicación.",
+      "representativeQueries": [
+        "¿Qué páginas de IBSA Nutrición explican la nutrición deportiva y las consultas?",
+        "¿Dónde está IBSA Nutrición y cómo puedo agendar una consulta?"
+      ],
+      "tags": ["guía del sitio", "nutrición", "Aguascalientes"]
+    }
+  ]
+}

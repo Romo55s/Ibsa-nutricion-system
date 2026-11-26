@@ -3,3 +3,4 @@ Allow: /
 Disallow: /src/
 
 Sitemap: https://www.ibsa-nutricion.com/sitemap.xml
+Agentmap: https://www.ibsa-nutricion.com/.well-known/ard.json
