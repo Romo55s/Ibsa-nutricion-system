@@ -3,7 +3,6 @@ import aboutPortrait from "./people/mariana-about.webp";
 import communityPortrait from "./people/mariana-community.webp";
 import consultation from "./people/mariana-consultation.webp";
 import consultationMobile from "./people/mariana-consultation-mobile.webp";
-import formalHero from "./people/mariana-hero-formal-cutout.png";
 import profile from "./people/mariana-profile.webp";
 import portrait from "./people/mariana-portrait.webp";
 import carrera01 from "./events/carrera-01.webp";
@@ -37,7 +36,6 @@ export const assets = {
     communityPortrait,
     consultation,
     consultationMobile,
-    formalHero,
     profile,
     portrait,
   },

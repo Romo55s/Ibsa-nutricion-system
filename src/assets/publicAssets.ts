@@ -18,6 +18,14 @@ export const publicAssets = {
     yogurtGranola: "/images/guide/yogurt-granola.webp",
     waffle: "/images/guide/waffle.webp",
   },
+  people: {
+    formalHero: {
+      avif640: "/images/people/mariana-hero-formal-640.avif",
+      avif960: "/images/people/mariana-hero-formal-960.avif",
+      webp640: "/images/people/mariana-hero-formal-640.webp",
+      webp960: "/images/people/mariana-hero-formal-960.webp",
+    },
+  },
   exercises: {
     baseUrl: "/images/exercises/",
     wallSit: "/images/exercises/wall-sit.webp",

@@ -129,7 +129,7 @@ The currently selected photo assets have been visually reviewed:
 
 | Asset reference | Content and role | Treatment |
 | --- | --- | --- |
-| `assets.people.formalHero` | Mariana wearing the IBSA uniform and holding a measuring tape | `src/assets/people/mariana-hero-formal-cutout.png`; retain transparency |
+| `publicAssets.people.formalHero` | Responsive, transparent AVIF/WebP versions of Mariana wearing the IBSA uniform and holding a measuring tape; preload the AVIF candidate from the document head and keep the image eager with high fetch priority | `public/images/people/mariana-hero-formal-{640,960}.{avif,webp}`; preserve `src/assets/people/mariana-hero-formal-cutout.png` as the full-resolution source original |
 | `assets.people.aboutPortrait`, `profile`, `consultation`, and `portrait` | Mariana profile and consultation views | Optimized WebP files under `src/assets/people/` |
 | `assets.events` and `assets.clinic` | Carrera, WireMasters, community, and PHYN clinic imagery | Optimized WebP files grouped under `src/assets/events/` and `src/assets/clinic/` |
 | Certificate scans | Nutrition and body recomposition credentials | Keep as JPEG under `src/assets/credentials/` for legible text |

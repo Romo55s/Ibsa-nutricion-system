@@ -79,7 +79,7 @@ The project includes:
 
 Current canonical domain is configured as:
 
-- `https://ibsanutricion.com/`
+- `https://www.ibsa-nutricion.com/`
 
 If the domain changes, update URLs in `index.html`, `robots.txt`, and `sitemap.xml`.
 

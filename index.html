@@ -105,12 +105,18 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/brand/android-chrome-192x192.png" />
     <link rel="icon" type="image/png" sizes="512x512" href="/brand/android-chrome-512x512.png" />
     <link rel="manifest" href="/brand/site.webmanifest" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@300;400;500;600;700&amp;family=DM+Serif+Display:ital@0;1&amp;display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="image"
+      type="image/avif"
+      href="/images/people/mariana-hero-formal-960.avif"
+      imagesrcset="/images/people/mariana-hero-formal-640.avif 640w, /images/people/mariana-hero-formal-960.avif 960w"
+      imagesizes="(max-width: 767px) 100vw, (max-width: 1163px) 55vw, 640px"
+      fetchpriority="high"
     />
+    <link rel="preload" href="/fonts/albert-sans-latin-c2fb6fda41.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/dm-serif-display-latin-fdf61e20fd.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/dm-serif-display-italic-latin-ed8b291611.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body>
     <div id="root"></div>

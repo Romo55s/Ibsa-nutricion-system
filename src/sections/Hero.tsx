@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { Button } from "../components/Button";
-import { assets } from "../assets";
+import { publicAssets } from "../assets";
 
-const formalPortraitCutout = assets.people.formalHero;
+const formalPortrait = publicAssets.people.formalHero;
+const formalPortraitSizes =
+  "(max-width: 767px) 100vw, (max-width: 1163px) 55vw, 640px";
 
 export const Hero = () => (
   <section className="bg-white pt-20">
@@ -30,14 +32,30 @@ export const Hero = () => (
         </div>
       </div>
       <div className="-mx-[var(--page-gutter)] flex items-end justify-center md:mx-0 md:justify-end">
-        <img
-          src={formalPortraitCutout}
-          width={1064}
-          height={1478}
-          alt="Mariana Ibarra Santos con uniforme clínico azul marino y cinta métrica."
-          {...{ fetchpriority: "high" }}
-          className="block max-h-[62vh] w-full object-contain object-bottom sm:max-h-[72vh] md:max-w-[640px]"
-        />
+        <picture className="block w-full md:max-w-[640px]">
+          <source
+            type="image/avif"
+            srcSet={`${formalPortrait.avif640} 640w, ${formalPortrait.avif960} 960w`}
+            sizes={formalPortraitSizes}
+          />
+          <source
+            type="image/webp"
+            srcSet={`${formalPortrait.webp640} 640w, ${formalPortrait.webp960} 960w`}
+            sizes={formalPortraitSizes}
+          />
+          <img
+            src={formalPortrait.webp640}
+            srcSet={`${formalPortrait.webp640} 640w, ${formalPortrait.webp960} 960w`}
+            sizes={formalPortraitSizes}
+            width={1064}
+            height={1478}
+            alt="Mariana Ibarra Santos con uniforme clínico azul marino y cinta métrica."
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+            className="block max-h-[62vh] w-full object-contain object-bottom sm:max-h-[72vh]"
+          />
+        </picture>
       </div>
     </div>
   </section>
