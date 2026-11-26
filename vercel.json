@@ -64,7 +64,7 @@
       "destination": "/guia-desayunos-pre-entreno/index.html"
     },
     {
-      "source": "/((?!api/).*)",
+      "source": "/((?!api/|\\.well-known/).*)",
       "destination": "/index.html"
     }
   ]
