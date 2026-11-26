@@ -1,4 +1,5 @@
 import type { Exercise, MuscleGroup } from "../types/routines";
+import { publicAssets } from "../assets/publicAssets";
 import {
   CUSTOM_EXERCISE_IMAGE,
   getCustomExerciseById,
@@ -530,7 +531,7 @@ export const exercises: Exercise[] = [
     nameEn: "Wall Sit",
     muscleGroup: "piernas",
     equipment: "pesoCorporal",
-    imagePath: "/exercises/wall-sit.jpg",
+    imagePath: publicAssets.exercises.wallSit,
     youtubeVideoId: "6Li55TURhVg",
     isWarmup: true,
     cues: [

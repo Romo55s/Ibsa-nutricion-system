@@ -56,6 +56,18 @@ Requires **Google Chrome** installed (`puppeteer-core` uses the `chrome` channel
 - `src/components/` - Reusable UI components
 - `public/` - Static assets and SEO files (`robots.txt`, `sitemap.xml`, `llms.txt`)
 
+## Image assets
+
+Import app images from the typed catalog in `src/assets/index.ts`:
+
+```ts
+import { assets } from "../assets";
+
+const portrait = assets.people.aboutPortrait;
+```
+
+Use `publicAssets` from `src/assets/publicAssets.ts` for stable files served from `public/`, including recipe photos used by the guide PDF and local exercise images. To add an app image, place it in the matching category folder and export it from `src/assets/index.ts`; to add a static image, place it under `public/images/` and register its URL in `src/assets/publicAssets.ts`. Source photos are grouped under `src/assets/people`, `events`, `clinic`, `credentials`, and `brand`; replaced originals and unused references are kept under `src/assets/archive/`.
+
 ## SEO and Discovery
 
 The project includes:

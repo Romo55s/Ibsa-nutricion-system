@@ -43,7 +43,9 @@ Review these user-facing edge cases against the existing implementation while ch
 - `src/pages/EventPage.tsx`, `src/components/EventImageCard.tsx`, `src/components/EventImageGallery.tsx`, `src/components/EventModal.tsx` — apply the event-story layout while retaining gallery and modal behavior.
 - `src/pages/BreakfastGuidePage.tsx` — apply a publication-like guide layout while retaining all existing content and PDF actions.
 - `src/pages/RoutinesPage.tsx`, `RoutineEditorPage.tsx`, `RoutineDetailPage.tsx`, `src/components/routines/*`, `src/sections/RoutinePlanPreview.tsx`, `src/lib/buildRoutinePdfHtml.ts` — restyle all routine views, editor controls, preview, and PDF while preserving routines behavior.
-- `src/assets/editorial/mariana-hero.webp`, `mariana-profile.webp`, `mariana-detail.webp`, and optional `online-consultation.webp` — create responsive optimized derivatives of the selected Downloads photos; originals remain untouched.
+- `src/assets/index.ts` and `src/assets/publicAssets.ts` — central typed catalog for imported app images and stable public URLs.
+- `src/assets/people/`, `events/`, `clinic/`, `credentials/`, and `brand/` — organized optimized assets used by the UI; source images remain in Downloads or `src/assets/archive/`.
+- `public/images/guide/`, `public/images/exercises/`, and `public/brand/` — optimized static assets used by pages, PDFs, and browser metadata.
 
 ## Execution Steps
 
@@ -89,7 +91,7 @@ Review these user-facing edge cases against the existing implementation while ch
 ### Task 3: Redesign the homepage and integrate supplied photos
 
 **Files:**
-- Create: `src/assets/editorial/` optimized image derivatives
+- Create: `src/assets/index.ts`, `src/assets/publicAssets.ts`, and organized optimized asset folders
 - Modify: `src/sections/Hero.tsx`, `Benefits.tsx`, `About.tsx`, `Credibility.tsx`, `RoutineTool.tsx`, `Reviews.tsx`, `Locations.tsx`, `FlowingMenu.tsx`, `FinalCTA.tsx`, `src/pages/Home.tsx`
 - Modify: `src/components/CertificationsModal.tsx` for keyboard-operable certification/image viewing as part of the homepage credibility flow.
 - Modify: `src/components/Button.tsx` to use its link-rendering mode for homepage external actions and to respect reduced-motion preferences for magnetic pointer effects.
@@ -99,7 +101,8 @@ Review these user-facing edge cases against the existing implementation while ch
 - Produces: Editorial home flow with responsive local photo derivatives, existing section interactions, and booking calls to action.
 
 - [ ] Inspect current diffs in all homepage sections and preserve existing copy, booking destinations, section anchors, and routine-tool behavior.
-- [ ] Use the installed Sharp package to create WebP derivatives from `IMG_8680.jpg` (hero candidate), `IMG_8627.jpg` (profile), and `IMG_8604.jpg` (supporting portrait). Create an `IMG_8601.jpg` derivative only if it supports a clear online-consultation context. Target 1800px maximum long edge for hero and 1200px for supporting crops; balance image quality against approximately 300 KB hero / 200 KB supporting targets.
+- [ ] Use Sharp to create optimized WebP derivatives for active photos and guide images; preserve certificates as JPEG, the original logo as SVG, and the transparent hero portrait as PNG.
+- [ ] Centralize imported image references in `src/assets/index.ts` and static public URL references in `src/assets/publicAssets.ts`; use the URL catalog from PDF generation code that runs outside Vite.
 - [ ] Implement the desktop hero as a text/image split near 45/55; set mobile text before a full-width portrait crop. Keep all copy away from faces, and provide focal positioning per viewport.
 - [ ] Use the shared Button's anchor mode for external booking, directions, and WhatsApp actions so each destination is one semantic link with the established button visual and hover treatment.
 - [ ] Disable magnetic pointer translations/fill growth when `prefers-reduced-motion: reduce` is active; preserve label contrast and the non-motion button appearance.

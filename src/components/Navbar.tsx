@@ -1,9 +1,11 @@
 import { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Logo from "../assets/Logo-IBSA-White.svg";
+import { assets } from "../assets";
 import { Button } from "./Button";
 import StaggeredMenu from "./StaggeredMenu";
+
+const Logo = assets.brand.logoWhite;
 
 const menuItems = [
   { label: "Beneficios", ariaLabel: "Beneficios", link: "#beneficios" },

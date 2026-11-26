@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "../components/Button";
-import portrait from "../assets/editorial/mariana-perfil.webp";
+import { assets } from "../assets";
+
+const portrait = assets.people.profile;
 
 export const FinalCTA = () => (
   <>

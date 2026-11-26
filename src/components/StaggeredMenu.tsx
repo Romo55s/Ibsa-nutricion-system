@@ -1,6 +1,7 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useLocation, useNavigate } from "react-router-dom";
+import { assets } from "../assets";
 
 export interface StaggeredMenuItem {
   label: string;
@@ -39,7 +40,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   displaySocials = true,
   displayItemNumbering = true,
   className,
-  logoUrl = "/src/assets/logos/reactbits-gh-white.svg",
+  logoUrl = assets.brand.logoWhite,
   menuButtonColor = "var(--color-primary)",
   openMenuButtonColor = "var(--color-primary)",
   changeMenuColorOnOpen = true,

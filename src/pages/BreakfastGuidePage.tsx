@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { Button } from "../components/Button";
+import { assets } from "../assets";
 import {
   closing,
   disclaimer,
@@ -13,7 +14,8 @@ import {
   recipes,
   timingGuide,
 } from "../data/breakfastGuideContent";
-import Logo from "../assets/Logo-IBSA-White.svg";
+
+const Logo = assets.brand.logoWhite;
 
 /** PDF estático en `public/` (generar con `npm run generate:pdf`). */
 const pdfPublicPath = `/${guideMeta.pdfFileName}`;

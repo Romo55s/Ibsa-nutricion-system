@@ -1,7 +1,9 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
-import Logo from "../assets/Logo-IBSA-White.svg";
+import { assets } from "../assets";
+
+const Logo = assets.brand.logoWhite;
 
 export const Footer = () => {
   const logoRef = useRef<HTMLImageElement>(null);

@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { extname, join } from "node:path";
+import { publicAssets } from "../assets/publicAssets";
 import {
   closing,
   disclaimer,
@@ -60,7 +61,7 @@ function absUrl(base: string, path: string): string {
 /**
  * HTML completo para page.setContent + page.pdf (Chromium).
  * Con `localPublicRoot`, logo e imágenes van incrustadas desde `public/` (recomendado al generar el PDF en local).
- * Sin eso, usa `baseUrl` absoluto (p. ej. sitio en marcha) para resolver `/guide/...` por HTTP.
+ * Sin eso, usa `baseUrl` absoluto (p. ej. sitio en marcha) para resolver las rutas públicas por HTTP.
  */
 export function buildBreakfastGuidePdfHtml(
   baseUrl: string,
@@ -75,7 +76,7 @@ export function buildBreakfastGuidePdfHtml(
     return absUrl(baseUrl, webPath);
   }
 
-  const logoSrc = assetSrc("/ibsa-logo-white.svg");
+  const logoSrc = assetSrc(publicAssets.brand.whiteLogo);
 
   const introHtml = guideIntro.paragraphs
     .map((p) => `<p class="intro-p">${esc(p)}</p>`)

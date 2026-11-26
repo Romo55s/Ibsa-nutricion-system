@@ -1,3 +1,4 @@
+import { publicAssets } from "../assets/publicAssets";
 import { colors, typography } from "../design-system";
 import {
   getExerciseById,
@@ -318,7 +319,10 @@ export function buildRoutinePdfHtml(routine: Routine, logoSrc: string): string {
 }
 
 export async function exportRoutinePdf(routine: Routine): Promise<void> {
-  const logoSrc = `${window.location.origin}/ibsa-logo-white.svg`;
+  const logoSrc = new URL(
+    publicAssets.brand.whiteLogo,
+    window.location.origin,
+  ).toString();
   const html = buildRoutinePdfHtml(routine, logoSrc);
 
   const iframe = document.createElement("iframe");

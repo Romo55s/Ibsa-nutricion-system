@@ -1,20 +1,34 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import raceCover from "../assets/Evento-Carrera-portada.jpg";
-import raceStart from "../assets/Evento-Carrera-1.jpg";
-import raceFinish from "../assets/Evento-Carrera-4.jpg";
-import clinic from "../assets/Phyn-1.jpg";
-import clinicInterior from "../assets/Phyn-2.jpg";
-import athleteCertificate from "../assets/Certificado-Mujer-Atleta.jpg";
-import recompositionCertificate from "../assets/Certificado-Recomposicion-Corporal.jpg";
+import { assets } from "../assets";
 
 const items = [
-  { title: "Eventos", href: "/evento", images: [raceCover, raceStart, raceFinish] },
-  { title: "Consultorios", href: "#ubicaciones", images: [clinic, clinicInterior] },
+  {
+    title: "Eventos",
+    href: "/evento",
+    images: [
+      assets.events.carrera.cover,
+      assets.events.carrera.photos[0],
+      assets.events.carrera.photos[3],
+    ],
+  },
+  {
+    title: "Consultorios",
+    href: "#ubicaciones",
+    images: [assets.clinic.phynRoom01, assets.clinic.phynRoom02],
+  },
   { title: "Guía pre-entreno", href: "/guia-desayunos-pre-entreno", images: [
-    "/guide/overnight-oats.png", "/guide/toastadas-fruta.png", "/guide/batido-pre-entreno.png",
+    assets.public.guide.overnightOats,
+    assets.public.guide.toastadasFruta,
+    assets.public.guide.batidoPreEntreno,
   ] },
-  { title: "Certificados", images: [athleteCertificate, recompositionCertificate] },
+  {
+    title: "Certificados",
+    images: [
+      assets.credentials.womenAthlete,
+      assets.credentials.bodyRecomposition,
+    ],
+  },
 ];
 
 export const FlowingMenu = ({ onOpenCertifications }: { onOpenCertifications: () => void }) => {

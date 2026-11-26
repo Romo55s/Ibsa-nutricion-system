@@ -1,8 +1,9 @@
 /**
  * Contenido de la guía de desayunos pre-entreno.
  * Edita aquí para actualizar la página y el PDF estático (misma fuente; regenerar con `npm run generate:pdf`).
- * Imágenes en `public/guide/` para URLs estables en web y en el HTML del PDF.
+ * Imágenes servidas desde `public/images/guide/` y catalogadas en `src/assets/publicAssets.ts`.
  */
+import { publicAssets } from "../assets/publicAssets";
 
 export const guideMeta = {
   documentTitle: "Guía gratuita · Desayunos pre-entreno | IBSA Nutrición",
@@ -75,7 +76,7 @@ export const principles = {
 export type GuideRecipe = {
   name: string;
   timingLabel: string;
-  /** Ruta pública bajo `public/` (p. ej. `/guide/photo.png`). */
+  /** Ruta pública en `public/`, registrada en `src/assets/publicAssets.ts`. */
   imageUrl: string;
   imageAlt: string;
   ingredients: string[];
@@ -86,7 +87,7 @@ export const recipes: GuideRecipe[] = [
   {
     name: "Overnight oats express",
     timingLabel: "Ideal ~90–120 min antes",
-    imageUrl: "/guide/overnight-oats.png",
+    imageUrl: publicAssets.guide.overnightOats,
     imageAlt: "Tarrito de avena overnight con frutos rojos y semillas",
     ingredients: [
       "40–50 g avena en hojuelas",
@@ -100,7 +101,7 @@ export const recipes: GuideRecipe[] = [
   {
     name: "Tostadas integrales + fruta",
     timingLabel: "Ideal ~1,5–2,5 h antes",
-    imageUrl: "/guide/toastadas-fruta.png",
+    imageUrl: publicAssets.guide.toastadasFruta,
     imageAlt: "Tostadas integrales con fruta",
     ingredients: [
       "2 rebanadas pan integral",
@@ -113,7 +114,7 @@ export const recipes: GuideRecipe[] = [
   {
     name: "Batido pre-entreno",
     timingLabel: "Ideal ~45–90 min antes",
-    imageUrl: "/guide/batido-pre-entreno.png",
+    imageUrl: publicAssets.guide.batidoPreEntreno,
     imageAlt: "Batido o smoothie de fruta en vaso, pre-entreno",
     ingredients: [
       "1 plátano congelado o natural",
@@ -126,7 +127,7 @@ export const recipes: GuideRecipe[] = [
   {
     name: "Tortilla + pan integral + cítrico",
     timingLabel: "Ideal ~2–3 h antes",
-    imageUrl: "/guide/tortilla-pan.png",
+    imageUrl: publicAssets.guide.tortillaPan,
     imageAlt: "Tortilla o huevo con pan integral y cítrico",
     ingredients: [
       "2 huevos enteros o 3 claras + 1 yema",
@@ -139,7 +140,7 @@ export const recipes: GuideRecipe[] = [
   {
     name: "Yogur + granola en porción medida",
     timingLabel: "Ideal ~60–120 min antes",
-    imageUrl: "/guide/yogurt-granola.png",
+    imageUrl: publicAssets.guide.yogurtGranola,
     imageAlt: "Bol con yogur, granola y frutos rojos",
     ingredients: [
       "1 yogur griego natural",
@@ -151,7 +152,7 @@ export const recipes: GuideRecipe[] = [
   {
     name: "Waffle o hotcake integral liviano",
     timingLabel: "Ideal ~1,5–2 h antes",
-    imageUrl: "/guide/waffle.png",
+    imageUrl: publicAssets.guide.waffle,
     imageAlt: "Waffle o hotcake integral con fruta",
     ingredients: [
       "1 porción de mezcla integral casera o comercial",

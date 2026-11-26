@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "../components/Button";
-import formalPortraitCutout from "../assets/editorial/mariana-formal-cutout.png";
+import { assets } from "../assets";
+
+const formalPortraitCutout = assets.people.formalHero;
 
 export const Hero = () => (
   <section className="bg-white pt-20">

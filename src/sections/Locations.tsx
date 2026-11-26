@@ -1,5 +1,7 @@
 import { Button } from "../components/Button";
-import clinicRoom from "../assets/Phyn-1.jpg";
+import { assets } from "../assets";
+
+const clinicRoom = assets.clinic.phynRoom01;
 
 const clinic = {
   name: "PHYN",

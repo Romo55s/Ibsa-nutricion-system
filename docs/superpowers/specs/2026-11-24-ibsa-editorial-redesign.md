@@ -69,7 +69,7 @@ Keep the main editorial canvas white. Use mist gray as a cool neutral surface; d
 
 ## 4. Shared site frame and interaction rules
 
-- Keep the current original IBSA logo asset (`Logo-IBSA-White.svg`) and existing brand mark. Use the correct light/dark treatment over each background; do not redraw, typeset, crop, or replace the logo with plain text.
+- Keep the original IBSA logo, cataloged as `assets.brand.logoWhite` in `src/assets/index.ts` and served from `publicAssets.brand.whiteLogo` for static PDF output. Use the correct light/dark treatment over each background; do not redraw, typeset, crop, or replace the logo with plain text.
 - Preserve the current shared `Button` component, its distinctive visual treatment, and its hover/focus behavior. Editorial work can tune surrounding layout and button placement but must not replace the established buttons with a new library style.
 - Use the header and mobile staggered menu behavior represented by the approved “Estudio clínico editorial” concept as the reference. In production, retain the existing `Navbar` and `StaggeredMenu` behavior and navigation destinations; update visual tokens and spacing without changing route or anchor semantics.
 - Keep the shared footer consistent across the routes that currently use it. Give it a clear final booking/contact hierarchy, social link, and recognizable original logo.
@@ -81,10 +81,10 @@ Keep the main editorial canvas white. Use mist gray as a cool neutral surface; d
 ### Home (`/`)
 
 1. **Header:** clean light header with the logo, existing desktop navigation and booking CTA; retain the staggered mobile menu. Keep it visually quiet so the first image and headline lead.
-2. **Hero:** a two-part editorial opening: text block and primary consultation CTA on one side, Mariana photograph on the other. Target roughly 45/55 text/image balance on desktop with a generous image crop and an intentional focal point. Use `IMG_8680.jpg` as the first hero candidate because it shows Mariana in IBSA uniform holding a measuring tape and clearly signals her professional specialty; choose the crop after previewing at desktop and mobile sizes. Keep heading text off the face and preserve the tape/brand mark where the crop permits. On phones, stack the text before a full-width portrait crop; use a 4:5-ish image window and keep the face visible.
+2. **Hero:** a two-part editorial opening: text block and primary consultation CTA on one side, Mariana photograph on the other. Target roughly 45/55 text/image balance on desktop with a generous image crop and an intentional focal point. Use `assets.people.formalHero` (the transparent formal PNG showing Mariana in uniform with a measuring tape); keep heading text off her face and preserve the tape where the crop permits. On phones, stack the text before a bounded portrait area and keep the face visible.
 3. **Practice statement:** short eyebrow, a clear large statement about clinical and sports nutrition, and a compact paragraph explaining the personal, sustainable approach. Do not invent new claims or prices.
 4. **Services/benefits:** present the currently supplied service and benefit content in a calm editorial grid, ideally three or four columns on wide screens with dividing rules and clear text hierarchy rather than a row of identical floating cards. Stack cleanly on mobile.
-5. **About Mariana:** split text and portrait composition. Use `IMG_8627.jpg` as the first portrait candidate: crossed-arm portrait, open white background, and clear professional presence. Keep her portrait naturally colored and provide room for a short biography and credentials already present in the site.
+5. **About Mariana:** split text and portrait composition. Use `assets.people.aboutPortrait`, a naturally colored WebP derived from Mariana's existing casual portrait. Pair it with the short biography and credentials already present in the site.
 6. **Routine tool:** preserve its complete current behavior and preview. Give it a distinct deep navy section with clear tool label, concise explanation, and a visible start action; maintain contrast and do not let it read as an unrelated embedded app.
 7. **Reviews:** keep review text and attribution intact. Use spacious quote typography and a restrained grid or carousel only if the current behavior already supports it; avoid fabricated rating counts or imagery.
 8. **Locations:** present Phyn Clinic as the sole in-person clinic, using its existing address, map/directions, and booking actions. Keep the single-location layout balanced and easy to scan.
@@ -125,17 +125,19 @@ Keep the main editorial canvas white. Use mist gray as a cool neutral surface; d
 
 ## 6. New photo selection and treatment
 
-The four sources in `C:/Users/ppton/Downloads/Mariana-images-new` have been visually reviewed:
+The currently selected photo assets have been visually reviewed:
 
-| Source | Content and first proposed role | Treatment |
+| Asset reference | Content and role | Treatment |
 | --- | --- | --- |
-| `IMG_8680.jpg` | Mariana wearing IBSA uniform and holding a measuring tape; first hero candidate | Wide hero crop, focal point on Mariana, keep the tape visible when possible |
-| `IMG_8627.jpg` | Crossed-arm professional portrait against a bright wall; About/profile candidate | Vertical crop, retain natural color and useful negative space |
-| `IMG_8604.jpg` | Friendly close portrait; supporting human detail or editorial callout | Use as a smaller supporting crop, not as a repeated hero portrait |
-| `IMG_8601.jpg` | Hands using a laptop in a dark setting; online-consultation detail candidate | Use only in a small online-service context if it remains clear at normal brightness; do not use as the homepage lead |
+| `assets.people.formalHero` | Mariana wearing the IBSA uniform and holding a measuring tape | `src/assets/people/mariana-hero-formal-cutout.png`; retain transparency |
+| `assets.people.aboutPortrait`, `profile`, `consultation`, and `portrait` | Mariana profile and consultation views | Optimized WebP files under `src/assets/people/` |
+| `assets.events` and `assets.clinic` | Carrera, WireMasters, community, and PHYN clinic imagery | Optimized WebP files grouped under `src/assets/events/` and `src/assets/clinic/` |
+| Certificate scans | Nutrition and body recomposition credentials | Keep as JPEG under `src/assets/credentials/` for legible text |
 
-- Keep source photos unchanged in Downloads. Create optimized derivatives inside the app asset tree using the installed image tooling, preferably WebP with quality adjusted after visual comparison.
-- Produce a wide hero derivative capped around 1800px on its long edge and supporting portrait/detail derivatives capped around 1200px. Aim for roughly 300 KB maximum for the hero and 200 KB for supporting images while maintaining visible skin and fabric detail; treat these as targets, not reasons to degrade image quality.
+- Keep source photos unchanged in Downloads. Optimized derivatives live under categorized `src/assets/` folders; unused local copies are archived under `src/assets/archive/`.
+- Use `src/assets/index.ts` as the import catalog for Vite-managed assets and `src/assets/publicAssets.ts` for stable URLs to `public/` files. Keep that URL-only module free of binary imports so the Node PDF generator can safely share it.
+- Store recipe and exercise images under `public/images/guide/` and `public/images/exercises/`, and browser branding files under `public/brand/`.
+- Keep active WebP photos dimensioned for their use: 1600–1920px for full-width or gallery photos and 800–1200px for supporting portraits. Preserve visible skin and fabric detail; treat file sizes as optimization targets, not reasons to degrade image quality.
 - Use responsive `srcSet`/`sizes` or equivalent Vite-supported imports where useful. Set intrinsic dimensions or aspect ratio to avoid layout shift, lazy-load below-the-fold imagery, and prioritize the hero image.
 - Add meaningful alt text for informative photos and empty alt text for purely decorative crops. Avoid baking text or logos into the photo derivatives.
 - Final crops and positioning must be reviewed on a wide desktop viewport and a narrow phone viewport before selecting the hero treatment.
@@ -192,5 +194,5 @@ Do not reset, stash, revert, or replace any existing uncommitted change. Before 
 ## 12. Decisions to make during implementation
 
 - Final hero crop and responsive focal positions after viewing the exact image in its final container.
-- Whether `IMG_8601.jpg` helps explain online consultation clearly enough to use; omit it from a public section if the dark crop feels confusing.
+- Keep optional source imagery out of active sections unless it has a clear editorial role and is present in the central asset catalog.
 - Whether to self-host the display font or keep the current Google Fonts approach, based on the repository's current font loading and performance constraints.

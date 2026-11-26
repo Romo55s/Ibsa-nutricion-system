@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { CertificationsModal } from "../components/CertificationsModal";
-import athleteCertificate from "../assets/Certificado-Mujer-Atleta.jpg";
-import recompositionCertificate from "../assets/Certificado-Recomposicion-Corporal.jpg";
+import { assets } from "../assets";
 import { FlowingMenu } from "./FlowingMenu";
 
 const certifications = [
   {
-    src: athleteCertificate,
+    src: assets.credentials.womenAthlete,
     alt: "Certificado de Nutrición en la Mujer Atleta",
     title: "Nutrición en la Mujer Atleta",
   },
   {
-    src: recompositionCertificate,
+    src: assets.credentials.bodyRecomposition,
     alt: "Certificado de Recomposición Corporal",
     title: "Recomposición Corporal",
   },

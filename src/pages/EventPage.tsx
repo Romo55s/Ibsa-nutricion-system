@@ -5,6 +5,7 @@ import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { Button } from "../components/Button";
 import { EventImageGallery } from "../components/EventImageGallery";
+import { assets } from "../assets";
 import {
   EventImageModal,
   EventModal,
@@ -12,31 +13,19 @@ import {
 } from "../components/EventModal";
 import { EventImageCard, type EventImage } from "../components/EventImageCard";
 
-// Importar imágenes locales de carrera
-import Evento1 from "../assets/Evento-Carrera-1.jpg";
-import Evento2 from "../assets/Eveneto-Carrera-2.jpg";
-import Evento3 from "../assets/Evento Carrera-3.jpg";
-import Evento4 from "../assets/Evento-Carrera-4.jpg";
-import EventoPortada from "../assets/Evento-Carrera-Portada-2.jpg";
-
-// Importar imágenes de Wire Masters
-import WireMasters3 from "../assets/mariana-empresa-3.jpg";
-import WireMasters4 from "../assets/mariana-empresa-4.jpg";
-
-// Importar imagen de comunidad
-import ComunidadMariana from "../assets/Mariana-Phyn.jpg";
-// @ts-ignore - JPG files
-import WireMasters5 from "../assets/mariana-empresa-5.JPG";
-// @ts-ignore - JPG files
-import WireMasters6 from "../assets/mariana-empresa-6.JPG";
-// @ts-ignore - JPG files
-import WireMasters7 from "../assets/mariana-empresa-7.JPG";
-// @ts-ignore - JPG files
-import WireMasters8 from "../assets/mariana-empresa-8.JPG";
-// @ts-ignore - JPG files
-import WireMasters9 from "../assets/mariana-empresa-9.JPG";
-// @ts-ignore - JPG files
-import WireMasters10 from "../assets/mariana-empresa-10.JPG.JPG";
+const [Evento1, Evento2, Evento3, Evento4] = assets.events.carrera.photos;
+const EventoPortada = assets.events.carrera.featuredCover;
+const [
+  WireMasters3,
+  WireMasters4,
+  WireMasters5,
+  WireMasters6,
+  WireMasters7,
+  WireMasters8,
+  WireMasters9,
+  WireMasters10,
+] = assets.events.wiremasters;
+const ComunidadMariana = assets.people.communityPortrait;
 
 // Imágenes de Wire Masters
 const wireMastersImages = [

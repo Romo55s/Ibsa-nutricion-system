@@ -1,6 +1,8 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
-import portrait from "../assets/mariana-casual.jpg"
+import { assets } from "../assets";
+
+const portrait = assets.people.aboutPortrait;
 
 export const About = () => {
   const metricsRef = useRef<HTMLDListElement>(null);
