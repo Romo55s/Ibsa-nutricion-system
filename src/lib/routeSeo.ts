@@ -2,6 +2,7 @@ export type RouteSeo = {
   title: string;
   description: string;
   canonical: string;
+  breadcrumbName?: string;
 };
 
 export const publicRouteSeo: Record<string, RouteSeo> = {
@@ -16,6 +17,7 @@ export const publicRouteSeo: Record<string, RouteSeo> = {
     description:
       "Conoce las carreras, actividades y conferencias de nutrición y deporte en las que participa Mariana Ibarra en Aguascalientes y otras sedes.",
     canonical: "https://www.ibsa-nutricion.com/evento",
+    breadcrumbName: "Eventos y conferencias",
   },
   "/guia-desayunos-pre-entreno": {
     title:
@@ -23,6 +25,7 @@ export const publicRouteSeo: Record<string, RouteSeo> = {
     description:
       "Descubre qué comer antes de entrenar, cuándo hacerlo y recetas sencillas. Descarga gratis la guía de desayunos pre-entreno de IBSA Nutrición.",
     canonical: "https://www.ibsa-nutricion.com/guia-desayunos-pre-entreno",
+    breadcrumbName: "Desayunos pre-entreno",
   },
 };
 
@@ -90,4 +93,37 @@ export const applyRouteSeo = (seo: RouteSeo) => {
     document.head.append(canonical);
   }
   canonical.href = seo.canonical;
+
+  const existingBreadcrumb = document.getElementById(
+    "route-breadcrumb-schema"
+  );
+  if (!seo.breadcrumbName) {
+    existingBreadcrumb?.remove();
+    return;
+  }
+
+  const breadcrumb =
+    existingBreadcrumb instanceof HTMLScriptElement
+      ? existingBreadcrumb
+      : document.createElement("script");
+  breadcrumb.id = "route-breadcrumb-schema";
+  breadcrumb.type = "application/ld+json";
+  breadcrumb.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Inicio",
+        item: "https://www.ibsa-nutricion.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: seo.breadcrumbName,
+      },
+    ],
+  });
+  if (!breadcrumb.isConnected) document.head.append(breadcrumb);
 };

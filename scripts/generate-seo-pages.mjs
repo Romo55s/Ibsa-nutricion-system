@@ -11,6 +11,7 @@ const pages = [
     description:
       "Conoce las carreras, actividades y conferencias de nutrición y deporte en las que participa Mariana Ibarra en Aguascalientes y otras sedes.",
     canonical: "https://www.ibsa-nutricion.com/evento",
+    breadcrumbName: "Eventos y conferencias",
   },
   {
     path: "guia-desayunos-pre-entreno",
@@ -19,6 +20,7 @@ const pages = [
     description:
       "Descubre qué comer antes de entrenar, cuándo hacerlo y recetas sencillas. Descarga gratis la guía de desayunos pre-entreno de IBSA Nutrición.",
     canonical: "https://www.ibsa-nutricion.com/guia-desayunos-pre-entreno",
+    breadcrumbName: "Desayunos pre-entreno",
   },
 ];
 
@@ -59,6 +61,26 @@ for (const page of pages) {
   html = canonicalPattern.test(html)
     ? html.replace(canonicalPattern, canonicalTag)
     : html.replace("</head>", `  ${canonicalTag}\n  </head>`);
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Inicio",
+        item: "https://www.ibsa-nutricion.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: page.breadcrumbName,
+      },
+    ],
+  };
+  const breadcrumbTag = `<script type="application/ld+json" id="route-breadcrumb-schema">${JSON.stringify(breadcrumbSchema)}</script>`;
+  html = html.replace("</head>", `  ${breadcrumbTag}\n  </head>`);
 
   const destination = join(outputDir, page.path, "index.html");
   await mkdir(dirname(destination), { recursive: true });
