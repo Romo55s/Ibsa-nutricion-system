@@ -1,4 +1,10 @@
-import { useId, useLayoutEffect, useRef, type ReactNode, type RefObject } from "react";
+import {
+  useId,
+  useLayoutEffect,
+  useRef,
+  type ReactNode,
+  type RefObject,
+} from "react";
 import { gsap } from "gsap";
 import { acquireModalScrollLock } from "../lib/modalScrollLock";
 
@@ -79,7 +85,6 @@ export function EditorialDialog({
     <dialog
       ref={dialogRef}
       aria-labelledby={titleId}
-      data-lenis-prevent
       className="fixed inset-0 m-0 flex h-full max-h-none w-full max-w-none items-center justify-center bg-transparent p-3 backdrop:bg-primary/75 backdrop:backdrop-blur-sm sm:p-6"
       onCancel={(event) => {
         event.preventDefault();
@@ -91,13 +96,15 @@ export function EditorialDialog({
     >
       <div
         ref={panelRef}
-        data-lenis-prevent
         className={`flex max-h-[92dvh] w-full flex-col overflow-hidden border border-light bg-white text-primary shadow-elev-3 ${panelClassName}`}
       >
         <header className="flex shrink-0 items-start justify-between gap-5 border-b border-light bg-white px-5 py-4 sm:px-8 sm:py-5">
           <div className="min-w-0">
             <p className="editorial-label mb-1 text-muted">{eyebrow}</p>
-            <h2 id={titleId} className="break-words font-display text-2xl leading-tight sm:text-3xl">
+            <h2
+              id={titleId}
+              className="break-words font-display text-2xl leading-tight sm:text-3xl"
+            >
               {title}
             </h2>
           </div>
@@ -119,7 +126,9 @@ export function EditorialDialog({
             </svg>
           </button>
         </header>
-        <div className={`min-h-0 overflow-y-auto overscroll-contain ${bodyClassName}`}>
+        <div
+          className={`min-h-0 overflow-y-auto overscroll-contain ${bodyClassName}`}
+        >
           {children}
         </div>
       </div>

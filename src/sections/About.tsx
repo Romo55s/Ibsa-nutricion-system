@@ -1,6 +1,9 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { assets } from "../assets";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const portrait = assets.people.aboutPortrait;
 
@@ -13,8 +16,11 @@ export const About = () => {
 
     const motion = gsap.matchMedia();
     motion.add("(prefers-reduced-motion: no-preference)", () => {
-      const experience = metrics.querySelector<HTMLElement>("[data-experience]");
-      const personalized = metrics.querySelector<HTMLElement>("[data-personalized]");
+      const experience =
+        metrics.querySelector<HTMLElement>("[data-experience]");
+      const personalized = metrics.querySelector<HTMLElement>(
+        "[data-personalized]"
+      );
       if (!experience || !personalized) return;
       const count = { progress: 0 };
       gsap.to(count, {
@@ -48,8 +54,12 @@ export const About = () => {
           className="mx-auto aspect-[4/5] w-full max-w-md bg-mist object-cover"
         />
         <div>
-          <p className="editorial-label mb-4 text-muted">Mariana Ibarra Santos</p>
-          <h2 className="editorial-heading max-w-lg">Más que una dieta, un estilo de vida.</h2>
+          <p className="editorial-label mb-4 text-muted">
+            Mariana Ibarra Santos
+          </p>
+          <h2 className="editorial-heading max-w-lg">
+            Más que una dieta, un estilo de vida.
+          </h2>
           <div className="mt-6 max-w-prose space-y-4 leading-relaxed text-accent lg:text-lg">
             <p>
               En mi adolescencia, la delgadez me acomplejaba. Evitaba usar
@@ -63,14 +73,27 @@ export const About = () => {
               báscula y empieces a celebrar lo que tu cuerpo es capaz de hacer.
             </p>
           </div>
-          <dl ref={metricsRef} className="mt-8 grid grid-cols-2 gap-6 border-t border-light pt-5">
+          <dl
+            ref={metricsRef}
+            className="mt-8 grid grid-cols-2 gap-6 border-t border-light pt-5"
+          >
             <div className="flex flex-col-reverse items-start gap-1">
               <dt className="text-sm text-muted">Años de experiencia</dt>
-              <dd className="font-display text-4xl"><span aria-hidden="true" data-experience>+5</span><span className="sr-only">+5</span></dd>
+              <dd className="font-display text-4xl">
+                <span aria-hidden="true" data-experience>
+                  +5
+                </span>
+                <span className="sr-only">+5</span>
+              </dd>
             </div>
             <div className="flex flex-col-reverse items-start gap-1">
               <dt className="text-sm text-muted">Personalizado</dt>
-              <dd className="font-display text-4xl"><span aria-hidden="true" data-personalized>100%</span><span className="sr-only">100%</span></dd>
+              <dd className="font-display text-4xl">
+                <span aria-hidden="true" data-personalized>
+                  100%
+                </span>
+                <span className="sr-only">100%</span>
+              </dd>
             </div>
           </dl>
         </div>

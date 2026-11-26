@@ -18,5 +18,13 @@ export default defineConfig({
   },
   build: {
     cssCodeSplit: false,
+    manifest: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (/node_modules[\\/]gsap[\\/]/.test(id)) return "gsap-vendor";
+        },
+      },
+    },
   },
 });

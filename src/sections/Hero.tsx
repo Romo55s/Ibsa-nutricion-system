@@ -12,22 +12,29 @@ export const Hero = () => (
       <div className="py-10 sm:py-12 md:py-0 md:pr-8 xl:pr-16">
         <p className="editorial-label text-muted">Mariana Ibarra Santos</p>
         <h1 className="mt-5 font-display text-[clamp(3.25rem,6.7vw,6rem)] leading-[0.99] tracking-[-0.045em]">
-          Nutrición clínica <em className="block font-normal">y deportiva en Aguascalientes.</em>
+          Nutrición clínica{" "}
+          <em className="block font-normal">y deportiva en Aguascalientes.</em>
         </h1>
         <p className="mt-6 max-w-md text-base leading-relaxed text-accent lg:text-lg">
-          Planes personalizados de nutrición clínica y deportiva para mejorar
-          tu rendimiento, composición corporal y hábitos, sin dietas
-          restrictivas.
+          Planes personalizados de nutrición clínica y deportiva para mejorar tu
+          rendimiento, composición corporal y hábitos, sin dietas restrictivas.
         </p>
         <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2">
-          <Button href="https://cal.com/mariana-ibarra-santos" target="_blank" rel="noopener noreferrer">
+          <Button
+            href="https://cal.com/mariana-ibarra-santos"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Agendar consulta
           </Button>
           <Link
             to="/guia-desayunos-pre-entreno"
             className="editorial-link min-h-11 text-sm font-semibold"
           >
-            Guía de desayunos pre-entreno <span className="editorial-link-arrow" aria-hidden="true">↗</span>
+            Guía de desayunos pre-entreno{" "}
+            <span className="editorial-link-arrow" aria-hidden="true">
+              ↗
+            </span>
           </Link>
         </div>
       </div>
@@ -35,17 +42,17 @@ export const Hero = () => (
         <picture className="block w-full md:max-w-[640px]">
           <source
             type="image/avif"
-            srcSet={`${formalPortrait.avif640} 640w, ${formalPortrait.avif960} 960w`}
+            srcSet={`${formalPortrait.avif640} 640w, ${formalPortrait.avif768} 768w, ${formalPortrait.avif960} 960w`}
             sizes={formalPortraitSizes}
           />
           <source
             type="image/webp"
-            srcSet={`${formalPortrait.webp640} 640w, ${formalPortrait.webp960} 960w`}
+            srcSet={`${formalPortrait.webp640} 640w, ${formalPortrait.webp768} 768w, ${formalPortrait.webp960} 960w`}
             sizes={formalPortraitSizes}
           />
           <img
             src={formalPortrait.webp640}
-            srcSet={`${formalPortrait.webp640} 640w, ${formalPortrait.webp960} 960w`}
+            srcSet={`${formalPortrait.webp640} 640w, ${formalPortrait.webp768} 768w, ${formalPortrait.webp960} 960w`}
             sizes={formalPortraitSizes}
             width={1064}
             height={1478}

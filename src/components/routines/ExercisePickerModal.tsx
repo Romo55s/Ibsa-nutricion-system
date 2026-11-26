@@ -105,7 +105,8 @@ export function ExercisePickerModal({
 
   const [customName, setCustomName] = useState("");
   const [customNameEn, setCustomNameEn] = useState("");
-  const [customMuscle, setCustomMuscle] = useState<MuscleGroup>("cuerpoCompleto");
+  const [customMuscle, setCustomMuscle] =
+    useState<MuscleGroup>("cuerpoCompleto");
   const [customEquipment, setCustomEquipment] =
     useState<Equipment>("pesoCorporal");
   const [customYoutube, setCustomYoutube] = useState("");
@@ -153,7 +154,9 @@ export function ExercisePickerModal({
   }, [allExercises, excludeIds, muscle, query, warmupOnly]);
 
   const selectedExercises = useMemo(() => {
-    const byId = new Map(allExercises.map((exercise) => [exercise.id, exercise]));
+    const byId = new Map(
+      allExercises.map((exercise) => [exercise.id, exercise])
+    );
     return selectedIds
       .map((id) => byId.get(id))
       .filter((exercise): exercise is Exercise => Boolean(exercise));
@@ -270,12 +273,10 @@ export function ExercisePickerModal({
         if (event.target === event.currentTarget) dismiss();
       }}
       className="fixed inset-0 m-0 h-full max-h-none w-full max-w-none overflow-hidden bg-transparent p-0 text-primary backdrop:bg-primary/75 backdrop:backdrop-blur-sm"
-      data-lenis-prevent
     >
       <div
         ref={sheetRef}
         className="absolute inset-x-0 bottom-0 mx-auto flex max-h-[95dvh] w-full max-w-4xl flex-col overflow-y-auto overscroll-contain border-t-2 border-primary bg-white shadow-elev-3 sm:inset-y-0 sm:my-auto sm:h-fit sm:max-h-[90dvh] sm:w-[calc(100%_-_3rem)] sm:border"
-        data-lenis-prevent
       >
         <div className="shrink-0 border-b border-light bg-white px-5 pb-4 pt-5 sm:px-6 sm:pt-6">
           <div className="mb-4 flex items-start justify-between gap-4">
@@ -364,7 +365,12 @@ export function ExercisePickerModal({
 
           {view === "catalog" && (
             <>
-              <label htmlFor="exercise-catalog-search" className="mb-1 block text-sm font-medium text-accent">Buscar por nombre</label>
+              <label
+                htmlFor="exercise-catalog-search"
+                className="mb-1 block text-sm font-medium text-accent"
+              >
+                Buscar por nombre
+              </label>
               <input
                 id="exercise-catalog-search"
                 type="search"
@@ -413,7 +419,7 @@ export function ExercisePickerModal({
                       type="button"
                       aria-pressed={active}
                       onClick={() => setMuscle(filter)}
-                      className={`whitespace-nowrap min-h-11 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
+                      className={`min-h-11 whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
                         active
                           ? "bg-primary text-white"
                           : "border border-light bg-white text-accent hover:border-accent hover:bg-mist"
@@ -428,10 +434,7 @@ export function ExercisePickerModal({
           )}
         </div>
 
-        <div
-          className="shrink-0 px-5 py-5 sm:px-6"
-          data-lenis-prevent
-        >
+        <div className="shrink-0 px-5 py-5 sm:px-6">
           {view === "catalog" ? (
             <>
               <p className="mb-4 text-sm text-muted">
@@ -482,7 +485,7 @@ export function ExercisePickerModal({
                         </div>
                       </div>
                       <div
-                        className={`my-3 mr-2 flex h-6 w-6 shrink-0 self-start items-center justify-center rounded-full transition-all ${
+                        className={`my-3 mr-2 flex h-6 w-6 shrink-0 items-center justify-center self-start rounded-full transition-all ${
                           selected
                             ? "bg-primary text-white opacity-100"
                             : "border border-light bg-white text-accent"
@@ -635,7 +638,10 @@ export function ExercisePickerModal({
                 />
 
                 {customError && (
-                  <p role="alert" className="mt-4 rounded-sm border-l-2 border-red-700 bg-red-50 px-3 py-2 text-sm text-red-800">
+                  <p
+                    role="alert"
+                    className="mt-4 rounded-sm border-l-2 border-red-700 bg-red-50 px-3 py-2 text-sm text-red-800"
+                  >
                     {customError}
                   </p>
                 )}
@@ -644,7 +650,7 @@ export function ExercisePickerModal({
           )}
         </div>
 
-        <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-light bg-mist px-5 py-4 bottom-0 z-10 [@media(min-height:32rem)]:sticky sm:px-6">
+        <div className="bottom-0 z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-light bg-mist px-5 py-4 sm:px-6 [@media(min-height:32rem)]:sticky">
           {view === "catalog" ? (
             <>
               <p role="status" className="text-sm text-muted">
@@ -675,9 +681,7 @@ export function ExercisePickerModal({
                   disabled={selectedCount === 0}
                   className="min-h-11 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
                 >
-                  {selectedCount === 0
-                    ? "Agregar"
-                    : `Agregar ${selectedCount}`}
+                  {selectedCount === 0 ? "Agregar" : `Agregar ${selectedCount}`}
                 </button>
               </div>
             </>

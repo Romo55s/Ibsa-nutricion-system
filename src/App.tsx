@@ -5,10 +5,7 @@ import {
   Outlet,
   useLocation,
 } from "react-router-dom";
-import { lazy, Suspense, useEffect, useLayoutEffect } from "react";
-import Lenis from "lenis";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef } from "react";
 import { EditorialLinkMotion } from "./components/EditorialLinkMotion";
 
 const Home = lazy(() =>
@@ -41,9 +38,6 @@ const RoutineEditPage = lazy(() =>
   }))
 );
 
-// Registrar ScrollTrigger una sola vez
-gsap.registerPlugin(ScrollTrigger);
-
 const ScrollToTop = () => {
   const { pathname, hash } = useLocation();
 
@@ -63,7 +57,10 @@ const ScrollToTop = () => {
 
             window.scrollTo({
               top: offsetPosition,
-              behavior: "smooth",
+              behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+                .matches
+                ? "auto"
+                : "smooth",
             });
           });
         }
@@ -84,66 +81,29 @@ const ScrollToTop = () => {
 
 const PageTransition = () => {
   const { pathname } = useLocation();
+  const previousPath = useRef<string | null>(null);
+  const shouldAnimate =
+    previousPath.current !== null && previousPath.current !== pathname;
 
   useLayoutEffect(() => {
-    const main = document.getElementById("main-content");
-    if (!main || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
-
-    const context = gsap.context(() => {
-      gsap.fromTo(
-        main,
-        { autoAlpha: 0, y: 10 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.38,
-          ease: "power2.out",
-          clearProps: "opacity,visibility,transform",
-        }
-      );
-    });
-
-    return () => context.revert();
+    previousPath.current = pathname;
   }, [pathname]);
 
-  return <Outlet />;
+  return (
+    <div
+      className={
+        shouldAnimate
+          ? "page-transition page-transition-enter"
+          : "page-transition"
+      }
+    >
+      <Outlet />
+    </div>
+  );
 };
 
 const AppContent = () => {
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: "vertical",
-      gestureOrientation: "vertical",
-      smoothWheel: true,
-      allowNestedScroll: true,
-    });
-
-    lenis.on("scroll", ScrollTrigger.update);
-
-    const onGsapTicker = (time: number) => {
-      lenis.raf(time * 1000);
-    };
-    gsap.ticker.add(onGsapTicker);
-    gsap.ticker.lagSmoothing(0);
-
-    let modalLockCount = 0;
-    const onModalLock = () => {
-      modalLockCount += 1;
-      if (modalLockCount === 1) lenis.stop();
-    };
-    const onModalUnlock = () => {
-      modalLockCount = Math.max(0, modalLockCount - 1);
-      if (modalLockCount === 0) lenis.start();
-    };
-    window.addEventListener("ibsa:modal-lock", onModalLock);
-    window.addEventListener("ibsa:modal-unlock", onModalUnlock);
-
-    // Manejo de anclas modificado para funcionar con React Router
-    // Solo interceptar si estamos en la misma página (no cuando navegamos desde otra página)
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const anchor = target.closest("a");
@@ -157,10 +117,14 @@ const AppContent = () => {
         if (targetId && targetId !== "#") {
           const targetElement = document.querySelector(targetId);
           if (targetElement) {
-            lenis.scrollTo(targetElement, {
-              offset: -100,
-              duration: 1.5,
-              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            const offsetPosition =
+              targetElement.getBoundingClientRect().top + window.scrollY - 100;
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+                .matches
+                ? "auto"
+                : "smooth",
             });
           }
         }
@@ -170,11 +134,7 @@ const AppContent = () => {
     document.addEventListener("click", handleClick);
 
     return () => {
-      lenis.destroy();
-      gsap.ticker.remove(onGsapTicker);
       document.removeEventListener("click", handleClick);
-      window.removeEventListener("ibsa:modal-lock", onModalLock);
-      window.removeEventListener("ibsa:modal-unlock", onModalUnlock);
     };
   }, []);
 

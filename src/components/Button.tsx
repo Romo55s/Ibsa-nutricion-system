@@ -34,18 +34,24 @@ export const Button = ({
   const fillRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const control: HTMLElement | null = isLink ? linkRef.current : buttonRef.current;
+    const control: HTMLElement | null = isLink
+      ? linkRef.current
+      : buttonRef.current;
     const text = textRef.current;
     const fill = fillRef.current;
 
     if (!control || !text || !fill) return;
 
-    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const motionPreference = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
     let removePointerEffects = () => {};
+    let controlBounds: DOMRect | null = null;
 
     const clearPointerEffects = () => {
       removePointerEffects();
       removePointerEffects = () => {};
+      controlBounds = null;
       gsap.killTweensOf([control, text, fill]);
       gsap.set(control, { x: 0, y: 0 });
       gsap.set(text, { x: 0, y: 0 });
@@ -63,22 +69,35 @@ export const Button = ({
       });
 
       const handleMouseMove = (e: MouseEvent) => {
+        if (!controlBounds) return;
         const { clientX, clientY } = e;
-        const { left, top, width, height } = control.getBoundingClientRect();
+        const { left, top, width, height } = controlBounds;
         const x = clientX - (left + width / 2);
         const y = clientY - (top + height / 2);
 
         xTo(x * 0.3);
         yTo(y * 0.3);
-        gsap.to(text, { x: x * 0.1, y: y * 0.1, duration: 1, ease: "power2.out" });
-        gsap.to(fill, { x: x * 0.5, y: y * 0.5, duration: 0.6, ease: "power2.out" });
+        gsap.to(text, {
+          x: x * 0.1,
+          y: y * 0.1,
+          duration: 1,
+          ease: "power2.out",
+        });
+        gsap.to(fill, {
+          x: x * 0.5,
+          y: y * 0.5,
+          duration: 0.6,
+          ease: "power2.out",
+        });
       };
 
       const handleMouseEnter = () => {
+        controlBounds = control.getBoundingClientRect();
         gsap.to(fill, { scale: 2.5, duration: 0.5, ease: "power2.out" });
       };
 
       const handleMouseLeave = () => {
+        controlBounds = null;
         xTo(0);
         yTo(0);
         gsap.to(text, { x: 0, y: 0, duration: 1, ease: "elastic.out(1, 0.3)" });

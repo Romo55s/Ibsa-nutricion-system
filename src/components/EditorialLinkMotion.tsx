@@ -1,10 +1,4 @@
 import { useEffect } from "react";
-import { gsap } from "gsap";
-
-interface MagneticLinkMotion {
-  xTo: (value: number) => void;
-  yTo: (value: number) => void;
-}
 
 const clamp = (value: number, limit: number) =>
   Math.max(-limit, Math.min(limit, value));
@@ -12,41 +6,17 @@ const clamp = (value: number, limit: number) =>
 export function EditorialLinkMotion() {
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const motionByLink = new WeakMap<HTMLElement, MagneticLinkMotion>();
     let activeLink: HTMLElement | null = null;
-
-    const getMotion = (link: HTMLElement) => {
-      const existing = motionByLink.get(link);
-      if (existing) return existing;
-
-      const motion = {
-        xTo: gsap.quickTo(link, "x", {
-          duration: 0.8,
-          ease: "elastic.out(1, 0.3)",
-        }),
-        yTo: gsap.quickTo(link, "y", {
-          duration: 0.8,
-          ease: "elastic.out(1, 0.3)",
-        }),
-      };
-      motionByLink.set(link, motion);
-      return motion;
-    };
+    let activeBounds: DOMRect | null = null;
 
     const resetActiveLink = (immediate = false) => {
       if (!activeLink) return;
       const link = activeLink;
       activeLink = null;
-
-      if (immediate) {
-        gsap.killTweensOf(link);
-        gsap.set(link, { x: 0, y: 0 });
-        return;
-      }
-
-      const motion = motionByLink.get(link);
-      motion?.xTo(0);
-      motion?.yTo(0);
+      activeBounds = null;
+      link.style.setProperty("--editorial-link-x", "0px");
+      link.style.setProperty("--editorial-link-y", "0px");
+      if (immediate) link.style.transition = "none";
     };
 
     const handlePointerMove = (event: PointerEvent) => {
@@ -65,16 +35,26 @@ export function EditorialLinkMotion() {
         return;
       }
 
-      if (activeLink && activeLink !== target) resetActiveLink();
-      activeLink = target;
+      if (activeLink !== target) {
+        resetActiveLink();
+        activeLink = target;
+        activeBounds = target.getBoundingClientRect();
+        target.style.removeProperty("transition");
+      }
 
-      const bounds = target.getBoundingClientRect();
-      const offsetX = event.clientX - (bounds.left + bounds.width / 2);
-      const offsetY = event.clientY - (bounds.top + bounds.height / 2);
-      const motion = getMotion(target);
-
-      motion.xTo(clamp(offsetX * 0.22, 8));
-      motion.yTo(clamp(offsetY * 0.22, 6));
+      if (!activeBounds) return;
+      const offsetX =
+        event.clientX - (activeBounds.left + activeBounds.width / 2);
+      const offsetY =
+        event.clientY - (activeBounds.top + activeBounds.height / 2);
+      target.style.setProperty(
+        "--editorial-link-x",
+        `${clamp(offsetX * 0.22, 8)}px`
+      );
+      target.style.setProperty(
+        "--editorial-link-y",
+        `${clamp(offsetY * 0.22, 6)}px`
+      );
     };
 
     const handlePointerOut = (event: PointerEvent) => {
@@ -87,17 +67,26 @@ export function EditorialLinkMotion() {
     const handleMotionPreferenceChange = () => {
       if (reducedMotion.matches) resetActiveLink(true);
     };
+    const resetForViewportChange = () => resetActiveLink();
 
     document.addEventListener("pointermove", handlePointerMove, {
       passive: true,
     });
     document.addEventListener("pointerout", handlePointerOut);
     reducedMotion.addEventListener("change", handleMotionPreferenceChange);
+    window.addEventListener("scroll", resetForViewportChange, {
+      passive: true,
+    });
+    window.addEventListener("resize", resetForViewportChange, {
+      passive: true,
+    });
 
     return () => {
       document.removeEventListener("pointermove", handlePointerMove);
       document.removeEventListener("pointerout", handlePointerOut);
       reducedMotion.removeEventListener("change", handleMotionPreferenceChange);
+      window.removeEventListener("scroll", resetForViewportChange);
+      window.removeEventListener("resize", resetForViewportChange);
       resetActiveLink(true);
     };
   }, []);

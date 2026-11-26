@@ -50,6 +50,7 @@ const MagneticNavItem = ({
 
     if (!item || !text || !dot) return;
 
+    let itemBounds: DOMRect | null = null;
     const xTo = gsap.quickTo(text, "x", {
       duration: 1,
       ease: "elastic.out(1, 0.3)",
@@ -68,8 +69,9 @@ const MagneticNavItem = ({
     });
 
     const handleMouseMove = (e: MouseEvent) => {
+      if (!itemBounds) return;
       const { clientX, clientY } = e;
-      const { left, top, width, height } = item.getBoundingClientRect();
+      const { left, top, width, height } = itemBounds;
 
       const x = clientX - (left + width / 2);
       const y = clientY - (top + height / 2);
@@ -84,10 +86,12 @@ const MagneticNavItem = ({
     };
 
     const handleMouseEnter = () => {
+      itemBounds = item.getBoundingClientRect();
       gsap.to(dot, { scale: 1, duration: 0.3 });
     };
 
     const handleMouseLeave = () => {
+      itemBounds = null;
       xTo(0);
       yTo(0);
       dotXTo(0);
@@ -142,7 +146,7 @@ const MagneticNavItem = ({
       ref={itemRef}
       href={href}
       onClick={handleClick}
-      className="group relative flex flex-col items-center min-h-11 justify-center whitespace-nowrap px-2 py-2 xl:px-3"
+      className="group relative flex min-h-11 flex-col items-center justify-center whitespace-nowrap px-2 py-2 xl:px-3"
     >
       <span
         ref={textRef}

@@ -1,12 +1,24 @@
 <!doctype html>
 <html lang="es">
   <head>
-    <!-- Google Tag Manager -->
-    <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-MD8RPBJ3"></script>
+    <!-- Google Tag Manager: start after the page's load work settles. -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
+      window.addEventListener('load', function () {
+        var loadTagManager = function () {
+          var script = document.createElement('script');
+          script.async = true;
+          script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MD8RPBJ3';
+          document.head.appendChild(script);
+        };
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(loadTagManager, { timeout: 2500 });
+        } else {
+          window.setTimeout(loadTagManager, 1200);
+        }
+      }, { once: true });
     </script>
     <!-- End Google Tag Manager -->
     <meta charset="UTF-8" />
@@ -109,8 +121,8 @@
       rel="preload"
       as="image"
       type="image/avif"
-      href="/images/people/mariana-hero-formal-960.avif"
-      imagesrcset="/images/people/mariana-hero-formal-640.avif 640w, /images/people/mariana-hero-formal-960.avif 960w"
+      href="/images/people/mariana-hero-formal-960-3278f598b4.avif"
+      imagesrcset="/images/people/mariana-hero-formal-640-57555a6b72.avif 640w, /images/people/mariana-hero-formal-768-a6176cc170.avif 768w, /images/people/mariana-hero-formal-960-3278f598b4.avif 960w"
       imagesizes="(max-width: 767px) 100vw, (max-width: 1163px) 55vw, 640px"
       fetchpriority="high"
     />
