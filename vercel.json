@@ -38,6 +38,14 @@
   ],
   "rewrites": [
     {
+      "source": "/evento",
+      "destination": "/evento/index.html"
+    },
+    {
+      "source": "/guia-desayunos-pre-entreno",
+      "destination": "/guia-desayunos-pre-entreno/index.html"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }

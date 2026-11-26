@@ -10,7 +10,7 @@ export const Hero = () => (
       <div className="py-10 sm:py-12 md:py-0 md:pr-8 xl:pr-16">
         <p className="editorial-label text-muted">Mariana Ibarra Santos</p>
         <h1 className="mt-5 font-display text-[clamp(3.25rem,6.7vw,6rem)] leading-[0.99] tracking-[-0.045em]">
-          Pon tu cuerpo <em className="block font-normal">en forma.</em>
+          Nutrición clínica <em className="block font-normal">y deportiva en Aguascalientes.</em>
         </h1>
         <p className="mt-6 max-w-md text-base leading-relaxed text-accent lg:text-lg">
           Planes personalizados de nutrición clínica y deportiva para mejorar

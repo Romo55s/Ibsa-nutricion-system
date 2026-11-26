@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "dev:vercel": "vercel dev",
-    "build": "vite build",
+    "build": "vite build && node scripts/generate-seo-pages.mjs",
     "preview": "vite preview",
     "generate:pdf": "tsx scripts/generate-breakfast-guide-pdf.ts",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"scripts/**/*.ts\" \"vite.config.ts\" \"*.mjs\" \"*.cjs\""

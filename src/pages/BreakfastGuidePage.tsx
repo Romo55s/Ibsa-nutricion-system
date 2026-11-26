@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
@@ -58,14 +57,6 @@ const GuidePdfDownload = () => (
 );
 
 export const BreakfastGuidePage = () => {
-  useEffect(() => {
-    const prev = document.title;
-    document.title = guideMeta.documentTitle;
-    return () => {
-      document.title = prev;
-    };
-  }, []);
-
   return (
     <div className="page">
       <a href="#main-content" className="skip-to-content" data-router-link>
