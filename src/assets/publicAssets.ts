@@ -20,12 +20,14 @@ export const publicAssets = {
   },
   people: {
     formalHero: {
-      avif640: "/images/people/mariana-hero-formal-640-57555a6b72.avif",
-      avif768: "/images/people/mariana-hero-formal-768-a6176cc170.avif",
-      avif960: "/images/people/mariana-hero-formal-960-3278f598b4.avif",
-      webp640: "/images/people/mariana-hero-formal-640-68cd794834.webp",
-      webp768: "/images/people/mariana-hero-formal-768-8ca6ce8bb3.webp",
-      webp960: "/images/people/mariana-hero-formal-960-df7126412b.webp",
+      avif640: "/images/people/mariana-hero-formal-640-e7bfaa7eef.avif",
+      avif768: "/images/people/mariana-hero-formal-768-5231b064d3.avif",
+      avif960: "/images/people/mariana-hero-formal-960-dbf75a09b1.avif",
+      avif1064: "/images/people/mariana-hero-formal-1064-6d3d19f91b.avif",
+      webp640: "/images/people/mariana-hero-formal-640-e90eaa751a.webp",
+      webp768: "/images/people/mariana-hero-formal-768-48b49f5a46.webp",
+      webp960: "/images/people/mariana-hero-formal-960-6dbd614dbb.webp",
+      webp1064: "/images/people/mariana-hero-formal-1064-6e22c76665.webp",
     },
   },
   exercises: {

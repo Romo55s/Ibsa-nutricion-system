@@ -42,17 +42,17 @@ export const Hero = () => (
         <picture className="block w-full md:max-w-[640px]">
           <source
             type="image/avif"
-            srcSet={`${formalPortrait.avif640} 640w, ${formalPortrait.avif768} 768w, ${formalPortrait.avif960} 960w`}
+            srcSet={`${formalPortrait.avif640} 640w, ${formalPortrait.avif768} 768w, ${formalPortrait.avif960} 960w, ${formalPortrait.avif1064} 1064w`}
             sizes={formalPortraitSizes}
           />
           <source
             type="image/webp"
-            srcSet={`${formalPortrait.webp640} 640w, ${formalPortrait.webp768} 768w, ${formalPortrait.webp960} 960w`}
+            srcSet={`${formalPortrait.webp640} 640w, ${formalPortrait.webp768} 768w, ${formalPortrait.webp960} 960w, ${formalPortrait.webp1064} 1064w`}
             sizes={formalPortraitSizes}
           />
           <img
             src={formalPortrait.webp640}
-            srcSet={`${formalPortrait.webp640} 640w, ${formalPortrait.webp768} 768w, ${formalPortrait.webp960} 960w`}
+            srcSet={`${formalPortrait.webp640} 640w, ${formalPortrait.webp768} 768w, ${formalPortrait.webp960} 960w, ${formalPortrait.webp1064} 1064w`}
             sizes={formalPortraitSizes}
             width={1064}
             height={1478}
